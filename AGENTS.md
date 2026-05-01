@@ -4,13 +4,13 @@
 
 Create a logistics strategy game titled **“Rail Boss”**. The player manages a
 railway network, which transports passengers, and earns profit while maintaining
-tracks and rolling stock.
+tracks.
 
 ---
 
 ## Core Game Elements
 
-### Game
+### State
 
 - Initializes game
 - Expose all the objects enabled in the game
@@ -58,6 +58,10 @@ tracks and rolling stock.
 - A passenger can choose to board the next arriving train, or skip.
 - A passenger can choose to disembark at any station.
 - Passengers want to arrive at destination as fast as possible.
+
+### Area
+
+The map where stations are placed.
 
 ### Network
 

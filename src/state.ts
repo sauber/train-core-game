@@ -27,4 +27,7 @@ export type State = {
 
   /** Train types */
   trainTypes: Set<TrainType>;
+
+  /** Is game finished */
+  gameover: boolean;
 };

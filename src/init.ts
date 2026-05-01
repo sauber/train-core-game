@@ -53,13 +53,14 @@ export function init(): State {
     trainTypes: new Set([
       {
         name: "Local",
-        speed: 1,
-        wear: 1,
-        cost: 1,
+        speed: 0.2,
+        wear: 0.1,
+        cost: 20,
         minimum: 1,
-        maximum: 1,
+        maximum: 4,
       },
     ]),
+    gameover: false,
   };
 
   // Add initial stations
