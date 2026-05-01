@@ -1,8 +1,6 @@
 import { assertEquals } from "@std/assert";
 import type { TrainType } from "./train-type.ts";
-import { Track } from "./track.ts";
 import { Train } from "./train.ts";
-import { Station } from "./station.ts";
 
 Deno.test("Init train", () => {
   const type: TrainType = {
@@ -13,10 +11,7 @@ Deno.test("Init train", () => {
     minimum: 50,
     maximum: 200,
   };
-  const A = new Station("A");
-  const B = new Station("B");
-  const track = new Track([A, B]);
-  const train = new Train(type, track);
+  const train = new Train(type);
   assertEquals(train.type, type);
   assertEquals(train.passengers, []);
 });

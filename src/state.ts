@@ -10,9 +10,6 @@ export type State = {
   /** The player */
   account: Account;
 
-  /** Available station names */
-  stationNames: Array<string>;
-
   /** Area of the map */
   area: Area;
 

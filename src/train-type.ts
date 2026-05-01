@@ -1,6 +1,6 @@
-import type { Speed } from "./speed-type.ts";
-import type { Cost } from "./cost-type.ts";
-import type { WearRatio } from "./wear-type.ts";
+import type { Speed } from "./speed.ts";
+import type { Cost } from "./cost.ts";
+import type { WearRatio } from "./wear.ts";
 
 /** Properties of a train */
 export type TrainType = {
