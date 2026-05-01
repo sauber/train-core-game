@@ -1,5 +1,5 @@
 import { assertEquals, assertThrows } from "@std/assert";
-import { Account } from "./account.ts";
+import { Account } from "../entity/account.ts";
 
 Deno.test("Init", () => {
   const account = new Account(100);

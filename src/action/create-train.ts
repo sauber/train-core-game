@@ -1,8 +1,8 @@
-import type { Station } from "./station.ts";
-import type { Track } from "./track.ts";
-import type { TrainType } from "./train-type.ts";
-import { Train } from "./train.ts";
-import type { State } from "./state.ts";
+import type { Station } from "../entity/station.ts";
+import type { Track } from "../entity/track.ts";
+import type { TrainType } from "../entity/train-type.ts";
+import { Train } from "../entity/train.ts";
+import type { State } from "../entity/state.ts";
 
 /** Insert a new train at a station or on a track */
 export function createTrain(

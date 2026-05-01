@@ -1,6 +1,6 @@
-import { Account } from "./account.ts";
-import { Area } from "./area.ts";
-import type { State } from "./state.ts";
+import { Account } from "../entity/account.ts";
+import { Area } from "../entity/area.ts";
+import type { State } from "../entity/state.ts";
 import { createStation } from "./create-station.ts";
 
 /** Create default start state */

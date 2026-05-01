@@ -1,6 +1,6 @@
 import { createStationName } from "./create-station-name.ts";
-import type { State } from "./state.ts";
-import { Station } from "./station.ts";
+import type { State } from "../entity/state.ts";
+import { Station } from "../entity/station.ts";
 
 /** Create a station on the area */
 export function createStation(state: State): boolean | Error {

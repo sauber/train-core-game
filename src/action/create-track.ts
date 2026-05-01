@@ -1,6 +1,6 @@
-import type { State } from "./state.ts";
-import type { Station } from "./station.ts";
-import { Track } from "./track.ts";
+import type { State } from "../entity/state.ts";
+import type { Station } from "../entity/station.ts";
+import { Track } from "../entity/track.ts";
 
 /** Create a track between two stations, if it doesn't exist already */
 export function createTrack(

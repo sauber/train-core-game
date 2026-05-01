@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert/equals";
 import { createStation } from "./create-station.ts";
-import { init } from "./init.ts";
+import { init } from "./init-state.ts";
 
 Deno.test("Create station", () => {
   const state = init();
