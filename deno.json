@@ -1,6 +1,8 @@
 {
-  "name": "Rail Boss Game Core",
+  "name": "@sauber/rail-boss-engine",
   "version": "0.1.0",
+  "license": "MIT",
+  "exports": "./src/*.ts",
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.19"
   },

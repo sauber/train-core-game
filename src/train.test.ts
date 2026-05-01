@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { TrainType } from "./train-type.ts";
+import type { TrainType } from "./train-type.ts";
 import { Track } from "./track.ts";
 import { Train } from "./train.ts";
 import { Station } from "./station.ts";
