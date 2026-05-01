@@ -1,0 +1,8 @@
+{
+  "name": "Rail Boss Game Core",
+  "version": "0.1.0",
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.19"
+  },
+  "lock": false
+}

@@ -27,16 +27,6 @@ tracks and rolling stock.
 - Income is added to balance.
 - A journal keeps track of all transactions.
 
-### Store
-
-- List all items available for purchase
-
-### Map
-
-- Contains stations and network of tracks
-- Generates new stations at random locations
-- Ensures minimum distance between stations
-
 ### Stations
 
 - Each station has a uniq name chosen from static list of 25 biggest Danish
@@ -70,10 +60,17 @@ tracks and rolling stock.
 
 ### Network
 
+- A graph of node (stations) and links (tracks)
+- Generates new stations at random locations
+- Ensures minimum distance between stations
 - Contains all tracks.
 - Find shortest path from one station to any other. Destination station may not
   be reachable through existing usable tracks.
 - There can only be one track between same two stations.
+
+### Store
+
+- List all items available for purchase
 
 ### Track
 
