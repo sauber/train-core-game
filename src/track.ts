@@ -1,5 +1,5 @@
-import { Station } from "./station.ts";
+import type { Station } from "./station.ts";
 
 export class Track {
-  constructor(readonly stations: [Station, Station]) {}
+  constructor(public readonly stations: [Station, Station]) {}
 }
