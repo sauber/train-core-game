@@ -57,6 +57,7 @@ tracks and rolling stock.
 - A passenger is deleted from the game after paying travel fare upon arrival.
 - A passenger can choose to board the next arriving train, or skip.
 - A passenger can choose to disembark at any station.
+- Passengers want to arrive at destination as fast as possible.
 
 ### Network
 
