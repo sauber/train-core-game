@@ -2,8 +2,8 @@ import type { State } from "./state.ts";
 import type { Station } from "./station.ts";
 import { Track } from "./track.ts";
 
-/** Add a track between two stations, if it doesn't exist already */
-export function addTrack(
+/** Create a track between two stations, if it doesn't exist already */
+export function createTrack(
   state: State,
   a: Station,
   b: Station,

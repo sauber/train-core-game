@@ -1,7 +1,7 @@
 import { Account } from "./account.ts";
 import { Area } from "./area.ts";
 import type { State } from "./state.ts";
-import { addStation } from "./add-station.ts";
+import { createStation } from "./create-station.ts";
 
 /** Create default start state */
 export function init(): State {
@@ -25,7 +25,7 @@ export function init(): State {
   };
 
   // Add initial stations
-  for (let i = 0; i < 4; i++) addStation(state);
+  for (let i = 0; i < 4; i++) createStation(state);
 
   return state;
 }
