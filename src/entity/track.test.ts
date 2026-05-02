@@ -1,10 +1,16 @@
+import { assert } from "node:console";
 import { Station } from "./station.ts";
 import { Track } from "./track.ts";
 import { assertEquals } from "@std/assert";
 
 Deno.test("Init track", () => {
-  const A = new Station("A", 1);
-  const B = new Station("B", 1);
-  const track = new Track([A, B]);
-  assertEquals(track.stations, [A, B]);
+  const a = new Station("A", { x: 0, y: 0 }, 1);
+  const b = new Station("B", { x: 0, y: 0 }, 1);
+  const track = new Track(a, b);
+  assert(track.stations.has(a));
+  assert(track.stations.has(b));
+  assert(a.tracks.has(track));
+  assert(b.tracks.has(track));
+  assertEquals(track.train, undefined);
+  assertEquals(track.distance, 0);
 });

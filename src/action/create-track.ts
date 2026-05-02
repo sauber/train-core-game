@@ -14,7 +14,7 @@ export function createTrack(
       return Error(`Track exists between ${m.name} and ${n.name}`);
     }
   }
-  const track = new Track([a, b]);
+  const track = new Track(a, b);
   state.tracks.add(track);
   return track;
 }

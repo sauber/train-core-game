@@ -1,24 +1,21 @@
-import type { Station } from "./station.ts";
+import { Station, type Stations } from "./station.ts";
+
+export type Distance = number;
 
 // A coordinate on the map
-type Location = {
+export type Location = {
   x: number;
   y: number;
 };
 
 // Distance between two locations
-function distance(a: Location, b: Location): number {
+export function distance(a: Location, b: Location): number {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 }
 
-// A station at a location on the map
-type Spot = Location & {
-  station: Station;
-};
-
 /** Game map */
 export class Area {
-  private readonly spots: Array<Spot> = [];
+  private readonly stations: Stations = new Set();
 
   constructor(
     /** Width of map */
@@ -39,17 +36,17 @@ export class Area {
     };
   }
 
-  // What is the shortest distance from a location to any existing spots
+  // What is the shortest distance from a location to any existing stations
   private shortestDistance(location: Location): number {
     let shortest = Infinity;
-    for (const spot of this.spots) {
-      const dist = distance(location, spot);
+    this.stations.forEach((station: Station) => {
+      const dist = distance(location, station.location);
       if (dist < shortest) shortest = dist;
-    }
+    });
     return shortest;
   }
 
-  // Find a random location on the map with minimum distance to existing spots
+  // Find a random location on the map with minimum distance to existing stations
   private findEmptyLocation(): Location {
     // TODO: Fail after maximum number of tries
     while (true) {
@@ -60,9 +57,10 @@ export class Area {
   }
 
   /** Add station somewhere on the map */
-  public add(station: Station): boolean {
+  public createStation(name: string, platforms: number): Station {
     const location = this.findEmptyLocation();
-    this.spots.push({ ...location, station });
-    return true;
+    const station = new Station(name, location, platforms);
+    this.stations.add(station);
+    return station;
   }
 }

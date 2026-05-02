@@ -1,9 +1,9 @@
 import type { Account } from "./account.ts";
 import type { Area } from "./area.ts";
-import type { TrainType } from "./train-type.ts";
-import type { Station } from "./station.ts";
-import type { Train } from "./train.ts";
-import type { Track } from "./track.ts";
+import type { TrainTypes } from "./train-type.ts";
+import type { Stations } from "./station.ts";
+import type { Trains } from "./train.ts";
+import type { Tracks } from "./track.ts";
 
 /** All the objects in a game */
 export type State = {
@@ -14,16 +14,16 @@ export type State = {
   area: Area;
 
   /** Stations */
-  stations: Set<Station>;
+  stations: Stations;
 
   /** Tracks */
-  tracks: Set<Track>;
+  tracks: Tracks;
 
   /** Trains */
-  trains: Set<Train>;
+  trains: Trains;
 
   /** Train types */
-  trainTypes: Set<TrainType>;
+  trainTypes: TrainTypes;
 
   /** Is game finished */
   gameover: boolean;

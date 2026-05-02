@@ -3,13 +3,13 @@ import { Station } from "./station.ts";
 import type { TrainType } from "./train-type.ts";
 
 Deno.test("Station Init", () => {
-  const station = new Station("Alice", 1);
+  const station = new Station("Alice", { x: 0, y: 0 }, 1);
   assertEquals(station.name, "Alice");
-  assertEquals(station.capacity, 1);
+  assertEquals(station.availablePlatforms, 1);
 });
 
 Deno.test("Station add train", () => {
-  const station = new Station("Alice", 1);
+  const station = new Station("Alice", { x: 0, y: 0 }, 1);
   const express: TrainType = {
     name: "Express",
     speed: 100,
@@ -23,5 +23,5 @@ Deno.test("Station add train", () => {
     passengers: [],
   };
   station.addTrain(train);
-  assertEquals(station.capacity, 0);
+  assertEquals(station.availablePlatforms, 0);
 });

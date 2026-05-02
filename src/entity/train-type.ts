@@ -2,6 +2,8 @@ import type { Speed } from "./speed.ts";
 import type { Cost } from "./cost.ts";
 import type { WearRatio } from "./wear.ts";
 
+export type TrainTypes = Set<TrainType>;
+
 /** Properties of a train */
 export type TrainType = {
   // Name of train type

@@ -1,18 +1,17 @@
 import { createStationName } from "./create-station-name.ts";
 import type { State } from "../entity/state.ts";
-import { Station } from "../entity/station.ts";
+import type { Station } from "../entity/station.ts";
 
 /** Create a station on the area */
-export function createStation(state: State): boolean | Error {
-  // Pick next station name
+export function createStation(state: State): Station {
+  // Pick random station name
   const name: string = createStationName();
 
+  // Create station somewhere on the map
+  const station: Station = state.area.createStation(name, 1);
+
   // Add to list of stations
-  const station = new Station(name, 1);
   state.stations.add(station);
 
-  // Put it somewhere on the map
-  state.area.add(station);
-
-  return true;
+  return station;
 }
