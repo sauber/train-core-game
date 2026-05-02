@@ -26,8 +26,17 @@ export class Track {
     return true;
   }
 
+  /** Distance between stations */
   public get distance(): Distance {
     const [a, b] = Array.from(this.stations);
     return distance(a.location, b.location);
+  }
+
+  /** Given one station, which one is at the other end */
+  public otherStation(station: Station): Station {
+    for (const s of this.stations) {
+      if (s !== station) return s;
+    }
+    throw new Error("Station not in track");
   }
 }
