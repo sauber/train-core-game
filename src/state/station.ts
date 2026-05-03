@@ -30,8 +30,10 @@ export class Station {
   }
 
   /** Add train to station */
-  public addTrain(train: Train): boolean {
-    if (this.availablePlatforms <= 0) return false;
+  public addTrain(train: Train): true | Error {
+    if (this.availablePlatforms <= 0) {
+      return new Error("No platforms available");
+    }
     this.trains.add(train);
     return true;
   }

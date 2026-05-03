@@ -8,3 +8,8 @@ Examples:
 - Which track will train depart onto
 - Location of new station to be built
 - Generate route for train
+
+In a simulation, all transitions will be performed by controllers.
+
+In a game, some transitions will be performed by player, the rest by
+controllers.
