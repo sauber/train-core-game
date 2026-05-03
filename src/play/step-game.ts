@@ -1,10 +1,10 @@
-import type { State } from "../state/state.ts";
+import type { Game } from "./game.ts";
 
 // Increasing ticks throughout the game
 export type Tick = number;
 
 /** Automatic tasks to perform at each tick in game */
-export function stepGame(_state: State): void {
+export function stepGame(_state: Game): void {
   // TODO
   // Game:
   // - Increase tick

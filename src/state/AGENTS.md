@@ -4,12 +4,6 @@ Ensure game is always in valid state.
 
 ## Rules for state of game objects
 
-### Game
-
-- Game is in one of the following states: Not started, started, growing,
-  profitting, game over
-- Game transits states forward, never backwards.
-
 ### Area
 
 - Ensure minimum distance within edge

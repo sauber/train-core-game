@@ -8,3 +8,5 @@ Examples:
 - Build a new track between two stations.
 - Insert a new train on a station platform
 - Spawn a new passenger on a station
+
+All actions are logged to game journal

@@ -1,20 +1,6 @@
+import { Network } from "../analyze/network.ts";
 import type { Station, Stations } from "./station.ts";
 import type { Train } from "./train.ts";
-
-/** From one stations, create a list of recursively all possible destination stations */
-export function findDestinations(
-  station: Station,
-  stations: Stations = new Set<Station>([station]),
-): Stations {
-  station.tracks.forEach((track) => {
-    const other: Station = track.otherStation(station);
-    if (!stations.has(other)) {
-      stations.add(other);
-      findDestinations(other, stations);
-    }
-  });
-  return stations;
-}
 
 /** A traveler from station trying to reach another destination */
 export class Passenger {
@@ -28,15 +14,16 @@ export class Passenger {
     public readonly origin: Station,
   ) {
     // Confirm destinations exist at station
-    const destinations: Stations = findDestinations(origin);
-    destinations.delete(origin);
-    if (destinations.size < 1) {
+    const network = new Network(origin);
+    if (network.stations.size < 2) {
       throw new Error(
         `No destinations found at station ${origin.name}, passenger not created.`,
       );
     }
 
     // Pick a destination (random weighted by station size and distance)
+    const destinations: Stations = network.stations;
+    destinations.delete(origin);
     this.destination =
       [...destinations][Math.floor(Math.random() * destinations.size)];
 

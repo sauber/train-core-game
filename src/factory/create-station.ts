@@ -1,9 +1,9 @@
 import { createStationName } from "../utils/create-station-name.ts";
-import type { State } from "../state/state.ts";
+import type { Game } from "../play/game.ts";
 import type { Station } from "../state/station.ts";
 
 /** Create a station on the area */
-export function createStation(state: State): Station {
+export function createStation(state: Game): Station {
   // Pick random station name
   const name: string = createStationName();
 

@@ -1,12 +1,11 @@
-import { Account } from "../state/account.ts";
 import { Area } from "../state/area.ts";
-import type { State } from "../state/state.ts";
+import type { Game, JournalEntry } from "./game.ts";
 import { createStation } from "../factory/create-station.ts";
 
 /** Create default start state */
-export function init(): State {
-  const state: State = {
-    account: new Account(1000),
+export function createGame(): Game {
+  const state: Game = {
+    balance: 1000,
     area: new Area(100, 100, 10, 5),
     stations: new Set(),
     tracks: new Set(),
@@ -23,6 +22,7 @@ export function init(): State {
     ]),
     gameover: false,
     tick: 0,
+    journal: new Array<JournalEntry>(),
   };
 
   // Add initial stations

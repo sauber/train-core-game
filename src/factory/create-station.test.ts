@@ -1,9 +1,9 @@
 import { assertEquals } from "@std/assert/equals";
 import { createStation } from "./create-station.ts";
-import { init } from "../play/create-game.ts";
+import { createGame } from "../play/create-game.ts";
 
 Deno.test("Create station", () => {
-  const state = init();
+  const state = createGame();
   const station_count = state.stations.size;
 
   createStation(state);

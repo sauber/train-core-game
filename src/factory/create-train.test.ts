@@ -2,8 +2,8 @@ import { assertInstanceOf } from "@std/assert";
 
 import { createTrain } from "./create-train.ts";
 import { createTrack } from "./create-track.ts";
-import { init } from "../play/create-game.ts";
-import type { State } from "../state/state.ts";
+import { createGame } from "../play/create-game.ts";
+import type { Game } from "../play/game.ts";
 import type { Station } from "../state/station.ts";
 import type { TrainType } from "../state/train-type.ts";
 import { Train } from "../state/train.ts";
@@ -19,14 +19,14 @@ const type: TrainType = {
 };
 
 Deno.test("Create train at station", () => {
-  const game: State = init();
+  const game: Game = createGame();
   const station: Station = [...game.stations][0];
   const result = createTrain(game, type, station);
   assertInstanceOf(result, Train);
 });
 
 Deno.test("Create train on track", () => {
-  const game: State = init();
+  const game: Game = createGame();
   const [a, b] = [...game.stations];
   const track = createTrack(game, a, b) as Track;
   const train: Train | Error = createTrain(game, type, track);

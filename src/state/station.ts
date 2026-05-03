@@ -1,6 +1,7 @@
 import type { Train, Trains } from "./train.ts";
 import type { Location } from "./area.ts";
 import type { Track, Tracks } from "./track.ts";
+import type { Passenger } from "./passenger.ts";
 
 export type Stations = Set<Station>;
 
@@ -10,6 +11,9 @@ export class Station {
 
   /** Tracks connected to station */
   public readonly tracks: Tracks = new Set<Track>();
+
+  /** Passengers waiting at station */
+  public readonly passengers: Set<Passenger> = new Set<Passenger>();
 
   constructor(
     /** Name of station */
