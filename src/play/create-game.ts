@@ -1,7 +1,7 @@
-import { Account } from "../entity/account.ts";
-import { Area } from "../entity/area.ts";
-import type { State } from "../entity/state.ts";
-import { createStation } from "./create-station.ts";
+import { Account } from "../state/account.ts";
+import { Area } from "../state/area.ts";
+import type { State } from "../state/state.ts";
+import { createStation } from "../factory/create-station.ts";
 
 /** Create default start state */
 export function init(): State {
@@ -22,6 +22,7 @@ export function init(): State {
       },
     ]),
     gameover: false,
+    tick: 0,
   };
 
   // Add initial stations

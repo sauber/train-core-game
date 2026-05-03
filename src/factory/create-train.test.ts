@@ -2,12 +2,12 @@ import { assertInstanceOf } from "@std/assert";
 
 import { createTrain } from "./create-train.ts";
 import { createTrack } from "./create-track.ts";
-import { init } from "./init-state.ts";
-import type { State } from "../entity/state.ts";
-import type { Station } from "../entity/station.ts";
-import type { TrainType } from "../entity/train-type.ts";
-import { Train } from "../entity/train.ts";
-import type { Track } from "../entity/track.ts";
+import { init } from "../play/create-game.ts";
+import type { State } from "../state/state.ts";
+import type { Station } from "../state/station.ts";
+import type { TrainType } from "../state/train-type.ts";
+import { Train } from "../state/train.ts";
+import type { Track } from "../state/track.ts";
 
 const type: TrainType = {
   name: "Ride",

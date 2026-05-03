@@ -1,9 +1,9 @@
 import { assertInstanceOf } from "@std/assert";
 import { createTrack } from "./create-track.ts";
-import { init } from "./init-state.ts";
-import type { State } from "../entity/state.ts";
-import type { Station } from "../entity/station.ts";
-import { Track } from "../entity/track.ts";
+import { init } from "../play/create-game.ts";
+import type { State } from "../state/state.ts";
+import type { Station } from "../state/station.ts";
+import { Track } from "../state/track.ts";
 
 Deno.test("Create track", () => {
   // Pick any two stations

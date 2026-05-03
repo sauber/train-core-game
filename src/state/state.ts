@@ -5,6 +5,9 @@ import type { Stations } from "./station.ts";
 import type { Trains } from "./train.ts";
 import type { Tracks } from "./track.ts";
 
+/** Number of steps since start */
+export type Tick = number;
+
 /** All the objects in a game */
 export type State = {
   /** The player */
@@ -27,4 +30,7 @@ export type State = {
 
   /** Is game finished */
   gameover: boolean;
+
+  /** Current tick of game */
+  tick: Tick;
 };

@@ -1,5 +1,5 @@
-import type { Station } from "../entity/station.ts";
-import { Passenger } from "../entity/passenger.ts";
+import type { Station } from "../state/station.ts";
+import { Passenger } from "../state/passenger.ts";
 
 /** Create passenger at station */
 export function createPassenger(
