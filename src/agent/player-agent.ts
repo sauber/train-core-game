@@ -7,7 +7,7 @@ import type { Game } from "../play/game.ts";
 import type { Trains } from "../state/train.ts";
 
 /** Take an action on behalf of a player */
-export const playerController = (game: Game): void => {
+export const playerAgent = (game: Game): void => {
   // Place a train on a network without any trains
   const networks = listNetworks(game);
   for (const network of networks) {
@@ -28,6 +28,10 @@ export const playerController = (game: Game): void => {
     const type = [...game.trainTypes].find((type) => type.cost <= game.balance);
     if (!type) break;
     createTrain(game, type, station);
+    game.journal.push({
+      tick: game.tick,
+      message: `${type.name} train inserted in ${station.name}`,
+    });
     return;
   }
 

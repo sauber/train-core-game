@@ -35,8 +35,8 @@ transports passengers, and earns profit while maintaining tracks.
 
 ```
 src/
+├── agent/       # Make decisions for objects
 ├── analyze/     # Find objects matching criteria
-├── controller/  # Make decisions for objects
 ├── factory/     # Insert objects in game
 ├── play/        # Progress game
 ├── state/       # Current game objects and their state
