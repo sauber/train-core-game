@@ -1,9 +1,9 @@
-import type { Game } from "../play/game.ts";
+import type { Simulation } from "../play/simulation.ts";
 import type { Station, Stations } from "../state/station.ts";
 import { Network } from "./network.ts";
 
 /** List of all networks in game */
-export function listNetworks(game: Game): Network[] {
+export function listNetworks(game: Simulation): Network[] {
   const networks: Network[] = [];
   const stations: Stations = new Set<Station>([...game.stations]);
   while (stations.size > 0) {

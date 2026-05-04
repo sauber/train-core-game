@@ -1,10 +1,10 @@
-import type { Game } from "../play/game.ts";
+import type { Simulation } from "../play/simulation.ts";
 import type { Station } from "../state/station.ts";
 import { Track } from "../state/track.ts";
 
 /** Create a track between two stations, if it doesn't exist already */
 export function createTrack(
-  state: Game,
+  state: Simulation,
   a: Station,
   b: Station,
 ): Track | Error {

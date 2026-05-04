@@ -3,11 +3,11 @@ import { listNetworks } from "../analyze/list-networks.ts";
 import { unConnectedStations } from "../analyze/list-unconnected-stations.ts";
 import { createTrack } from "../factory/create-track.ts";
 import { createTrain } from "../factory/create-train.ts";
-import type { Game } from "../play/game.ts";
+import type { Simulation } from "../play/simulation.ts";
 import type { Trains } from "../state/train.ts";
 
 /** Take an action on behalf of a player */
-export const playerAgent = (game: Game): void => {
+export const playerAgent = (game: Simulation): void => {
   // Place a train on a network without any trains
   const networks = listNetworks(game);
   for (const network of networks) {
@@ -28,10 +28,7 @@ export const playerAgent = (game: Game): void => {
     const type = [...game.trainTypes].find((type) => type.cost <= game.balance);
     if (!type) break;
     createTrain(game, type, station);
-    game.journal.push({
-      tick: game.tick,
-      message: `${type.name} train inserted in ${station.name}`,
-    });
+    game.event(`${type.name} train inserted in ${station.name}`);
     return;
   }
 

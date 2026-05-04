@@ -1,13 +1,13 @@
 import { assertInstanceOf } from "@std/assert";
 import { createTrack } from "./create-track.ts";
 import { createGame } from "../play/create-game.ts";
-import type { Game } from "../play/game.ts";
+import type { Simulation } from "../play/simulation.ts";
 import type { Station } from "../state/station.ts";
 import { Track } from "../state/track.ts";
 
 Deno.test("Create track", () => {
   // Pick any two stations
-  const state: Game = createGame();
+  const state: Simulation = createGame();
   const stations: Station[] = Array.from(state.stations);
   const [a, b] = stations;
 

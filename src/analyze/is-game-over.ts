@@ -1,4 +1,4 @@
-import type { Game } from "../play/game.ts";
+import type { Simulation } from "../play/simulation.ts";
 import type { TrainType } from "../state/train-type.ts";
 
 /** Confirm if any of the conditions for Game Over is met
@@ -6,7 +6,7 @@ import type { TrainType } from "../state/train-type.ts";
  * 2. Countdown in Profit phases completed
  * 3. No trains in network yet, and no money to buy train
  */
-export function isGameover(game: Game): boolean {
+export function isGameover(game: Simulation): boolean {
   if (game.trains.size == 0) {
     if (
       game.balance <

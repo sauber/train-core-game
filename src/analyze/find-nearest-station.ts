@@ -1,9 +1,12 @@
-import type { Game } from "../play/game.ts";
+import type { Simulation } from "../play/simulation.ts";
 import type { Station } from "../state/station.ts";
 import { type Distance, distance } from "../state/area.ts";
 
 /** From one station, which other station is geographically nearest */
-export function findNearestStation(game: Game, station: Station): Station {
+export function findNearestStation(
+  game: Simulation,
+  station: Station,
+): Station {
   let nearestDistance: Distance = Infinity;
   let nearestStation: Station = station;
   for (const other of game.stations) {
