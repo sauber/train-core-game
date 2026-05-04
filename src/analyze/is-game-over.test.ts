@@ -1,9 +1,9 @@
 import { assertEquals } from "@std/assert";
-import { createGame } from "../play/create-game.ts";
 import { isGameover } from "./is-game-over.ts";
+import { Simulation } from "../play/simulation.ts";
 
 Deno.test("Affort a train", () => {
-  const game = createGame();
+  const game = new Simulation();
   const cheapestTrainPrice = Math.min(
     ...[...game.trainTypes].map((t) => t.cost),
   );

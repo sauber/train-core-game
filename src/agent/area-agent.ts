@@ -11,14 +11,14 @@ export const areaAgent: Agent = (game: Simulation): void => {
   // Number of stations required
   let stations_required = 0;
   game.stationLevels.forEach((balance: Balance, index) => {
-    if (game.balance >= balance) stations_required = index;
+    if (game.balance >= balance) stations_required = index + 1;
   });
-
-  console.log({ current_station_count, stations_required });
 
   // Spawn missing stations
   for (let i = current_station_count; i < stations_required; i++) {
     const station: Station = createStation(game);
-    game.event(`${station.name} station created`);
+    game.event(`${station.name} station built`);
+    // Only one station per tick
+    return;
   }
 };

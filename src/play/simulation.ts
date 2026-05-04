@@ -1,6 +1,6 @@
 import { Area } from "../state/area.ts";
 import type { TrainTypes } from "../state/train-type.ts";
-import type { Station, Stations } from "../state/station.ts";
+import type { Stations } from "../state/station.ts";
 import type { Train, Trains } from "../state/train.ts";
 import type { Track, Tracks } from "../state/track.ts";
 

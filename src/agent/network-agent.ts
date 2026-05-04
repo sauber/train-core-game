@@ -1,14 +1,10 @@
-import { findNearestStation } from "../analyze/find-nearest-station.ts";
 import { listNetworks } from "../analyze/list-networks.ts";
-import { unConnectedStations } from "../analyze/list-unconnected-stations.ts";
-import { createTrack } from "../factory/create-track.ts";
 import { createTrain } from "../factory/create-train.ts";
 import type { Agent, Simulation } from "../play/simulation.ts";
 import type { Trains } from "../state/train.ts";
 
-/** Take an action on behalf of a player */
-export const playerAgent: Agent = (game: Simulation): void => {
-  // Place a train on a network without any trains
+/** Insert a train on a network without any trains */
+export const networkAgent: Agent = (game: Simulation): void => {
   const networks = listNetworks(game);
   for (const network of networks) {
     if (network.tracks.size == 0) continue;
@@ -29,15 +25,6 @@ export const playerAgent: Agent = (game: Simulation): void => {
     if (!type) break;
     createTrain(game, type, station);
     game.event(`${type.name} train inserted in ${station.name}`);
-    return;
-  }
-
-  // If a station is unconnected, connect it to nearest other station
-  const unconnected = unConnectedStations(game);
-  for (const station of unconnected) {
-    const other = findNearestStation(game, station);
-    createTrack(game, station, other);
-    console.log(`Player create track from ${station.name} to ${other.name}`);
     return;
   }
 };

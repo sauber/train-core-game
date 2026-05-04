@@ -1,17 +1,19 @@
 import { assertEquals } from "@std/assert";
-import { createGame } from "../play/create-game.ts";
-import type { Simulation } from "../play/simulation.ts";
+import { Simulation } from "../play/simulation.ts";
 import { unConnectedStations } from "./list-unconnected-stations.ts";
 import { createTrack } from "../factory/create-track.ts";
+import { createStation } from "../factory/create-station.ts";
 
 Deno.test("Unconnected Stations", () => {
-  const game: Simulation = createGame();
+  const game = new Simulation();
+  createStation(game);
 
   // No connected yet
   let unconnected = unConnectedStations(game);
   assertEquals(game.stations.size, unconnected.size);
 
   // Two stations connected
+  createStation(game);
   const [a, b] = [...game.stations];
   createTrack(game, a, b);
   unconnected = unConnectedStations(game);
