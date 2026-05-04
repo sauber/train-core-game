@@ -1,7 +1,7 @@
-import { listNetworks } from "../analyze/list-networks.ts";
-import { createTrain } from "../factory/create-train.ts";
+import { listNetworks } from "./list-networks.ts";
+import { createTrain } from "../train/create-train.ts";
 import type { Agent, Simulation } from "../play/simulation.ts";
-import type { Trains } from "../state/train.ts";
+import type { Trains } from "../train/train.ts";
 
 /** Insert a train on a network without any trains */
 export const networkAgent: Agent = (game: Simulation): void => {

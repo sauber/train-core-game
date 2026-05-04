@@ -1,6 +1,6 @@
-import type { Speed } from "./speed.ts";
-import type { Cost } from "./cost.ts";
-import type { WearRatio } from "./wear.ts";
+import type { Speed } from "../state/speed.ts";
+import type { Cost } from "../state/cost.ts";
+import type { WearRatio } from "../state/wear.ts";
 
 export type TrainTypes = Set<TrainType>;
 

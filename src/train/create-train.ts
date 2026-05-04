@@ -1,7 +1,7 @@
-import type { Station } from "../state/station.ts";
+import type { Station } from "../station/station.ts";
 import type { Track } from "../track/track.ts";
-import type { TrainType } from "../state/train-type.ts";
-import { Train } from "../state/train.ts";
+import type { TrainType } from "./train-type.ts";
+import { Train } from "./train.ts";
 import type { Simulation } from "../play/simulation.ts";
 
 /** Insert a new train at a station or on a track */

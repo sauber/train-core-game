@@ -1,5 +1,5 @@
-import type { Station } from "../state/station.ts";
-import { Passenger } from "../state/passenger.ts";
+import type { Station } from "../station/station.ts";
+import { Passenger } from "./passenger.ts";
 
 /** Create passenger at station */
 export function createPassenger(

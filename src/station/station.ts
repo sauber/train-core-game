@@ -1,7 +1,7 @@
-import type { Train, Trains } from "./train.ts";
-import type { Location } from "./area.ts";
+import type { Train, Trains } from "../train/train.ts";
+import type { Location } from "../area/area.ts";
 import type { Track, Tracks } from "../track/track.ts";
-import type { Passenger } from "./passenger.ts";
+import type { Passenger } from "../passenger/passenger.ts";
 
 export type Stations = Set<Station>;
 

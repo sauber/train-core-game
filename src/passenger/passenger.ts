@@ -1,6 +1,6 @@
-import { Network } from "../analyze/network.ts";
-import type { Station, Stations } from "./station.ts";
-import type { Train } from "./train.ts";
+import { Network } from "../network/network.ts";
+import type { Station, Stations } from "../station/station.ts";
+import type { Train } from "../train/train.ts";
 
 /** A traveler from station trying to reach another destination */
 export class Passenger {

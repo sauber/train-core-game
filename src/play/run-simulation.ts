@@ -1,6 +1,6 @@
 import { type Agents, Simulation } from "./simulation.ts";
-import { networkAgent } from "../agent/network-agent.ts";
-import { areaAgent } from "../agent/area-agent.ts";
+import { networkAgent } from "../network/network-agent.ts";
+import { areaAgent } from "../area/area-agent.ts";
 import { trackAgent } from "../track/track-agent.ts";
 import { reportAgent } from "../agent/report-agent.ts";
 

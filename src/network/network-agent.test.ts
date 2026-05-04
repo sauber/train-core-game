@@ -1,7 +1,7 @@
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { createStation } from "../factory/create-station.ts";
+import { createStation } from "../station/create-station.ts";
 import { createTrack } from "../track/create-track.ts";
-import { networkAgent } from "./network-agent.ts";
+import { networkAgent } from "../network/network-agent.ts";
 import { Simulation } from "../play/simulation.ts";
 
 Deno.test("Network agent inserts a train into a connected network", () => {

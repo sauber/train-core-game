@@ -1,8 +1,8 @@
-import { findNearestStation } from "../analyze/find-nearest-station.ts";
-import { unConnectedStations } from "../analyze/list-unconnected-stations.ts";
+import { findNearestStation } from "../station/find-nearest-station.ts";
+import { unConnectedStations } from "../station/list-unconnected-stations.ts";
 import { createTrack } from "./create-track.ts";
 import type { Agent, Simulation } from "../play/simulation.ts";
-import { distance } from "../state/area.ts";
+import { distance } from "../area/area.ts";
 import type { Track } from "./track.ts";
 
 /** If a station is unconnected, connect it to nearest other station */

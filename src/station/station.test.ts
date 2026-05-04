@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 import { Station } from "./station.ts";
-import type { TrainType } from "./train-type.ts";
+import type { TrainType } from "../train/train-type.ts";
 
 Deno.test("Station Init", () => {
   const station = new Station("Alice", { x: 0, y: 0 }, 1);

@@ -1,5 +1,5 @@
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { areaAgent } from "./area-agent.ts";
+import { areaAgent } from "../area/area-agent.ts";
 import { Simulation } from "../play/simulation.ts";
 
 Deno.test("Area agent builds one station per tick", () => {

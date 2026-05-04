@@ -3,7 +3,7 @@ import {
   assertGreaterOrEqual,
   assertNotEquals,
 } from "@std/assert";
-import { createStationName } from "../utils/create-station-name.ts";
+import { createStationName } from "../station/create-station-name.ts";
 
 Deno.test("Create station name", () => {
   const name = createStationName();

@@ -1,4 +1,4 @@
-import type { Distance } from "../state/area.ts";
+import type { Distance } from "../area/area.ts";
 import type { Track } from "./track.ts";
 
 export type Sequence = Track[];

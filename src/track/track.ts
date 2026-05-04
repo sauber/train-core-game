@@ -1,6 +1,6 @@
-import { type Distance, distance } from "../state/area.ts";
-import type { Station, Stations } from "../state/station.ts";
-import type { Train } from "../state/train.ts";
+import { type Distance, distance } from "../area/area.ts";
+import type { Station, Stations } from "../station/station.ts";
+import type { Train } from "../train/train.ts";
 
 export type Tracks = Set<Track>;
 

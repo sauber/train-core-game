@@ -1,7 +1,7 @@
 import { assertInstanceOf } from "@std/assert";
-import { Passenger } from "../state/passenger.ts";
-import { Station } from "../state/station.ts";
-import { createPassenger } from "../factory/create-passenger.ts";
+import { Passenger } from "./passenger.ts";
+import { Station } from "../station/station.ts";
+import { createPassenger } from "./create-passenger.ts";
 import { Track } from "../track/track.ts";
 
 Deno.test("Cannot create passenger at unconnected station", () => {

@@ -1,5 +1,5 @@
 import { assert, assertEquals } from "@std/assert";
-import { Station } from "../state/station.ts";
+import { Station } from "../station/station.ts";
 import { Track } from "./track.ts";
 
 Deno.test("Create track", () => {

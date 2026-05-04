@@ -1,5 +1,5 @@
 import type { Simulation } from "../play/simulation.ts";
-import type { Station, Stations } from "../state/station.ts";
+import type { Station, Stations } from "../station/station.ts";
 import { Network } from "./network.ts";
 
 /** List of all networks in game */

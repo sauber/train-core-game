@@ -1,6 +1,6 @@
 import type { Simulation } from "../play/simulation.ts";
-import type { Station } from "../state/station.ts";
-import { type Distance, distance } from "../state/area.ts";
+import type { Station } from "./station.ts";
+import { type Distance, distance } from "../area/area.ts";
 
 /** From one station, which other station is geographically nearest */
 export function findNearestStation(

@@ -1,6 +1,6 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { Passenger } from "./passenger.ts";
-import { Station } from "./station.ts";
+import { Station } from "../station/station.ts";
 import { Track } from "../track/track.ts";
 
 Deno.test("Init Passenger", () => {

@@ -1,6 +1,6 @@
-import { createStation } from "../factory/create-station.ts";
+import { createStation } from "../station/create-station.ts";
 import type { Agent, Balance, Simulation } from "../play/simulation.ts";
-import type { Station } from "../state/station.ts";
+import type { Station } from "../station/station.ts";
 
 export const areaAgent: Agent = (game: Simulation): void => {
   // Create stations at capital levels
