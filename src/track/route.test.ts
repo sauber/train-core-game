@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { Route } from "./route.ts";
 import { Station } from "../state/station.ts";
-import { Track } from "../state/track.ts";
+import { Track } from "./track.ts";
 
 Deno.test("Route distance", () => {
   const a = new Station("A", { x: 0, y: 0 }, 1);

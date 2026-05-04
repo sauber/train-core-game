@@ -1,5 +1,5 @@
 import type { Station } from "../state/station.ts";
-import type { Track } from "../state/track.ts";
+import type { Track } from "../track/track.ts";
 import type { TrainType } from "../state/train-type.ts";
 import { Train } from "../state/train.ts";
 import type { Simulation } from "../play/simulation.ts";

@@ -1,6 +1,6 @@
-import { Station } from "./station.ts";
-import { Track } from "./track.ts";
 import { assert, assertEquals } from "@std/assert";
+import { Station } from "../state/station.ts";
+import { Track } from "./track.ts";
 
 Deno.test("Create track", () => {
   const a = new Station("A", { x: 0, y: 0 }, 1);

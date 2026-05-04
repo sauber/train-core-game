@@ -1,7 +1,7 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { Passenger } from "./passenger.ts";
 import { Station } from "./station.ts";
-import { Track } from "./track.ts";
+import { Track } from "../track/track.ts";
 
 Deno.test("Init Passenger", () => {
   const A = new Station("A", { x: 0, y: 0 }, 1);

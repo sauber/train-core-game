@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { Simulation } from "../play/simulation.ts";
 import { unConnectedStations } from "./list-unconnected-stations.ts";
-import { createTrack } from "../factory/create-track.ts";
+import { createTrack } from "../track/create-track.ts";
 import { createStation } from "../factory/create-station.ts";
 
 Deno.test("Unconnected Stations", () => {

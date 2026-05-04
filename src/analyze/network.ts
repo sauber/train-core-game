@@ -1,5 +1,5 @@
 import type { Station, Stations } from "../state/station.ts";
-import type { Track, Tracks } from "../state/track.ts";
+import type { Track, Tracks } from "../track/track.ts";
 import type { Train, Trains } from "../state/train.ts";
 
 /** From one stations, create a list of recursively all possible destination stations */

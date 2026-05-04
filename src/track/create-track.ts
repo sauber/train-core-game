@@ -1,6 +1,6 @@
 import type { Simulation } from "../play/simulation.ts";
 import type { Station } from "../state/station.ts";
-import { Track } from "../track/track.ts";
+import { Track } from "./track.ts";
 
 /** Create a track between two stations, if it doesn't exist already */
 export function createTrack(

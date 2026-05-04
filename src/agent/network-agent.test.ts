@@ -1,6 +1,6 @@
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { createStation } from "../factory/create-station.ts";
-import { createTrack } from "../factory/create-track.ts";
+import { createTrack } from "../track/create-track.ts";
 import { networkAgent } from "./network-agent.ts";
 import { Simulation } from "../play/simulation.ts";
 

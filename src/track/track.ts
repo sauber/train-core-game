@@ -1,6 +1,6 @@
-import { type Distance, distance } from "./area.ts";
-import type { Station, Stations } from "./station.ts";
-import type { Train } from "./train.ts";
+import { type Distance, distance } from "../state/area.ts";
+import type { Station, Stations } from "../state/station.ts";
+import type { Train } from "../state/train.ts";
 
 export type Tracks = Set<Track>;
 
@@ -15,7 +15,7 @@ export class Track {
   /** Price of track */
   // public readonly price: number;
 
-  constructor(a: Station, b: Station// public readonly pricePerUnit: number
+  constructor(a: Station, b: Station // public readonly pricePerUnit: number
   ) {
     // Confirm trakc connect to two different stations
     if (a === b) throw new Error("Track must connect two different stations");

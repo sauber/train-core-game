@@ -1,6 +1,6 @@
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { createStation } from "../factory/create-station.ts";
-import { trackAgent } from "./track-agent.ts";
+import { trackAgent } from "../track/track-agent.ts";
 import { Simulation } from "../play/simulation.ts";
 
 Deno.test("Track agent connects one unconnected station", () => {
