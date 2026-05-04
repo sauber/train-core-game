@@ -1,8 +1,8 @@
 import { Area } from "../area/area.ts";
 import type { TrainTypes } from "../train/train-type.ts";
-import type { Station, Stations } from "../station/station.ts";
-import type { Train, Trains } from "../train/train.ts";
-import type { Track, Tracks } from "../track/track.ts";
+import { Stations } from "../station/station.ts";
+import { Trains } from "../train/train.ts";
+import { Tracks } from "../track/track.ts";
 
 /** Amount of capital available */
 export type Balance = number;
@@ -38,13 +38,13 @@ export class Simulation {
   public readonly area: Area = new Area(100, 100, 10, 5);
 
   /** Stations */
-  public readonly stations: Stations = new Set<Station>();
+  public readonly stations: Stations = new Stations(12);
 
   /** Tracks */
-  public readonly tracks: Tracks = new Set<Track>();
+  public readonly tracks: Tracks = new Tracks();
 
   /** Trains */
-  public readonly trains: Trains = new Set<Train>();
+  public readonly trains: Trains = new Trains();
 
   /** Train types */
   public readonly trainTypes: TrainTypes = DEFAULT_TRAIN_TYPES;

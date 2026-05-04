@@ -6,12 +6,12 @@ import type { Simulation } from "../play/simulation.ts";
 
 /** Insert a new train at a station or on a track */
 export function createTrain(
-  state: Simulation,
+  game: Simulation,
   type: TrainType,
   target: Station | Track,
 ): Train | Error {
   const train = new Train(type);
-  if (!target.addTrain(train)) return new Error("Could not add train");
-  state.trains.add(train);
+  if (!target.trains.add(train)) return new Error("Could not add train");
+  game.trains.add(train);
   return train;
 }

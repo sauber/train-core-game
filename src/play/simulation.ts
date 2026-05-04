@@ -1,8 +1,9 @@
 import { Area } from "../area/area.ts";
 import type { TrainTypes } from "../train/train-type.ts";
 import type { Stations } from "../station/station.ts";
-import type { Train, Trains } from "../train/train.ts";
-import type { Track, Tracks } from "../track/track.ts";
+import { Trains } from "../train/train.ts";
+import { Track, Tracks } from "../track/track.ts";
+import { Passenger, Passengers } from "../passenger/passenger.ts";
 
 /** Amount of capital available */
 export type Balance = number;
@@ -68,16 +69,19 @@ export class Simulation {
   // public readonly stations: Stations = new Set<Station>();
 
   /** Tracks */
-  public readonly tracks: Tracks = new Set<Track>();
+  public readonly tracks: Tracks = new Tracks();
 
   /** Trains */
-  public readonly trains: Trains = new Set<Train>();
+  public readonly trains: Trains = new Trains(Infinity);
 
   /** Train types */
   public readonly trainTypes: TrainTypes = DEFAULT_TRAIN_TYPES;
 
   /** Capital leves where new stations are spawned */
   public readonly stationLevels: Array<Balance> = DEFAULT_STATION_LEVES;
+
+  /** Passengers */
+  public readonly passengers: Passengers = new Passengers(Infinity);
 
   /** Is game finished */
   public gameover: boolean = false;

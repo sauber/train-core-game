@@ -1,13 +1,19 @@
 import { type Distance, distance } from "../area/area.ts";
-import type { Station, Stations } from "../station/station.ts";
-import type { Train } from "../train/train.ts";
+import type { Simulation } from "../play/simulation.ts";
+import { type Station, Stations } from "../station/station.ts";
+import { Trains } from "../train/train.ts";
+import { LimitSet } from "../utils/limitset.ts";
 
-export type Tracks = Set<Track>;
+export class Tracks extends LimitSet<Track> {
+  constructor(limit: number = Infinity, values: Array<Track> = []) {
+    super(limit, values);
+  }
+}
 
 /** Link between two stations */
 export class Track {
   /** Optional train on track */
-  public train: Train | undefined;
+  public readonly trains: Trains;
 
   /** Set of stations */
   public readonly stations: Stations;
@@ -17,20 +23,29 @@ export class Track {
 
   constructor(a: Station, b: Station // public readonly pricePerUnit: number
   ) {
-    // Confirm trakc connect to two different stations
+    // Confirm track connect to two different stations
     if (a === b) throw new Error("Track must connect two different stations");
-    this.stations = new Set<Station>([a, b]);
-    // a.addTrack(this);
-    // b.addTrack(this);
-    // this.price = Math.max(
-    //   1,
-    //   Math.round(pricePerUnit * distance(a.location, b.location)),
-    // );
+    this.stations = new Stations(2, [a, b]);
+    this.trains = new Trains(1);
   }
 
-  public addTrain(train: Train): boolean | Error {
-    if (this.train) return new Error("Track already has train");
-    this.train = train;
+  /** Add track to simulation */
+  public add(game: Simulation): true | Error {
+    for (const s of this.stations) {
+      if (s.tracks.has(this)) return new Error("Track already exists");
+      s.addTrack(this);
+    }
+    game.tracks.add(this);
+    return true;
+  }
+
+  /** Remove only if no train on track */
+  public remove(game: Simulation): true | Error {
+    if (this.trains.size > 0) return new Error("Train on track");
+    for (const s of this.stations) {
+      s.removeTrack(this);
+    }
+    game.tracks.delete(this);
     return true;
   }
 

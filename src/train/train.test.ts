@@ -13,5 +13,4 @@ Deno.test("Init train", () => {
   };
   const train = new Train(type);
   assertEquals(train.type, type);
-  assertEquals(train.passengers, []);
 });

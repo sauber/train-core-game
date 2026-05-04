@@ -10,9 +10,7 @@ Deno.test("Create track", () => {
   assert(track.stations.has(b), "Station B has track");
   assert(!a.tracks.has(track));
   assert(!b.tracks.has(track));
-  assertEquals(track.train, undefined);
   assertEquals(track.distance, 0);
   assertEquals(track.otherStation(a), b);
   assertEquals(track.otherStation(b), a);
-  // assertEquals(track.price, 1);
 });

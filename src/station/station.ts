@@ -1,19 +1,23 @@
-import type { Train, Trains } from "../train/train.ts";
+import { type Train, Trains } from "../train/train.ts";
 import type { Location } from "../area/area.ts";
-import type { Track, Tracks } from "../track/track.ts";
-import type { Passenger } from "../passenger/passenger.ts";
+import { type Track, Tracks } from "../track/track.ts";
+import { Passengers } from "../passenger/mod.ts";
+import { LimitSet } from "../utils/limitset.ts";
 
-export type Stations = Set<Station>;
+export class Stations extends LimitSet<Station> {
+  constructor(limit: number = Infinity, values: Array<Station> = []) {
+    super(limit, values);
+  }
+}
 
 export class Station {
   /** Trains currently at station */
-  public readonly trains: Trains = new Set<Train>();
+  public readonly trains: Trains;
 
   /** Tracks connected to station */
-  public readonly tracks: Tracks = new Set<Track>();
+  public readonly tracks: Tracks = new Tracks();
 
-  /** Passengers waiting at station */
-  public readonly passengers: Set<Passenger> = new Set<Passenger>();
+  public readonly passengers: Passengers = new Passengers(Infinity);
 
   constructor(
     /** Name of station */
@@ -22,7 +26,9 @@ export class Station {
     public readonly location: Location,
     /** Count of platforms */
     private platforms: number,
-  ) {}
+  ) {
+    this.trains = new Trains(platforms);
+  }
 
   /** Number of platforms not in use */
   public get availablePlatforms(): number {

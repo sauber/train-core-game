@@ -1,21 +1,34 @@
-import { assertInstanceOf } from "@std/assert";
-import { Passenger } from "./passenger.ts";
-import { Station } from "../station/station.ts";
+import { assert, assertInstanceOf } from "@std/assert";
+import type { Passenger } from "./passenger.ts";
 import { createPassenger } from "./create-passenger.ts";
 import { Track } from "../track/track.ts";
+import { Simulation } from "../play/simulation.ts";
+import { createStation } from "../station/create-station.ts";
+import type { Station } from "../station/station.ts";
 
-Deno.test("Cannot create passenger at unconnected station", () => {
-  const a = new Station("A", { x: 0, y: 0 }, 1);
-  const p: Passenger | Error = createPassenger(a);
+Deno.test("No network", () => {
+  const game = new Simulation();
+  const p: Passenger | Error = createPassenger(game);
   assertInstanceOf(p, Error);
 });
 
-Deno.test("Create passenger", () => {
-  const a = new Station("A", { x: 0, y: 0 }, 1);
-  const b = new Station("B", { x: 0, y: 0 }, 1);
+Deno.test("No connections", () => {
+  const game = new Simulation();
+  createStation(game);
+  createStation(game);
+  const p: Passenger | Error = createPassenger(game);
+  assertInstanceOf(p, Error);
+});
+
+Deno.test("Connection", () => {
+  const game = new Simulation();
+  const a: Station = createStation(game);
+  const b: Station = createStation(game);
+
   const t = new Track(a, b);
   a.addTrack(t);
   b.addTrack(t);
-  const p: Passenger | Error = createPassenger(a);
-  assertInstanceOf(p, Passenger);
+
+  const p: Passenger | Error = createPassenger(game);
+  assert("origin" in p);
 });

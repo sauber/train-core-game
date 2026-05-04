@@ -1,4 +1,4 @@
-import { Station, type Stations } from "../station/station.ts";
+import { Station, Stations } from "../station/station.ts";
 
 export type Distance = number;
 
@@ -15,7 +15,7 @@ export function distance(a: Location, b: Location): number {
 
 /** Game map */
 export class Area {
-  public readonly stations: Stations = new Set();
+  public readonly stations: Stations = new Stations(Infinity);
 
   constructor(
     /** Width of map */

@@ -1,15 +1,16 @@
 import type { Simulation } from "../play/simulation.ts";
-import type { Station, Stations } from "../station/station.ts";
-import { Network } from "./network.ts";
+import { type Station, Stations } from "../station/station.ts";
+import { Network, type Networks } from "./network.ts";
 
 /** List of all networks in game */
-export function listNetworks(game: Simulation): Network[] {
-  const networks: Network[] = [];
-  const stations: Stations = new Set<Station>([...game.stations]);
+export function listNetworks(game: Simulation): Networks {
+  const networks: Networks = new Set<Network>();
+  // Make clone of stations
+  const stations: Stations = new Stations(Infinity, [...game.stations]);
   while (stations.size > 0) {
     const station: Station = [...stations][0];
     const network = new Network(station);
-    networks.push(network);
+    networks.add(network);
     for (const station of network.stations) {
       stations.delete(station);
     }

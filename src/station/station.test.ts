@@ -1,6 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { Station } from "./station.ts";
 import type { TrainType } from "../train/train-type.ts";
+import { Train } from "../train/train.ts";
 
 Deno.test("Station Init", () => {
   const station = new Station("Alice", { x: 0, y: 0 }, 1);
@@ -21,10 +22,7 @@ Deno.test("Station add train", () => {
     minimum: 50,
     maximum: 200,
   };
-  const train = {
-    type: express,
-    passengers: [],
-  };
-  station.addTrain(train);
+  const train = new Train(express);
+  station.trains.add(train);
   assertEquals(station.availablePlatforms, 0);
 });
