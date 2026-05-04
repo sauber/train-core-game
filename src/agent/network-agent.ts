@@ -19,12 +19,18 @@ export const networkAgent: Agent = (game: Simulation): void => {
         station = other;
       }
     }
+    // console.log("Looking for train for", station.name);
 
     // A train type affordable by user
-    const type = [...game.trainTypes].find((type) => type.cost <= game.balance);
+    const type = [...game.trainTypes].find((type) =>
+      (type.cost) <= game.balance
+    );
+    // console.log(type);
     if (!type) break;
+    const cost = Math.max(1, Math.round(type.cost));
     createTrain(game, type, station);
-    game.event(`${type.name} train inserted in ${station.name}`);
+    game.event(`${type.name} train inserted in ${station.name}`, -cost);
+    // console.log(station);
     return;
   }
 };

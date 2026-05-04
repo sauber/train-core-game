@@ -13,7 +13,9 @@ Deno.test("Cannot create passenger at unconnected station", () => {
 Deno.test("Create passenger", () => {
   const a = new Station("A", { x: 0, y: 0 }, 1);
   const b = new Station("B", { x: 0, y: 0 }, 1);
-  const _t = new Track(a, b);
+  const t = new Track(a, b);
+  a.addTrack(t);
+  b.addTrack(t);
   const p: Passenger | Error = createPassenger(a);
   assertInstanceOf(p, Passenger);
 });

@@ -12,12 +12,20 @@ export class Track {
   /** Set of stations */
   public readonly stations: Stations;
 
-  constructor(a: Station, b: Station) {
+  /** Price of track */
+  // public readonly price: number;
+
+  constructor(a: Station, b: Station// public readonly pricePerUnit: number
+  ) {
     // Confirm trakc connect to two different stations
     if (a === b) throw new Error("Track must connect two different stations");
     this.stations = new Set<Station>([a, b]);
-    a.addTrack(this);
-    b.addTrack(this);
+    // a.addTrack(this);
+    // b.addTrack(this);
+    // this.price = Math.max(
+    //   1,
+    //   Math.round(pricePerUnit * distance(a.location, b.location)),
+    // );
   }
 
   public addTrain(train: Train): boolean | Error {

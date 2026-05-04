@@ -6,7 +6,9 @@ import { Track } from "./track.ts";
 Deno.test("Init Passenger", () => {
   const A = new Station("A", { x: 0, y: 0 }, 1);
   const B = new Station("B", { x: 0, y: 0 }, 1);
-  const _t = new Track(A, B);
+  const t = new Track(A, B);
+  A.addTrack(t);
+  B.addTrack(t);
   const passenger = new Passenger(A);
   assertEquals(passenger.origin, A);
   assertEquals(passenger.destination, B);

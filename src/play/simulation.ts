@@ -14,6 +14,8 @@ export type Tick = number;
 export type JournalEntry = {
   tick: Tick;
   message: string;
+  transaction?: number;
+  balance?: Balance;
 };
 export type Journal = Array<JournalEntry>;
 
@@ -23,7 +25,7 @@ const DEFAULT_TRAIN_TYPES: TrainTypes = new Set([
     name: "Local",
     speed: 0.2,
     wear: 0.1,
-    cost: 20,
+    cost: 200,
     minimum: 1,
     maximum: 4,
   },
@@ -56,6 +58,7 @@ export type Agents = Array<Agent>;
 /** All the objects in a game */
 export class Simulation {
   /** Capital available */
+  public readonly initalBalance: Balance;
   public balance: Balance = 1000;
 
   /** Area of the map */
@@ -87,11 +90,32 @@ export class Simulation {
 
   constructor(state: Partial<Simulation> = {}) {
     Object.assign(this, state);
+    this.initalBalance = this.balance;
   }
 
   /** Add an event to the journal */
-  event(message: string) {
-    this.journal.push({ tick: this.tick, message });
+  event(message: string, transaction?: number) {
+    if (transaction) {
+      // const calc = `${this.balance}${
+      //   transaction < 0 ? transaction : "+" + transaction
+      // } = ${this.balance + transaction}`;
+
+      // console.log("Transaction:", message, calc);
+      if (this.balance + transaction < 0) {
+        throw new Error(
+          `Error: Negative balance ${this.balance + transaction}`,
+        );
+      }
+      this.balance += transaction;
+      this.journal.push({
+        tick: this.tick,
+        message,
+        transaction,
+        balance: this.balance,
+      });
+    } else {
+      this.journal.push({ tick: this.tick, message });
+    }
   }
 
   /** Run one step in simulation */
