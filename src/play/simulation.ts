@@ -62,7 +62,7 @@ export class Simulation {
   public readonly area: Area = new Area(100, 100, 10, 5);
 
   /** Stations */
-  public readonly stations: Stations = new Set<Station>();
+  // public readonly stations: Stations = new Set<Station>();
 
   /** Tracks */
   public readonly tracks: Tracks = new Set<Track>();
@@ -105,5 +105,10 @@ export class Simulation {
     while (!this.gameover && this.tick < maxSteps) {
       this.step(agents);
     }
+  }
+
+  /** Stations in game */
+  public get stations(): Stations {
+    return this.area.stations;
   }
 }

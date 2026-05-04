@@ -6,7 +6,7 @@ export function createGame(): Simulation {
   const game: Simulation = new Simulation();
 
   // Add initial stations
-  for (let i = 0; i < 4; i++) createStation(game);
+  // for (let i = 0; i < 4; i++) createStation(game);
 
   return game;
 }

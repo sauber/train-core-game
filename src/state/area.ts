@@ -15,7 +15,7 @@ export function distance(a: Location, b: Location): number {
 
 /** Game map */
 export class Area {
-  private readonly stations: Stations = new Set();
+  public readonly stations: Stations = new Set();
 
   constructor(
     /** Width of map */

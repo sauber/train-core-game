@@ -3,11 +3,11 @@ import { listNetworks } from "../analyze/list-networks.ts";
 import { unConnectedStations } from "../analyze/list-unconnected-stations.ts";
 import { createTrack } from "../factory/create-track.ts";
 import { createTrain } from "../factory/create-train.ts";
-import type { Simulation } from "../play/simulation.ts";
+import type { Agent, Simulation } from "../play/simulation.ts";
 import type { Trains } from "../state/train.ts";
 
 /** Take an action on behalf of a player */
-export const playerAgent = (game: Simulation): void => {
+export const playerAgent: Agent = (game: Simulation): void => {
   // Place a train on a network without any trains
   const networks = listNetworks(game);
   for (const network of networks) {
