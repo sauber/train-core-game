@@ -2,8 +2,9 @@ import { Area } from "../area/area.ts";
 import type { TrainTypes } from "../train/train-type.ts";
 import type { Stations } from "../station/station.ts";
 import { Trains } from "../train/train.ts";
-import { Track, Tracks } from "../track/track.ts";
-import { Passenger, Passengers } from "../passenger/passenger.ts";
+import { Tracks } from "../track/track.ts";
+import { Passengers } from "../passenger/passenger.ts";
+import type { Agents } from "./agent.ts";
 
 /** Amount of capital available */
 export type Balance = number;
@@ -51,10 +52,6 @@ const DEFAULT_STATION_LEVES: Array<Balance> = [
   80000,
   100000,
 ];
-
-/** Agents for controlling game */
-export type Agent = (game: Simulation) => void;
-export type Agents = Array<Agent>;
 
 /** All the objects in a game */
 export class Simulation {

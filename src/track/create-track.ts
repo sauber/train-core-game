@@ -1,6 +1,7 @@
-import type { Simulation } from "../play/simulation.ts";
+import type { Simulation } from "../simulation/mod.ts";
 import type { Station } from "../station/station.ts";
 import { Track } from "./track.ts";
+import { trackBuildCost } from "./cost.ts";
 
 /** Create a track between two stations, if it doesn't exist already */
 export function createTrack(
@@ -15,18 +16,13 @@ export function createTrack(
     }
   }
 
-  // TODO: Calculate prices in a store
-
   // Create track
-  // const unitCost = state.initalBalance / state.area.width;
   const track = new Track(a, b);
+  const price = trackBuildCost(state, track);
 
-  // Estimate price and confirm available funds
-  // const price = track.price;
-  // if (price > state.balance) {
-  //   return new Error(`Not enough funds ${price}>${state.balance}`);
-  // }
-  // state.balance -= price;
+  if (price > state.balance) {
+    return new Error(`Not enough funds ${price}>${state.balance}`);
+  }
 
   // Insert track
   state.tracks.add(track);

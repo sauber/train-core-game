@@ -1,8 +1,8 @@
 import { findNearestStation } from "../station/find-nearest-station.ts";
 import { unConnectedStations } from "../station/list-unconnected-stations.ts";
 import { createTrack } from "./create-track.ts";
+import { trackBuildCost } from "./cost.ts";
 import type { Agent, Simulation } from "../play/simulation.ts";
-import { distance } from "../area/area.ts";
 import type { Track } from "./track.ts";
 
 /** If a station is unconnected, connect it to nearest other station */
@@ -12,20 +12,14 @@ export const trackAgent: Agent = (game: Simulation): void => {
     const other = findNearestStation(game, station);
     if (other == station) continue;
 
-    // Calculate price of track
-    const unitPrice = game.initalBalance / game.area.width;
-    const price = Math.max(
-      1,
-      Math.round(distance(station.location, other.location) * unitPrice),
-    );
+    const tempTrack = new Track(station, other);
+    const price = trackBuildCost(game, tempTrack);
 
     let cheapest = Infinity;
     for (const type of game.trainTypes) {
       cheapest = Math.min(cheapest, type.cost);
     }
 
-    // Leave enough balance for the cheapest train
-    // console.log(`Balance=${game.balance} cheapest=${cheapest} price=${price}`);
     if (price > (game.balance - cheapest)) continue;
 
     const track: Track | Error = createTrack(game, station, other);

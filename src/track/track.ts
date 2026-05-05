@@ -1,5 +1,5 @@
 import { type Distance, distance } from "../area/area.ts";
-import type { Simulation } from "../play/simulation.ts";
+import type { Simulation } from "../simulation/mod.ts";
 import { type Station, Stations } from "../station/station.ts";
 import { Trains } from "../train/train.ts";
 import { LimitSet } from "../utils/limitset.ts";
@@ -17,6 +17,9 @@ export class Track {
 
   /** Set of stations */
   public readonly stations: Stations;
+
+  /** Degraded state of track */
+  public degraded: number = 0;
 
   /** Price of track */
   // public readonly price: number;
