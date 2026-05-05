@@ -1,5 +1,5 @@
-import type { Simulation } from "../play/simulation.ts";
-import { type Station, Stations } from "../station/station.ts";
+import type { Simulation } from "../simulation/mod.ts";
+import { type Station, Stations } from "../station/mod.ts";
 import { Network, type Networks } from "./network.ts";
 
 /** List of all networks in game */

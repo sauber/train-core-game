@@ -1,8 +1,8 @@
-import type { Station } from "../station/station.ts";
-import type { Track } from "../track/track.ts";
+import type { Station } from "../station/mod.ts";
+import type { Track } from "../track/mod.ts";
 import type { TrainType } from "./train-type.ts";
-import { Train } from "./train.ts";
-import type { Simulation } from "../play/simulation.ts";
+import { Train } from "./mod.ts";
+import type { Simulation } from "../simulation/mod.ts";
 
 /** Insert a new train at a station or on a track */
 export function createTrain(

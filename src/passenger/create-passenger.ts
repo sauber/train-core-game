@@ -1,7 +1,7 @@
-import { listNetworks } from "../network/list-networks.ts";
-import type { Networks } from "../network/network.ts";
-import type { Simulation } from "../play/simulation.ts";
-import { shuffle } from "../utils/shuffle.ts";
+import { listNetworks } from "../network/mod.ts";
+import type { Networks } from "../network/mod.ts";
+import type { Simulation } from "../simulation/mod.ts";
+import { shuffle } from "../utils/mod.ts";
 import { Passenger } from "./passenger.ts";
 
 /** Create passenger at random connected station */

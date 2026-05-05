@@ -1,9 +1,9 @@
-import { listNetworks } from "../network/list-networks.ts";
-import { createTrain } from "../train/create-train.ts";
-import type { Simulation } from "../play/simulation.ts";
-import type { Trains } from "../train/train.ts";
-import type { Networks } from "../network/network.ts";
-import type { Station } from "../station/station.ts";
+import { listNetworks } from "../network/mod.ts";
+import { createTrain } from "../train/mod.ts";
+import type { Simulation } from "../simulation/mod.ts";
+import type { Trains } from "../train/mod.ts";
+import type { Networks } from "../network/mod.ts";
+import type { Station } from "../station/mod.ts";
 import type { TrainType, TrainTypes } from "../train/train-type.ts";
 
 // The stations with the most need of a train

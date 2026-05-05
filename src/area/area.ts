@@ -1,4 +1,4 @@
-import { Station, Stations } from "../station/station.ts";
+import { Station, Stations } from "../station/mod.ts";
 
 export type Distance = number;
 

@@ -1,9 +1,9 @@
-import { Area } from "../area/area.ts";
+import { Area } from "../area/mod.ts";
 import type { TrainTypes } from "../train/train-type.ts";
-import type { Stations } from "../station/station.ts";
-import { Trains } from "../train/train.ts";
-import { Tracks } from "../track/track.ts";
-import { Passengers } from "../passenger/passenger.ts";
+import type { Stations } from "../station/mod.ts";
+import { Trains } from "../train/mod.ts";
+import { Tracks } from "../track/mod.ts";
+import { Passengers } from "../passenger/mod.ts";
 import type { Agents } from "./agent.ts";
 
 /** Amount of capital available */

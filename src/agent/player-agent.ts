@@ -1,10 +1,10 @@
-import { findNearestStation } from "../station/find-nearest-station.ts";
-import { listNetworks } from "../network/list-networks.ts";
-import { unConnectedStations } from "../station/list-unconnected-stations.ts";
-import { createTrack } from "../track/create-track.ts";
-import { createTrain } from "../train/create-train.ts";
-import type { Agent, Simulation } from "../play/simulation.ts";
-import type { Trains } from "../train/train.ts";
+import { findNearestStation } from "../station/mod.ts";
+import { listNetworks } from "../network/mod.ts";
+import { unConnectedStations } from "../station/mod.ts";
+import { createTrack } from "../track/mod.ts";
+import { createTrain } from "../train/mod.ts";
+import type { Agent, Simulation } from "../simulation/mod.ts";
+import type { Trains } from "../train/mod.ts";
 
 /** Take an action on behalf of a player */
 export const playerAgent: Agent = (game: Simulation): void => {

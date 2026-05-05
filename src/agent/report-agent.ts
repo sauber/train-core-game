@@ -1,8 +1,8 @@
-import type { Agent, Simulation } from "../play/simulation.ts";
+import type { Agent, Simulation, JournalEntry } from "../simulation/mod.ts";
 
 /** Write to console events which happened at current tick */
 export const reportAgent: Agent = (game: Simulation) => {
-  const events = game.journal.filter((e) => e.tick == game.tick);
+  const events = game.journal.filter((e: JournalEntry) => e.tick == game.tick);
   if (events.length > 0) {
     // console.log(`Tick ${game.tick}`);
     for (const event of events) {

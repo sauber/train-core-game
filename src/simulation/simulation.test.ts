@@ -1,5 +1,6 @@
 import { assertEquals, assertInstanceOf } from "@std/assert";
-import { type Agents, Simulation } from "./simulation.ts";
+import type { Agents } from "./agent.ts";
+import { Simulation } from "./simulation.ts";
 
 Deno.test("Simulation instance", () => {
   const simulation = new Simulation();

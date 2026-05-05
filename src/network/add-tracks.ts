@@ -1,8 +1,8 @@
 import type { Simulation } from "../simulation/mod.ts";
-import { Track } from "../track/track.ts";
-import { distance } from "../area/area.ts";
-import type { Station } from "../station/station.ts";
-import { trackBuildCost } from "../track/cost.ts";
+import { Track } from "../track/mod.ts";
+import { distance } from "../area/mod.ts";
+import type { Station } from "../station/mod.ts";
+import { trackBuildCost } from "../track/mod.ts";
 
 /** Find an isolated station and its nearest neighbor to connect */
 function findIsolatedStation(

@@ -1,4 +1,4 @@
-import type { Simulation } from "../play/simulation.ts";
+import type { Simulation } from "../simulation/mod.ts";
 
 /** Repair broken trains */
 export function repairTrains(game: Simulation): boolean {

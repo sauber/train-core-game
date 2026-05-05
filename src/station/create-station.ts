@@ -1,6 +1,6 @@
 import { createStationName } from "./create-station-name.ts";
-import type { Simulation } from "../play/simulation.ts";
-import type { Station } from "./station.ts";
+import type { Simulation } from "../simulation/mod.ts";
+import type { Station } from "../station/mod.ts";
 
 /** Create a station on the area */
 export function createStation(state: Simulation): Station {

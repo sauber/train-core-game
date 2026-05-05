@@ -1,8 +1,9 @@
-import { type Agents, Simulation } from "./simulation.ts";
-import { fleetAgent } from "../fleet/fleet-agent.ts";
-import { areaAgent } from "../area/area-agent.ts";
-import { trackAgent } from "../track/track-agent.ts";
-import { reportAgent } from "../agent/report-agent.ts";
+import type { Agents } from "./agent.ts";
+import { Simulation } from "./simulation.ts";
+import { fleetAgent } from "../fleet/mod.ts";
+import { areaAgent } from "../area/mod.ts";
+import { trackAgent } from "../track/mod.ts";
+import { reportAgent } from "../agent/mod.ts";
 
 const agents: Agents = [fleetAgent, trackAgent, areaAgent, reportAgent];
 

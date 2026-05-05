@@ -1,8 +1,8 @@
 import { assertEquals } from "@std/assert";
-import { Simulation } from "../play/simulation.ts";
+import { Simulation } from "../simulation/mod.ts";
 import { unConnectedStations } from "./list-unconnected-stations.ts";
-import { createTrack } from "../track/create-track.ts";
-import { createStation } from "./create-station.ts";
+import { createTrack } from "../track/mod.ts";
+import { createStation } from "../station/mod.ts";
 
 Deno.test("Unconnected Stations", () => {
   const game = new Simulation();

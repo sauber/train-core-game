@@ -1,5 +1,5 @@
 import type { Simulation } from "../simulation/mod.ts";
-import type { Track } from "./track.ts";
+import type { Track } from "../track/mod.ts";
 
 /** Cost unit for building tracks */
 export function buildUnitCost(game: Simulation): number {

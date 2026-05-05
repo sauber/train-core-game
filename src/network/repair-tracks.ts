@@ -1,5 +1,5 @@
 import type { Simulation } from "../simulation/mod.ts";
-import { trackRepairCost } from "../track/cost.ts";
+import { trackRepairCost } from "../track/mod.ts";
 
 /** Repair a degraded track */
 export function repairTracks(game: Simulation): boolean {

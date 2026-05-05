@@ -1,5 +1,5 @@
 import { assertInstanceOf } from "@std/assert";
-import type { Station } from "../station/station.ts";
+import type { Station } from "../station/mod.ts";
 import { Passenger } from "./passenger.ts";
 
 Deno.test("Passenger Instance", () => {

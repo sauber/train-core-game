@@ -1,8 +1,8 @@
 import { assertEquals, assertNotEquals } from "@std/assert";
-import { findNearestStation } from "../station/find-nearest-station.ts";
-import type { Station } from "./station.ts";
-import { Simulation } from "../play/simulation.ts";
-import { createStation } from "./create-station.ts";
+import { findNearestStation } from "../station/mod.ts";
+import type { Station } from "../station/mod.ts";
+import { Simulation } from "../simulation/mod.ts";
+import { createStation } from "../station/mod.ts";
 
 Deno.test("Find Nearest Station", () => {
   const game = new Simulation();

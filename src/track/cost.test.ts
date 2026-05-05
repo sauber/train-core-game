@@ -1,12 +1,12 @@
 import { assertEquals } from "@std/assert";
 import { Simulation } from "../simulation/mod.ts";
-import { Track } from "./track.ts";
+import { Track } from "./mod.ts";
 import {
   buildUnitCost,
   repairUnitCost,
   trackBuildCost,
   trackRepairCost,
-} from "./cost.ts";
+} from "./mod.ts";
 
 Deno.test("build and repair cost formulas use track distance and game state", () => {
   const game = new Simulation();

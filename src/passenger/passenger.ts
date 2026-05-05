@@ -1,7 +1,7 @@
-import type { Simulation } from "../play/simulation.ts";
-import { Station } from "../station/station.ts";
-import type { Train } from "../train/train.ts";
-import { LimitSet } from "../utils/limitset.ts";
+import type { Simulation } from "../simulation/mod.ts";
+import { Station } from "../station/mod.ts";
+import type { Train } from "../train/mod.ts";
+import { LimitSet } from "../utils/mod.ts";
 
 export type Location = Station | Train;
 

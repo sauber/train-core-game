@@ -1,5 +1,5 @@
-import type { Simulation } from "../play/simulation.ts";
-import { Stations } from "../station/station.ts";
+import type { Simulation } from "../simulation/mod.ts";
+import { Stations } from "../station/mod.ts";
 
 /** A list of all stations which do no have any connections */
 export function unConnectedStations(game: Simulation): Stations {

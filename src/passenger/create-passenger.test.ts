@@ -1,9 +1,9 @@
 import { assert, assertInstanceOf } from "@std/assert";
 import type { Passenger } from "./passenger.ts";
 import { createPassenger } from "./create-passenger.ts";
-import { Track } from "../track/track.ts";
-import { Simulation } from "../play/simulation.ts";
-import { createStation } from "../station/create-station.ts";
+import { Track } from "../track/mod.ts";
+import { Simulation } from "../simulation/mod.ts";
+import { createStation } from "../station/mod.ts";
 import type { Station } from "../station/station.ts";
 
 Deno.test("No network", () => {

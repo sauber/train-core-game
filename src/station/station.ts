@@ -1,8 +1,8 @@
-import { type Train, Trains } from "../train/train.ts";
-import type { Location } from "../area/area.ts";
-import { type Track, Tracks } from "../track/track.ts";
+import { type Train, Trains } from "../train/mod.ts";
+import type { Location } from "../area/mod.ts";
+import { type Track, Tracks } from "../track/mod.ts";
 import { Passengers } from "../passenger/mod.ts";
-import { LimitSet } from "../utils/limitset.ts";
+import { LimitSet } from "../utils/mod.ts";
 
 export class Stations extends LimitSet<Station> {
   constructor(limit: number = Infinity, values: Array<Station> = []) {

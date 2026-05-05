@@ -1,7 +1,7 @@
 import type { Simulation } from "../simulation/mod.ts";
-import type { Station } from "../station/station.ts";
-import { Track } from "./track.ts";
-import { trackBuildCost } from "./cost.ts";
+import type { Station } from "../station/mod.ts";
+import { Track } from "./mod.ts";
+import { trackBuildCost } from "./mod.ts";
 
 /** Create a track between two stations, if it doesn't exist already */
 export function createTrack(

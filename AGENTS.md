@@ -8,8 +8,10 @@ transports passengers, and earns profit while maintaining tracks.
 ## Platform
 
 - Programming language: Typescript
+- Type checking: `deno check`
 - Test: `deno test`
-- Link: `deno lint`
+- Lint: `deno lint`
+- Shell: Windows 11 Powershell
 
 ## Code standards
 
@@ -77,24 +79,29 @@ Feature may have to import other modules. Use one of these three patterns:
   `import { <symbol>, type <symbol> } from "../<feature>/mod.ts;`
 - Location symbols: `import { <symbol>, type <symbol> } from "./<file>.ts;`
 
-Do no import directly from other project feature implementation file. Bad
+Do not import directly from other project feature implementation file. Bad
 example:
 
 ```
 import { <symbol>, type <symbol> } from "../<feature>/<file>.ts;
 ```
 
+Importing files from same folder should not use `mod.ts`.
+
 ## Agent
 
-An Agent is an autonomous decision-maker that controls a specific set of
-objects or aspects of the simulation. Each agent observes the simulation state
-and makes decisions to transition objects (e.g., board trains, build tracks,
-spawn passengers) according to defined rules and objectives.
+An Agent is an autonomous decision-maker that controls a specific set of objects
+or aspects of the simulation. Each agent observes the simulation state and makes
+decisions to transition objects (e.g., board trains, build tracks, spawn
+passengers) according to defined rules and objectives.
 
 In every simulation step, all registered agents are executed in a fixed order
 from smallest-scale (passengers) to largest-scale (area), ensuring that
-lower-level decisions are made before higher-level ones. Each agent is
-stateless between ticks and operates only on the current simulation state.
+lower-level decisions are made before higher-level ones. Each agent is stateless
+between ticks and operates only on the current simulation state.
+
+Multitick goals are stored as Routes in trains and passenger objects. Agents
+help objects reach goals.
 
 ### Agent Types
 
@@ -109,8 +116,8 @@ stateless between ticks and operates only on the current simulation state.
 
 Agents make decisions and report actions to the simulation journal. They do not
 directly mutate the simulation state; instead, actions are recorded and applied
-in a controlled manner. An agent may be called multiple times per tick but
-should remain deterministic and idempotent.
+in a controlled manner. An agent may be called once per tick but should remain
+deterministic and idempotent.
 
 ## Simulation
 
@@ -129,3 +136,22 @@ player control. The player acts as an agent for certain decisions (e.g., route
 assignment, construction priorities), while automated agents handle the rest.
 The game records player actions in the journal alongside automated agent
 actions, and evaluates win/loss conditions, profit, and network efficiency.
+
+## Distance
+
+All distances are relative to area width, so that simulation run similarly
+regardless of area size. This accomodate similar experiences when running in
+webbrowser windows of various sizes where the simulation area is tied to brwoser
+canvas.
+
+One distance unit (DU) is 1/1000 of area width.
+
+## Speed
+
+Speed is measured in distance units per step (DUPS). For example 20 DUPS means
+moving 2% of area width per step.
+
+## Cost
+
+All costs are relative to initial Balance, to have a similar simulation
+regardless of initial Balance.

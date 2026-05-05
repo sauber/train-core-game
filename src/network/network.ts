@@ -1,6 +1,6 @@
-import { type Station, Stations } from "../station/station.ts";
-import { Tracks } from "../track/track.ts";
-import { Trains } from "../train/train.ts";
+import { type Station, Stations } from "../station/mod.ts";
+import { Tracks } from "../track/mod.ts";
+import { Trains } from "../train/mod.ts";
 
 /** From one stations, create a list of recursively all possible destination stations */
 function destinations(

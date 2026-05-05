@@ -1,5 +1,5 @@
-import type { Distance } from "../area/area.ts";
-import type { Track } from "./track.ts";
+import type { Distance } from "../area/mod.ts";
+import type { Track } from "../track/mod.ts";
 
 export type Sequence = Track[];
 

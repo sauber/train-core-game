@@ -3,7 +3,7 @@ import { Passengers } from "../passenger/mod.ts";
 import { LimitSet } from "../utils/limitset.ts";
 import { Station } from "../station/station.ts";
 import type { Track } from "../track/track.ts";
-import type { Simulation } from "../play/simulation.ts";
+import type { Simulation } from "../simulation/mod.ts";
 
 export class Trains extends LimitSet<Train> {
   constructor(limit: number = Infinity) {

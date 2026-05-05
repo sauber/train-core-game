@@ -1,8 +1,8 @@
 import { assertEquals } from "@std/assert";
-import { Simulation } from "../play/simulation.ts";
-import { Train } from "../train/train.ts";
+import { Simulation } from "../simulation/mod.ts";
+import { Train } from "../train/mod.ts";
 import type { TrainType } from "../train/train-type.ts";
-import { repairTrains } from "./repair-trains.ts";
+import { repairTrains } from "./mod.ts";
 
 const defaultType: TrainType = {
   name: "Local",
