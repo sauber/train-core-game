@@ -80,8 +80,8 @@ export class Simulation {
   /** Passengers */
   public readonly passengers: Passengers = new Passengers();
 
-  /** Is game finished */
-  public gameover: boolean = false;
+  /** Has the simulation terminated early because it is stuck */
+  public terminated: boolean = false;
 
   /** Current tick of game */
   public tick: Tick = 0;
@@ -127,7 +127,7 @@ export class Simulation {
 
   /** Run the simulation until end */
   public run(agents: Agents, maxSteps: number): void {
-    while (!this.gameover && this.tick < maxSteps) {
+    while (!this.terminated && this.tick < maxSteps) {
       this.step(agents);
     }
   }

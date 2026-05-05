@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { isTerminated } from "../play/is-terminated.ts";
+import { isTerminated } from "./is-terminated.ts";
 import { Simulation } from "./simulation.ts";
 
 Deno.test("Affort a train", () => {

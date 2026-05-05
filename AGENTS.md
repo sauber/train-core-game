@@ -83,3 +83,49 @@ example:
 ```
 import { <symbol>, type <symbol> } from "../<feature>/<file>.ts;
 ```
+
+## Agent
+
+An Agent is an autonomous decision-maker that controls a specific set of
+objects or aspects of the simulation. Each agent observes the simulation state
+and makes decisions to transition objects (e.g., board trains, build tracks,
+spawn passengers) according to defined rules and objectives.
+
+In every simulation step, all registered agents are executed in a fixed order
+from smallest-scale (passengers) to largest-scale (area), ensuring that
+lower-level decisions are made before higher-level ones. Each agent is
+stateless between ticks and operates only on the current simulation state.
+
+### Agent Types
+
+- **Passenger Agent** - Controls passenger boarding and disembarkment decisions
+- **Train Agent** - Controls train routing, departure, driving, and arrival
+- **Station Agent** - Controls station operations including passenger spawning,
+  revenue collection, and train capacity management
+- **Network Agent** - Controls track construction, repair, and removal
+- **Area Agent** - Controls station creation and placement on the map
+
+### Agent Responsibilities
+
+Agents make decisions and report actions to the simulation journal. They do not
+directly mutate the simulation state; instead, actions are recorded and applied
+in a controlled manner. An agent may be called multiple times per tick but
+should remain deterministic and idempotent.
+
+## Simulation
+
+The simulation is the automated execution of the game world according to agent
+decisions. It runs in discrete steps (ticks), executing all agents in order and
+advancing the game state. The simulation handles the lifecycle of all objects,
+track degradation, train movement, passenger transport, and revenue flow.
+
+A simulation may be run to completion (terminating on configured conditions) or
+stepped interactively for observation and player intervention.
+
+## Game
+
+A game is a simulation in which some agent responsibilities are replaced by
+player control. The player acts as an agent for certain decisions (e.g., route
+assignment, construction priorities), while automated agents handle the rest.
+The game records player actions in the journal alongside automated agent
+actions, and evaluates win/loss conditions, profit, and network efficiency.

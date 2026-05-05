@@ -6,10 +6,23 @@ are added automatically.
 The Area Agent watches the Simulation Balance, and when increasing tresholds are
 reached, a new station is added to the Area.
 
-A Station have a minimum distance to all other stations on the map, to allow
+A Station has a minimum distance to all other stations on the map, to allow
 building tracks between them.
 
 Stations have no building or repair cost.
+
+## Station creation and placement
+
+The Area Agent creates new stations by:
+
+1. Attempting random locations within the area until finding one with minimum
+   distance to all existing stations.
+2. Generating a random station name.
+3. Adding the new station to the area with minimum capacity (1 train).
+
+The minimum distance is a configuration parameter to the simulation and must
+have a default value. It is measured in distance units and has a valid range
+from 1 to 1000.
 
 ## Distance
 
