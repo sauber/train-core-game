@@ -53,6 +53,21 @@ const DEFAULT_STATION_LEVES: Array<Balance> = [
   100000,
 ];
 
+// Execute callback at regular interval while condition is tru
+function every(
+  ms: number,
+  condition: () => boolean,
+  callback: () => void,
+): void {
+  const interval = setInterval(() => {
+    if (condition()) {
+      callback();
+    } else {
+      clearInterval(interval);
+    }
+  }, ms);
+}
+
 /** All the objects in a game */
 export class Simulation {
   /** Capital available */
@@ -125,11 +140,15 @@ export class Simulation {
     agents.forEach((agent) => agent(this));
   }
 
-  /** Run the simulation until end */
-  public run(agents: Agents, maxSteps: number): void {
-    while (!this.terminated && this.tick < maxSteps) {
-      this.step(agents);
-    }
+  /** Run the simulation until end
+   * Run each step every ms
+   */
+  public run(agents: Agents, maxSteps: number, ms: number): void {
+    every(
+      ms,
+      () => !this.terminated && this.tick < maxSteps,
+      () => this.step(agents),
+    );
   }
 
   /** Stations in game */
