@@ -17,16 +17,18 @@ export function distance(a: Location, b: Location): number {
 export class Area {
   public readonly stations: Stations = new Stations();
 
-  constructor(
-    /** Width of map */
-    public readonly width: number,
-    /** Height of map */
-    public readonly height: number,
-    /** Minimum distance between stations */
-    public readonly distance: number,
-    /** Margin to edges within the map */
-    public readonly margin: number,
-  ) {}
+  /** Width of map */
+  public readonly width: number = 1000;
+  /** Height of map */
+  public readonly height: number = 600;
+  /** Minimum distance between stations */
+  public readonly distance: number = 100;
+  /** Margin to edges within the map */
+  public readonly margin: number = 50;
+
+  constructor(p: Partial<Area> = {}) {
+    Object.assign(this, p);
+  }
 
   // A random location on the map
   private randomLocation(): Location {

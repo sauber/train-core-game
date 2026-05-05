@@ -25,7 +25,7 @@ export type Journal = Array<JournalEntry>;
 const DEFAULT_TRAIN_TYPES: TrainTypes = new Set([
   {
     name: "Local",
-    speed: 0.2,
+    speed: 20,
     wear: 0.1,
     cost: 200,
     minimum: 1,
@@ -60,7 +60,7 @@ export class Simulation {
   public balance: Balance = 1000;
 
   /** Area of the map */
-  public readonly area: Area = new Area(100, 100, 10, 5);
+  public readonly area: Area = new Area();
 
   /** Stations */
   // public readonly stations: Stations = new Set<Station>();

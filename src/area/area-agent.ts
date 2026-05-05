@@ -1,17 +1,14 @@
 import type { Agent, Balance, Simulation } from "../simulation/mod.ts";
-import type { Station } from "../station/mod.ts";
-import { createStation } from "../station/mod.ts";
+import { createStation, type Station } from "../station/mod.ts";
 
 /** Spawn stations and defined capital levels */
 export const areaAgent: Agent = (game: Simulation): void => {
-  // Create stations at capital levels
-
   // Number of stations in game
   const current_station_count = game.stations.size;
 
   // Number of stations required
   let stations_required = 0;
-   game.stationLevels.forEach((balance: Balance, index: number) => {
+  game.stationLevels.forEach((balance: Balance, index: number) => {
     if (game.balance >= balance) stations_required = index + 1;
   });
 
