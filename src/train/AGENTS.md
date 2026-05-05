@@ -1,80 +1,74 @@
 # Train
 
-A carrier of passengers.
+A Train is a carrier of passengers that moves between stations along tracks.
 
 ## Type
 
-There are different types of trains. Type wary by name, speed, cost and
-capacity.
+Different train types vary by name, speed, cost, and passenger capacity.
+Train types are defined in `train-type.ts`.
 
-## Route
+Example: Local train — speed 0.2 DUPS, wear 0.1, cost 200, capacity 1-4.
 
-A train holds a Route (a chain of stations and tracks) obtained from the
-Network Agent. The Route represents the planned path to a final destination.
+## States
 
-When a train reaches the final station in its route, the route is cleared,
-and a new one is requested from the Network Agent. Passengers aboard will
-disembark at their destination stations along the route.
+- **Operational**: Functional and can transport passengers (degradation < 1.0)
+- **Broken**: Non-functional (degradation ≥ 1.0)
 
-## Depart
+## Route (Planned)
 
-Train will depart from station onto track when
+When implemented, a train will hold a Route — a chain of stations and tracks
+obtained from route planning. The Route represents the planned path to a
+destination.
 
-- Train has route
-- Next track on route is free from other trains
-- Has at least one passenger aboard
-- Train is not broken (degraded<1)
-- Track is not broken (degraded<1)
+- When reaching the final station, the route is cleared and a new one is requested
+- Passengers aboard disembark at their destination stations along the route
 
-Departing station is chopped off Route.
+## Departure (Planned)
 
-## Driving
+A train will depart from a station onto a track when:
+- It has a route
+- The next track on the route is free
+- Has at least one passenger aboard (may be relaxed in future)
+- Train is not broken
+- Track is not broken
 
-Train will progress down a track at each simulation tick until reaching other
-end of track.
+## Driving (Planned)
 
-Each train has a speed (maximum distance units per step), specified as a
-parameter for each train type (typically 1-25 dps). The actual travel speed is
-reduced by degradation of both the train and the track:
+A train progresses down a track each simulation tick until reaching the other end.
 
+Travel speed is calculated as:
 ```
 travelSpeed = maxSpeed * min((1 - train.degraded), (1 - track.degraded))
 ```
 
-Travel speed is 0 if train is broken or track is broken (degraded >= 1).
+Travel speed is 0 if either train or track is broken.
 
-The number of ticks to traverse a track depends on the track distance divided
-by the travel speed (rounded up to whole ticks).
+Time to traverse a track = ceil(track distance / travel speed).
 
-## Arrive
+## Arrival (Planned)\n
+A train arrives at a station when:
+- It reaches the end of its current track
+- Platform capacity is available at the destination
 
-A train will arrive at station when
+## Current Implementation
 
-- Train reached end of track
-- Capacity is available at arriving station
+Trains exist and can:
+- Be added to/removed from the simulation
+- Move between stations and tracks (immediate, not tick-based)
+- Hold passengers up to their type's capacity
+- Track their own degradation level
+- Be inserted by the Fleet Agent
 
-The tracked that was just passed is chopped of Route.
-
-Number of passes of track is incremented which affect track degradation.
-
-## Final destination
-
-If train reaches the last station in its Route, the route is cleared, a new
-route is requested from the Network Agent, and remaining passengers disembark
-at that station.
+**Note:** Automated route following, speed-based travel, departure/arrival logic,
+and degradation during travel are not yet implemented. These will be handled by
+the planned Train Agent (not yet implemented).
 
 ## Degradation
 
-Trains degrade for each unit of distance traveled on previous track. Degradation
-is updated after passing a track.
+Trains degrade over time and use. Currently degradation is set per-type and
+trains do not self-degrade during movement.
 
-If degraded >= 1, train is marked as broken, otherwise it's operations.
-
-Trains can be repaired for a cost.
-
-## Agent
-
-The Train Agent will handle requesting route, departure, driving and arrival for
-all trains.
-
-Trains will degrade themselves.
+When implemented:
+- Trains will degrade per unit of distance traveled
+- Degradation ≥ 1.0 marks a train as broken
+- Broken trains can be repaired for a cost

@@ -1,49 +1,56 @@
 # Station
 
-Has a name.
+A Station is a node on the map where trains can stop, passengers can wait, and
+tracks connect to other stations.
 
-Location is somewhere on Area.
+## Properties
 
-Has 0 or more waiting passengers.
+- **Name**: Unique identifier
+- **Location**: Coordinates on the Area map
+- **Platforms (train capacity)**: Maximum number of trains that can be at the station
+- **Tracks**: Connections to other stations (no limit)
+- **Passengers**: Travelers waiting at the station (no limit)
 
-Has 0 or more tracks connecting to other stations.
+## Train Capacity
 
-Has a capacity for waiting trains. The capacity is determined by the number of
-boardings and disembarkments at the station. Train capacity never decreases.
+Train capacity is determined by the number of boardings and disembarkments
+at the station. Capacity starts at 1 train and increases monotonically as
+activity grows.
 
-There is no capacity limit for the number of connecting tracks or the number of
-waiting passengers at a station.
+### Capacity Thresholds (Defaults)
 
-## Train capacity growth
+- 0 boardings/disembarkments → 1 train
+- 100 boardings/disembarkments → 2 trains
+- 250 boardings/disembarkments → 3 trains
+- 500 boardings/disembarkments → 4 trains
 
-The Station Agent maintains a cumulative count of boardings and disembarkments
-at the station. When the cumulative count reaches predefined thresholds, the
-train capacity is expanded.
+Capacity never decreases. (Note: capacity growth not yet implemented.)
 
-Capacity thresholds are simulation parameters with the following defaults:
+## Revenue Collection (Planned)
 
-- 0 boardings/disembarkments → capacity 1 train
-- 100 boardings/disembarkments → capacity 2 trains
-- 250 boardings/disembarkments → capacity 3 trains
-- 500 boardings/disembarkments → capacity 4 trains
-
-Train capacity always increases monotonically and never decreases.
-
-## Revenue collection
-
-The Station Agent examines all passengers waiting at the station. For each
-passenger whose destination matches the station, the agent:
-
-1. Calculates the fare based on the shortest path distance from the passenger's
-   origin station to the current station.
-2. Adds the fare to the station's revenue.
-3. Removes the passenger from the simulation.
+When implemented, the Station Agent will:
+1. Check passengers waiting at the station
+2. For each passenger whose destination matches the station:
+   - Calculate fare based on shortest-path distance from origin to destination
+   - Add fare to station revenue
+   - Remove passenger from simulation
 
 Station revenue is transferred to the Simulation Balance each tick.
 
-## Passenger spawning
+## Passenger Spawning (Planned)
 
-The Station Agent is responsible for spawning new passengers at the station.
-Newly spawned passengers have a random origin and destination within the
-network. The frequency and volume of spawned passengers may vary based on
-simulation phase or station characteristics.
+When implemented, the Station Agent will spawn new passengers at the station.
+Newly spawned passengers have random origin and destination within the network.
+Frequency and volume may vary based on simulation phase or station characteristics.
+
+## Current Implementation
+
+Stations exist and can:
+- Hold trains (up to platform capacity)
+- Connect to other stations via tracks
+- Hold waiting passengers (no current limits)
+- Have their capacity determined by initial platforms (not yet by activity)
+
+Boarding/disembarkment decisions, revenue collection, and passenger spawning
+are not yet automated. These will be handled by the planned Station Agent
+(not yet implemented).

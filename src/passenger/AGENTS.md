@@ -1,36 +1,54 @@
+# Passenger
+
 Passengers are travellers from one station to another. Origin and destination
 are static for each traveller. The objective for a traveller is to reach
 destination as fast as possible.
 
-Passengers are spawned by the Station Agent but boarding, disembarkment, and
-route planning decisions are controlled by the Passenger Agent. Passengers
-do not manage their own lifecycle.
+Passengers do not manage their own lifecycle. A passenger is always at exactly
+one location: either waiting at a station or aboard a train.
 
-A Location marks where a passenger currently is. A passenger can be waiting at a
-station or aboard a train. A passenger is at all times at exactly one location.
+## Current Implementation
 
-## Passenger boarding
+Passengers can be spawned at stations and move between locations. Boarding,
+disembarkment, and route planning decisions are not yet automated — these will
+be handled by the planned Passenger Agent (not yet implemented).
 
-When a passenger spawns at a station (or disembarks), the Passenger Agent
-immediately creates or replaces a fastest-path route to the destination station.
-The passenger then boards any train at the same station whose planned route
-matches the passenger's intended next segment. If no such train is available,
-the passenger waits for one to arrive. Passengers will not board trains which
-are already full.
+## Passenger States
 
-## Passenger disembark
+- **Waiting**: At a station, awaiting transport
+- **In Transit**: Aboard a train
 
-Passengers disembark when their destination station is reached, or when
-continuing on the current train's route no longer aligns with their planned
-path. If a train reaches its final route station, all passengers whose
-destination matches will disembark; passengers whose destination is further
-along may remain aboard only if a compatible subsequent train is assured.
+## Boarding (Planned)
 
-If a train has no route (e.g. after reaching a final destination), all
-passengers on the train will disembark.
+When a passenger spawns at a station (or disembarks), the Passenger Agent will
+create or update a fastest-path route to the destination station. The passenger
+then boards any train at the same station whose planned route matches the
+passenger's intended next segment. If no such train is available, the passenger
+waits. Passengers will not board full trains.
 
-## Passenger removal
+## Disembarkment (Planned)
 
-Passengers do not manage their own lifecycle. When a passenger reaches their
-destination station, the Station Agent calculates the fare, collects payment,
-and removes the passenger from the simulation.
+Passengers disembark when:
+- Their destination station is reached, or
+- Continuing on the current train's route no longer aligns with their planned path
+
+If a train reaches its final route station, all passengers whose destination
+matches will disembark. Other passengers may remain only if a compatible
+subsequent train is assured.
+
+If a train has no route, all passengers on board will disembark.
+
+## Fare Collection (Planned)
+
+When passengers reach their destination station, the Station Agent will:
+1. Calculate the fare based on the shortest path distance from origin to destination
+2. Add the fare to the station's revenue
+3. Remove the passenger from the simulation
+
+## Planned Passenger Agent
+
+The not-yet-implemented Passenger Agent will control:
+- Route planning for individual passengers
+- Boarding/disembarkment decisions
+- Waiting behavior at stations
+- Path re-evaluation when trains don't match planned routes

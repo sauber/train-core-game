@@ -55,9 +55,9 @@ src/
 
 ## Feature Structure
 
-Each feature has an main implementation responsible for integrity of
-relationships in simulation, and an agent which can decide actions, and execute
-them.
+Each feature has a main implementation responsible for integrity of
+relationships in simulation, and may have an agent which can decide actions
+and execute them.
 
 Generally there is only one class or one function per file. Typescript Types are
 defined where they are processed as input or generated as output.
@@ -102,22 +102,31 @@ or aspects of the simulation. Each agent observes the simulation state and makes
 decisions to transition objects (e.g., board trains, build tracks, spawn
 passengers) according to defined rules and objectives.
 
-In every simulation step, all registered agents are executed in a fixed order
-from smallest-scale (passengers) to largest-scale (area), ensuring that
-lower-level decisions are made before higher-level ones. Each agent is stateless
-between ticks and operates only on the current simulation state.
+In every simulation step, all registered agents are executed in a single pass.
+Each agent is stateless between ticks and operates only on the current
+simulation state.
 
 Multitick goals are stored as Routes in trains and passenger objects. Agents
 help objects reach goals.
 
-### Agent Types
+### Current Agents
 
-- **Passenger Agent** - Controls passenger boarding and disembarkment decisions
-- **Train Agent** - Controls train routing, departure, driving, and arrival
-- **Station Agent** - Controls station operations including passenger spawning,
-  revenue collection, and train capacity management
-- **Network Agent** - Controls track construction, repair, and removal
-- **Area Agent** - Controls station creation and placement on the map
+- **Fleet Agent** - Manages train insertion and repair operations
+- **Track Agent** - Manages track construction and repair between stations
+- **Area Agent** - Manages station creation based on capital milestones
+- **Report Agent** - Reports simulation state changes
+
+### Agent Execution Order
+
+Agents are executed in a fixed order each simulation step:
+
+1. Fleet Agent (train insertion/repair)
+2. Track Agent (track construction/repair)
+3. Area Agent (station creation)
+4. Report Agent (state reporting)
+
+Lower-scale agents that would make fine-grained decisions (passenger boarding,
+train routing, station operations) are not yet implemented.
 
 ### Agent Responsibilities
 
@@ -126,39 +135,16 @@ directly mutate the simulation state; instead, actions are recorded and applied
 in a controlled manner. An agent may be called once per tick but should remain
 deterministic and idempotent.
 
-## Simulation
+## Planned Agent Types (Not Yet Implemented)
 
-The simulation is the automated execution of the game world according to agent
-decisions. It runs in discrete steps (ticks), executing all agents in order and
-advancing the game state. The simulation handles the lifecycle of all objects,
-track degradation, train movement, passenger transport, and revenue flow.
+- **Passenger Agent** - Would control passenger boarding and disembarkment decisions
+- **Train Agent** - Would control train routing, departure, driving, and arrival
+- **Station Agent** - Would control station operations including passenger spawning,
+  revenue collection, and train capacity management
+- **Network Agent** - Would control route planning and track construction decisions
 
-A simulation may be run to completion (terminating on configured conditions) or
-stepped interactively for observation and player intervention.
+When implemented, these agents would execute before the Fleet Agent in order from
+smallest-scale (passengers) to largest-scale (network).
 
-## Game
 
-A game is a simulation in which some agent responsibilities are replaced by
-player control. The player acts as an agent for certain decisions (e.g., route
-assignment, construction priorities), while automated agents handle the rest.
-The game records player actions in the journal alongside automated agent
-actions, and evaluates win/loss conditions, profit, and network efficiency.
 
-## Distance
-
-All distances are relative to area width, so that simulation run similarly
-regardless of area size. This accomodate similar experiences when running in
-webbrowser windows of various sizes where the simulation area is tied to brwoser
-canvas.
-
-One distance unit (DU) is 1/1000 of area width.
-
-## Speed
-
-Speed is measured in distance units per step (DUPS). For example 20 DUPS means
-moving 2% of area width per step.
-
-## Cost
-
-All costs are relative to initial Balance, to have a similar simulation
-regardless of initial Balance.

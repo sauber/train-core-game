@@ -1,6 +1,4 @@
-# AGENTS.md
-
-## Network
+# Network
 
 A Network is an abstraction representing a collection of Stations connected by
 tracks, generated on-demand from the current simulation state. Networks are
@@ -17,13 +15,18 @@ When a track is deleted, a single Network may split into multiple isolated
 Networks.
 
 Because Networks are stateless abstractions, there is no Network Agent with
-internal state or autonomous triggers. Other agents (Train, Station, Area)
-generate Network views to:
+internal state or autonomous triggers. Other agents generate Network views to:
 
 - Find reachable stations for a given origin
 - Evaluate connectivity and isolation
 - Plan routes (shortest/fastest paths)
 - Determine buildable track locations
+
+## Current Implementation
+
+The Track Agent uses network connectivity to identify unconnected stations and
+builds tracks to connect them. Network views are generated via `list-networks.ts`
+and related functions.
 
 ## Route
 
@@ -35,16 +38,18 @@ distance, or fastest total travel time.
 The Shortest Route has the smallest distance, and the Fastest Route is the
 smallest distance divided by track degradation factors.
 
-## Route generation
+## Route Usage (Planned)
 
-When a train at a station has no route, it requests one from the Network Agent.
-The Network Agent generates a route for the train by building a temporary
-Network view and applying a route-finding algorithm. The algorithm may vary:
-it could be a random next station, a comprehensive journey visiting all
-stations in the network (traveling salesman), or something in between.
+When implemented, Train Agents will request routes for trains. A route-finding
+algorithm will build a temporary Network view and compute paths. Algorithms may
+include:
 
-Network generation and route planning are triggered by agent requests
-(Train Agent requesting a route, etc.) rather than by autonomous Network actions.
-Actions that affect connectivity (building, repairing, removing tracks) are
-performed by other agents and result in updated simulation state from which
-Networks are subsequently generated.
+- Random next station
+- Shortest path (fewest hops or distance)
+- Fastest path (minimizing travel time)
+- Network-spanning routes (visiting multiple stations)
+
+Network generation and route planning are triggered by agent requests rather
+than by autonomous Network actions. Actions that affect connectivity (building,
+repairing, removing tracks) are performed by other agents and result in updated
+simulation state from which Networks are subsequently generated.

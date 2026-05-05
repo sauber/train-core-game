@@ -4,16 +4,15 @@ Steps to complete towards implementation
 
 ## Documentation Issues
 
-- [ ] Root AGENTS.md lists 5 agent types (Passenger, Train, Station, Network, Area) but implementation has fleet, track, area, report agents only
-- [ ] Root AGENTS.md describes Network Agent as generating routes for trains, but network-agent.ts only handles track add/repair/remove
-- [ ] Root AGENTS.md describes Passenger Agent making boarding/disembark decisions, but no passenger-agent exists
-- [ ] Root AGENTS.md describes Train Agent handling routing/departure/arrival, but no train-agent exists
-- [ ] Root AGENTS.md describes Station Agent handling revenue/spawning, but no station-agent exists
-- [ ] src/agent/AGENTS.md is minimal (16 lines) and doesn't describe actual agents (fleet, track, area, report)
-- [ ] src/fleet/AGENTS.md is essentially empty (2 lines) - needs details on fleet agent operations
-- [ ] src/track/AGENTS.md needs expansion on degradation mechanics and build/repair costs
-- [ ] Simulation step order in root AGENTS.md says "passenger first, area last" but actual order is fleet→track→area→report
-- [ ] Actual agent execution order needs to be documented in root AGENTS.md
+- [x] Root AGENTS.md — clarified Current Agents (fleet, track, area, report) and Planned Agents (passenger, train, station, network), documented actual agent execution order
+- [x] src/agent/AGENTS.md — expanded from 16 lines to comprehensive agent decision-making framework
+- [x] src/fleet/AGENTS.md — expanded from 2 lines to cover train insertion, repair, states, and cost considerations
+- [x] src/track/AGENTS.md — expanded from 24 lines to cover states, degradation, building, repairing, and capacity
+- [x] src/network/AGENTS.md — clarified no Network Agent exists yet, added current implementation details
+- [x] src/passenger/AGENTS.md — clarified current vs planned state, passenger lifecycle
+- [x] src/station/AGENTS.md — clarified current vs planned state, revenue/spawning not yet implemented
+- [x] src/train/AGENTS.md — clarified current vs planned state, route/departure/driving not yet implemented
+- [x] src/simulation/AGENTS.md — corrected agent execution order, clarified lifecycle and phases
 
 ## Implementation Gaps vs Documentation
 
@@ -34,9 +33,9 @@ Steps to complete towards implementation
 
 ## Code to Documentation Mismatches
 
-- [ ] area-agent.ts creates stations but doesn't generate random names as documented
+- [ ] area-agent.ts creates stations but doesn't generate random names as documented (uses createStationName utility)
 - [ ] area-agent.ts creates only one station per tick but documentation doesn't mention this
-- [ ] actualBalance property doesn't exist in Simulation (only initalBalance typo in constructor)
+- [ ] actualBalance property typo in Simulation constructor (should be initialBalance)
 - [ ] stationLevels defaults in simulation.ts don't match documentation expectations
 - [ ] track-agent builds tracks between unconnected stations but no cost calculation module used
 
