@@ -1,4 +1,4 @@
-import { assert } from "@std/assert";
+import { assert, assertEquals } from "@std/assert";
 import { Simulation } from "../simulation/mod.ts";
 import { addTracks } from "./add-tracks.ts";
 import { Track } from "../track/mod.ts";
@@ -17,17 +17,17 @@ Deno.test("addTracks adds one track to isolated stations if affordable", () => {
   );
 
   // Initially, all should have no tracks
-  assert(station1.tracks.size === 0 as number);
-  assert(station2.tracks.size === 0 as number);
-  assert(station3.tracks.size === 0 as number);
-  assert(game.tracks.size === 0 as number);
+  assertEquals(station1.tracks.size, 0);
+  assertEquals(station2.tracks.size, 0);
+  assertEquals(station3.tracks.size, 0);
+  assertEquals(game.tracks.size, 0);
 
   // Add tracks
   const result = addTracks(game);
 
   // Should have added one track
-  assert(result === true);
-  assert(game.tracks.size === 1 as number);
+  assertEquals(result, true);
+  assertEquals(game.tracks.size, 1);
 
   // Get the created track to verify the cost
   const track = Array.from(game.tracks)[0];
@@ -35,12 +35,15 @@ Deno.test("addTracks adds one track to isolated stations if affordable", () => {
     1,
     Math.round(track.distance * (game.initalBalance / game.area.width)),
   );
-  assert(game.balance === initialBalance - expectedCost);
+  assertEquals(game.balance, initialBalance - expectedCost);
   // Verify sufficient funds remain for cheapest train
   assert(game.balance >= minTrainCost);
   assert(game.journal.length > 0);
   assert(game.journal[game.journal.length - 1].message.includes("Track built"));
-  assert(game.journal[game.journal.length - 1].transaction === -expectedCost);
+  assertEquals(
+    game.journal[game.journal.length - 1].transaction,
+    -expectedCost,
+  );
 });
 
 Deno.test("addTracks returns false when no isolated stations", () => {
@@ -53,12 +56,12 @@ Deno.test("addTracks returns false when no isolated stations", () => {
   track.add(game);
 
   // Now, no isolated stations
-  assert(station1.tracks.size === 1 as number);
-  assert(station2.tracks.size === 1 as number);
+  assertEquals(station1.tracks.size, 1);
+  assertEquals(station2.tracks.size, 1);
 
   // Add tracks should return false
   const result = addTracks(game);
-  assert(result === false);
+  assertEquals(result, false);
 });
 
 Deno.test("addTracks returns false when insufficient funds remain", () => {
@@ -66,7 +69,7 @@ Deno.test("addTracks returns false when insufficient funds remain", () => {
 
   // Add tracks should return false because remaining balance would be less than minTrainCost
   const result = addTracks(game);
-  assert(result === false);
-  assert(game.tracks.size === 0 as number);
-  assert(game.balance === 200);
+  assertEquals(result, false);
+  assertEquals(game.tracks.size, 0);
+  assertEquals(game.balance, 200);
 });
