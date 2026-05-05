@@ -1,4 +1,4 @@
-import type { Simulation } from "../play/simulation.ts";
+import type { Simulation } from "./simulation.ts";
 import type { TrainType } from "../train/train-type.ts";
 
 /** Confirm if any of the conditions for Game Over is met

@@ -72,7 +72,7 @@ export class Simulation {
   public readonly tracks: Tracks = new Tracks();
 
   /** Trains */
-  public readonly trains: Trains = new Trains(Infinity);
+  public readonly trains: Trains = new Trains();
 
   /** Train types */
   public readonly trainTypes: TrainTypes = DEFAULT_TRAIN_TYPES;
@@ -81,7 +81,7 @@ export class Simulation {
   public readonly stationLevels: Array<Balance> = DEFAULT_STATION_LEVES;
 
   /** Passengers */
-  public readonly passengers: Passengers = new Passengers(Infinity);
+  public readonly passengers: Passengers = new Passengers();
 
   /** Is game finished */
   public gameover: boolean = false;

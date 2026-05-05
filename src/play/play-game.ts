@@ -1,9 +1,9 @@
 import { type Agents, Simulation } from "./simulation.ts";
-import { networkAgent } from "../network/network-agent.ts";
+import { fleetAgent } from "../fleet/fleet-agent.ts";
 import { areaAgent } from "../area/area-agent.ts";
 import { trackAgent } from "../track/track-agent.ts";
 
-const agents: Agents = [networkAgent, trackAgent, areaAgent];
+const agents: Agents = [fleetAgent, trackAgent, areaAgent];
 
 /** Play a game with player controller */
 export function runSimulation(maxSteps: number = 10): Simulation {

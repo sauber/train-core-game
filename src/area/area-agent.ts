@@ -2,6 +2,7 @@ import { createStation } from "../station/create-station.ts";
 import type { Agent, Balance, Simulation } from "../play/simulation.ts";
 import type { Station } from "../station/station.ts";
 
+/** Spawn stations and defined capital levels */
 export const areaAgent: Agent = (game: Simulation): void => {
   // Create stations at capital levels
 
@@ -18,7 +19,7 @@ export const areaAgent: Agent = (game: Simulation): void => {
   for (let i = current_station_count; i < stations_required; i++) {
     const station: Station = createStation(game);
     game.event(`${station.name} station built`);
-    // Only one station per tick
+    // Max one station per tick
     return;
   }
 };

@@ -20,6 +20,9 @@ export class Train {
   /** Location of train */
   public location: Location | undefined;
 
+  /** Degraded state of train */
+  public degraded: number = 0;
+
   constructor(
     /** Type of train */
     public readonly type: TrainType,

@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { Route } from "./route.ts";
+import { Route } from "../network/route.ts";
 import { Station } from "../station/station.ts";
 import { Track } from "./track.ts";
 

@@ -17,7 +17,7 @@ export class Station {
   /** Tracks connected to station */
   public readonly tracks: Tracks = new Tracks();
 
-  public readonly passengers: Passengers = new Passengers(Infinity);
+  public readonly passengers: Passengers = new Passengers();
 
   constructor(
     /** Name of station */

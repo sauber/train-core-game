@@ -33,14 +33,17 @@ transports passengers, and earns profit while maintaining tracks.
 
 ## Code Structure
 
+Code is divided into folders by feature.
+
 ```
 src/
-├── agent/       # Make decisions for objects
-├── analyze/     # Find objects matching criteria
-├── factory/     # Insert objects in game
-├── play/        # Progress game
-├── state/       # Current game objects and their state
-├── transition/  # Change state of game objects
-├── utils/       # Support for game
-└── ...
+├── area/        # Stations on a map
+├── fleet/       # Trains in networks
+├── network/     # Graphs of stations connected by tracks
+├── passenger/   # A traveller on a train or at a station
+├── play/        # Game simulation
+├── station/     # A node on the map with passengers, tracks and trains
+├── track/       # Link between two stations
+├── train/       # Transportation of passengers
+└── utils/       # Supporting functions
 ```

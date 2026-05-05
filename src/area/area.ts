@@ -15,7 +15,7 @@ export function distance(a: Location, b: Location): number {
 
 /** Game map */
 export class Area {
-  public readonly stations: Stations = new Stations(Infinity);
+  public readonly stations: Stations = new Stations();
 
   constructor(
     /** Width of map */

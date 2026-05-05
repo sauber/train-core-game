@@ -73,7 +73,7 @@ export class Passenger {
 
 // export type Passengers = LimitSet<Passenger>;
 export class Passengers extends LimitSet<Passenger> {
-  constructor(limit: number) {
+  constructor(limit: number = Infinity) {
     super(limit);
   }
 }

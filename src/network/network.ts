@@ -36,7 +36,7 @@ export class Network {
 
   /** Trains in the network, either at stations or on tracks */
   public get trains(): Trains {
-    const trains: Trains = new Trains(Infinity);
+    const trains: Trains = new Trains();
 
     // Trains at stations
     for (const station of this.stations) {
