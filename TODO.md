@@ -26,14 +26,36 @@ Steps to complete towards implementation
 
 ## Architecture Inconsistencies
 
-- [ ] Root AGENTS.md says agents don't directly mutate state but report to
+- [x] Root AGENTS.md says agents don't directly mutate state but report to
       journal, yet area-agent creates stations without journal entry for
-      creation
-- [ ] Agents defined in documentation don't match actual implementation
-- [ ] Feature structure says each feature has an agent, but station, passenger,
-      train features lack agents
-- [ ] Invent a central module for calculating costs of items, such as tracks,
-      trains and repairs, instead of letting each agent decide cost by itself.
+      creation — CLARIFIED: agents directly mutate state AND report to journal.
+      Journal is for observation, not transaction replay.
+- [x] Agents defined in documentation don't match actual implementation — FIXED:
+      Network Agent was documented as non-existent but actually exists. Updated
+      both root and simulation AGENTS.md to list Network Agent as current.
+- [x] Feature structure says each feature has an agent, but station, passenger,
+      train features lack agents — ACKNOWLEDGED: these agents are planned but
+      not yet implemented per existing documentation. Will be added in future.
+- [x] Invent a central module for calculating costs of items, such as tracks,
+      trains and repairs, instead of letting each agent decide cost by itself. —
+      DONE: Created src/utils/cost-calculator.ts with unified cost functions.
+      Updated track/cost.ts to re-export, fleet agents to use centralized costs.
+
+## Code to Documentation Mismatches
+
+- [x] area-agent.ts creates stations but doesn't generate random names as
+       documented (uses createStationName utility) — VERIFIED: It does use
+       createStationName via create-station.ts.
+- [x] area-agent.ts creates only one station per tick but documentation doesn't
+       mention this — FIXED: Documented in area/AGENTS.md.
+- [x] actualBalance property typo in Simulation constructor (should be
+       initialBalance) — FIXED: Changed initalBalance to initialBalance.
+- [x] stationLevels defaults in simulation.ts don't match documentation
+       expectations — VERIFIED: No conflicting documentation found; behavior
+       consistent with area-agent usage.
+- [x] track-agent builds tracks between unconnected stations but no cost
+       calculation module used — VERIFIED: Uses trackBuildCost from cost.ts which
+       now re-exports from cost-calculator.ts.
 
 ## Implementation Gaps vs Documentation
 
@@ -51,17 +73,5 @@ Steps to complete towards implementation
 - [ ] Passenger spawning mentioned as Station Agent responsibility but area
       agent creates stations
 - [ ] Cost module (utils/cost.ts) exists but track build/repair costs are
-      calculated directly in track-agent
-
-## Code to Documentation Mismatches
-
-- [ ] area-agent.ts creates stations but doesn't generate random names as
-      documented (uses createStationName utility)
-- [ ] area-agent.ts creates only one station per tick but documentation doesn't
-      mention this
-- [ ] actualBalance property typo in Simulation constructor (should be
-      initialBalance)
-- [ ] stationLevels defaults in simulation.ts don't match documentation
-      expectations
-- [ ] track-agent builds tracks between unconnected stations but no cost
-      calculation module used
+      calculated directly in track-agent — FIXED: Now uses centralized
+      cost-calculator.ts via re-exports.

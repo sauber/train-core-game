@@ -33,7 +33,7 @@ Deno.test("addTracks adds one track to isolated stations if affordable", () => {
   const track = Array.from(game.tracks)[0];
   const expectedCost = Math.max(
     1,
-    Math.round(track.distance * (game.initalBalance / game.area.width)),
+    Math.round(track.distance * (game.initialBalance / game.area.width)),
   );
   assertEquals(game.balance, initialBalance - expectedCost);
   // Verify sufficient funds remain for cheapest train

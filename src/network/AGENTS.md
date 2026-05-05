@@ -22,11 +22,23 @@ internal state or autonomous triggers. Other agents generate Network views to:
 - Plan routes (shortest/fastest paths)
 - Determine buildable track locations
 
+## Network Agent (Current)
+
+The Network Agent makes track construction and repair decisions. It operates
+on network connectivity to:
+
+1. **Repair tracks** — Fix broken tracks when affordable, prioritizing critical connections
+2. **Add tracks** — Connect isolated stations to improve network reachability
+
 ## Current Implementation
 
-The Track Agent uses network connectivity to identify unconnected stations and
-builds tracks to connect them. Network views are generated via `list-networks.ts`
-and related functions.
+The Network Agent uses `list-networks.ts` and related functions to generate
+network views. It prioritizes repairing broken tracks over building new ones.
+
+Track construction/repair decisions consider:
+- Available capital and repair budgets
+- Track distance and degradation state
+- Cost-effectiveness via centralized cost calculations
 
 ## Route
 

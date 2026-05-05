@@ -56,7 +56,7 @@ const DEFAULT_STATION_LEVES: Array<Balance> = [
 /** All the objects in a game */
 export class Simulation {
   /** Capital available */
-  public readonly initalBalance: Balance;
+  public readonly initialBalance: Balance;
   public balance: Balance = 1000;
 
   /** Area of the map */
@@ -91,7 +91,7 @@ export class Simulation {
 
   constructor(state: Partial<Simulation> = {}) {
     Object.assign(this, state);
-    this.initalBalance = this.balance;
+    this.initialBalance = this.balance;
   }
 
   /** Add an event to the journal */

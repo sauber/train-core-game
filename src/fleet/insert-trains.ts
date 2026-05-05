@@ -5,6 +5,7 @@ import type { Trains } from "../train/mod.ts";
 import type { Networks } from "../network/mod.ts";
 import type { Station } from "../station/mod.ts";
 import type { TrainType, TrainTypes } from "../train/train-type.ts";
+import { trainPurchaseCost } from "../utils/mod.ts";
 
 // The stations with the most need of a train
 function findStation(networks: Networks): Station | undefined {
@@ -28,7 +29,7 @@ function findStation(networks: Networks): Station | undefined {
 
 // Any train within budget
 function findTrain(types: TrainTypes, budget: number): TrainType | undefined {
-  return [...types].find((type) => (type.cost) <= budget);
+  return [...types].find((type) => trainPurchaseCost(type) <= budget);
 }
 
 /** Insert train in network which has none */
@@ -41,7 +42,7 @@ export function insertTrains(game: Simulation): boolean {
   if (!type) return false;
 
   // Insert train at station
-  const cost = Math.max(1, Math.round(type.cost));
+  const cost = trainPurchaseCost(type);
   createTrain(game, type, station);
   game.event(`${type.name} train inserted in ${station.name}`, -cost);
 

@@ -111,29 +111,33 @@ help objects reach goals.
 
 ### Current Agents
 
-- **Fleet Agent** - Manages train insertion and repair operations
-- **Track Agent** - Manages track construction and repair between stations
-- **Area Agent** - Manages station creation based on capital milestones
-- **Report Agent** - Reports simulation state changes
+In order of execution:
 
-### Agent Execution Order
+1. **Fleet Agent** — Train insertion and repair
+2. **Track Agent** — Track construction and repair
+3. **Area Agent** — Station creation
+4. **Report Agent** — State reporting
 
-Agents are executed in a fixed order each simulation step:
-
-1. Fleet Agent (train insertion/repair)
-2. Track Agent (track construction/repair)
-3. Area Agent (station creation)
-4. Report Agent (state reporting)
+**Network Agent** - Not yet implemented. Would handle track construction/repair decisions and route planning.
 
 Lower-scale agents that would make fine-grained decisions (passenger boarding,
 train routing, station operations) are not yet implemented.
 
-### Agent Responsibilities
+### Agent Execution Order
 
-Agents make decisions and report actions to the simulation journal. They do not
-directly mutate the simulation state; instead, actions are recorded and applied
-in a controlled manner. An agent may be called once per tick but should remain
-deterministic and idempotent.
+The agents execute in a fixed order each simulation step. Order matters because
+some agents may depend on state updates produced by earlier agents.
+Agents should be stateless between ticks and rely only on the current
+simulation state.
+
+### Agent State Mutation
+
+Agents observe the current simulation state and record actions in the journal
+via `game.event()`. State mutations (e.g., creating stations, building tracks,
+purchasing trains) occur directly via method calls on simulation objects.
+The journal serves as a record of actions for debugging and monitoring purposes.
+Actions do not go through the journal for execution/replay; the journal is an
+observer pattern for tracking simulation history.
 
 ## Planned Agent Types (Not Yet Implemented)
 
