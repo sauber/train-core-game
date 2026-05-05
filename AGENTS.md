@@ -82,14 +82,18 @@ Feature may have to import other modules. Use one of these three patterns:
   `import { <symbol>, type <symbol> } from "../<feature>/mod.ts;`
 - Location symbols: `import { <symbol>, type <symbol> } from "./<file>.ts;`
 
-Do not import directly from other project feature implementation file. Bad
+Do not import directly from other folder feature implementation file. Bad
 example:
 
 ```
 import { <symbol>, type <symbol> } from "../<feature>/<file>.ts;
 ```
 
-Importing files from same folder should not use `mod.ts`.
+Importing files from same folder should never use `mod.ts`. Its use is only for
+other features.
+
+When importing multiple symbols from other folder, keep all symbols on same
+import line.
 
 ## Agent
 
