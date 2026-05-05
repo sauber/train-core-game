@@ -8,3 +8,5 @@ Steps to complete towards implementation
       speed, and for moving trains along on tracks.
 - [ ] Invent a central module for calculating costs of items, such as tracks,
       trains and repairs, instead of letting each agent decide cost by itself.
+- [ ] Replace `assert()` methods in testcases, and use more specific `assert*()`
+      functions.

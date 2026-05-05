@@ -1,8 +1,7 @@
 import type { Simulation } from "../simulation/mod.ts";
-import { Track } from "../track/mod.ts";
+import { Track, trackBuildCost } from "../track/mod.ts";
 import { distance } from "../area/mod.ts";
 import type { Station } from "../station/mod.ts";
-import { trackBuildCost } from "../track/mod.ts";
 
 /** Find an isolated station and its nearest neighbor to connect */
 function findIsolatedStation(
@@ -39,11 +38,6 @@ function findIsolatedStation(
   return bestIsolated && bestNearest
     ? { isolated: bestIsolated, nearest: bestNearest }
     : null;
-}
-
-/** Calculate the cost of building a track based on its length */
-function calculateTrackCost(game: Simulation, track: Track): number {
-  return Math.ceil(track.distance);
 }
 
 /** Add a track to a station which has no tracks already.

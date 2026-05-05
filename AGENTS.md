@@ -32,6 +32,9 @@ transports passengers, and earns profit while maintaining tracks.
      appear.
 - Test files are placed side‑by‑side with their implementation files, e.g.
   `src/train/train.ts` and `src/train/train.test.ts`.
+- Use "@std/assert" for assert functions. Avoid to use the generic `assert()`
+  and use instead more specific ones such as `assertEquals()`,
+  `assertInstanceOf()` etc.
 
 ## Code Structure
 

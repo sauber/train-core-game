@@ -9,10 +9,6 @@ function isStation(location: Location): boolean {
   return location instanceof Station;
 }
 
-function isTrain(location: Location): boolean {
-  return !(location instanceof Station);
-}
-
 /** A traveler from station trying to reach another destination */
 export class Passenger {
   /** Current location of passenger */
