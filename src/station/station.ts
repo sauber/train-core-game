@@ -19,13 +19,19 @@ export class Station {
 
   public readonly passengers: Passengers = new Passengers();
 
+  /** Revenue collected at this station */
+  public revenue: number = 0;
+
+  /** Total boardings and disembarkments for capacity growth */
+  public activity: number = 0;
+
   constructor(
     /** Name of station */
     public readonly name: string,
     /** Location */
     public readonly location: Location,
     /** Count of platforms */
-    private platforms: number,
+    public platforms: number,
   ) {
     this.trains = new Trains(platforms);
   }

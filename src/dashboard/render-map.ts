@@ -1,5 +1,6 @@
-import type { Simulation } from "./simulation.ts";
+import type { Simulation } from "../simulation/simulation.ts";
 import type { Station } from "../station/mod.ts";
+import type { Track } from "../track/mod.ts";
 
 export type RenderMapOptions = {
   width?: number;
@@ -150,7 +151,7 @@ export function renderMap(
   const trainCellMap = new Map<string, string>();
 
   for (const track of game.tracks) {
-    const trackStations = Array.from(track.stations);
+    const trackStations = Array.from(track.stations) as Station[];
     if (trackStations.length !== 2) continue;
     const from = stationPositions.get(trackStations[0]);
     const to = stationPositions.get(trackStations[1]);
@@ -205,22 +206,24 @@ export function renderMap(
     rows[y] = row.join("");
   }
 
-  const stationLegend = Array.from(game.stations).map((station) => {
-    const trains = station.trains.size;
-    return `${station.name}(${trains})`;
-  });
+  const stationLegend = (Array.from(game.stations) as Station[])
+    .map((station) => {
+      const trains = station.trains.size;
+      return `${station.name}(${trains})`;
+    });
 
-  const trackLegend = Array.from(game.tracks).map((track) => {
-    const ends = Array.from(track.stations).map((station) => station.name);
-    return `${ends.join("-")}(${track.trains.size})`;
-  });
+  const trackLegend = (Array.from(game.tracks) as Track[])
+    .map((track) => {
+      const ends = Array.from(track.stations) as Station[];
+      return `${ends.map((s) => s.name).join("-")}(${track.trains.size})`;
+    });
 
   const legend = [
     `Stations: ${stationLegend.join(" ")}`,
     `Tracks: ${trackLegend.join(" ")}`,
   ];
 
-  const events = game.journal.slice(-3).map((entry) => {
+  const events = game.journal.slice(-3).map((entry: { tick: number; message: string; balance?: number }) => {
     const balanceText = entry.balance !== undefined
       ? ` balance=${entry.balance}`
       : "";

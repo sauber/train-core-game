@@ -2,76 +2,114 @@
 
 Steps to complete towards implementation
 
-## Documentation Issues
+## Station Tasks
 
-- [x] Root AGENTS.md — clarified Current Agents (fleet, track, area, report) and
-      Planned Agents (passenger, train, station, network), documented actual
-      agent execution order
-- [x] src/agent/AGENTS.md — expanded from 16 lines to comprehensive agent
-      decision-making framework
-- [x] src/fleet/AGENTS.md — expanded from 2 lines to cover train insertion,
-      repair, states, and cost considerations
-- [x] src/track/AGENTS.md — expanded from 24 lines to cover states, degradation,
-      building, repairing, and capacity
-- [x] src/network/AGENTS.md — clarified no Network Agent exists yet, added
-      current implementation details
-- [x] src/passenger/AGENTS.md — clarified current vs planned state, passenger
-      lifecycle
-- [x] src/station/AGENTS.md — clarified current vs planned state,
-      revenue/spawning not yet implemented
-- [x] src/train/AGENTS.md — clarified current vs planned state,
-      route/departure/driving not yet implemented
-- [x] src/simulation/AGENTS.md — corrected agent execution order, clarified
-      lifecycle and phases
+### Capacity Growth
 
-## Architecture Inconsistencies
+- [ ] Add activity counter to Station class
+  - Suggestion: Add `activity: number = 0` property to track
+    boardings/disembarkments
+- [ ] Increment activity on passenger events
+  - Suggestion: In station agent, increment station.activity when passengers
+    board/disembark
+- [ ] Implement capacity threshold checks
+  - Suggestion: Create function to calculate new capacity based on activity
+    (100→2, 250→3, etc.)
+- [ ] Update station platform limit when capacity grows
+  - Suggestion: Modify station.trains.limit and station.platforms when threshold
+    reached
 
-- [x] Root AGENTS.md says agents don't directly mutate state but report to
-      journal, yet area-agent creates stations without journal entry for
-      creation — CLARIFIED: agents directly mutate state AND report to journal.
-      Journal is for observation, not transaction replay.
-- [x] Agents defined in documentation don't match actual implementation — FIXED:
-      Network Agent was documented as non-existent but actually exists. Updated
-      both root and simulation AGENTS.md to list Network Agent as current.
-- [x] Feature structure says each feature has an agent, but station, passenger,
-      train features lack agents — ACKNOWLEDGED: these agents are planned but
-      not yet implemented per existing documentation. Will be added in future.
-- [x] Invent a central module for calculating costs of items, such as tracks,
-      trains and repairs, instead of letting each agent decide cost by itself. —
-      DONE: Created src/utils/cost-calculator.ts with unified cost functions.
-      Updated track/cost.ts to re-export, fleet agents to use centralized costs.
+### Revenue Collection
 
-## Code to Documentation Mismatches
+- [ ] Add revenue property to Station class
+  - Suggestion: Add `revenue: number = 0` to Station
+- [ ] Detect arrived passengers at stations
+  - Suggestion: In station agent, check passengers where passenger.destination
+    === station
+- [ ] Calculate fare for arrived passengers
+  - Suggestion: Use Euclidean distance between origin/destination, multiply by
+    rate (e.g., 0.5)
+- [ ] Add fare to station revenue and remove passenger
+  - Suggestion: station.revenue += fare, remove from station.passengers and
+    game.passengers
+- [ ] Transfer station revenue to simulation balance
+  - Suggestion: Periodically (end of tick?) add station.revenue to game.balance,
+    reset station.revenue
 
-- [x] area-agent.ts creates stations but doesn't generate random names as
-       documented (uses createStationName utility) — VERIFIED: It does use
-       createStationName via create-station.ts.
-- [x] area-agent.ts creates only one station per tick but documentation doesn't
-       mention this — FIXED: Documented in area/AGENTS.md.
-- [x] actualBalance property typo in Simulation constructor (should be
-       initialBalance) — FIXED: Changed initalBalance to initialBalance.
-- [x] stationLevels defaults in simulation.ts don't match documentation
-       expectations — VERIFIED: No conflicting documentation found; behavior
-       consistent with area-agent usage.
-- [x] track-agent builds tracks between unconnected stations but no cost
-       calculation module used — VERIFIED: Uses trackBuildCost from cost.ts which
-       now re-exports from cost-calculator.ts.
+### Passenger Spawning
 
-## Implementation Gaps vs Documentation
+- [ ] Move passenger spawning from area agent to station agent
+  - Suggestion: Remove passenger creation from area-agent.ts, add to
+    station-agent.ts
+- [ ] Implement spawning frequency logic
+  - Suggestion: Spawn one passenger per station per tick, or based on station
+    size/activity
+- [ ] Ensure spawning only when network exists
+  - Suggestion: Check game.stations.size >= 2 before calling createPassenger
 
-- [ ] Station train capacity growth described but not implemented (no station
-      agent exists to manage it)
-- [ ] Passenger boarding logic described but not implemented (no passenger agent
-      exists)
-- [ ] Train departure logic described but not implemented (no train agent
-      exists)
-- [ ] Station revenue collection described but not implemented (no station agent
-      exists)
-- [ ] Track degradation on train pass mentioned but not implemented in track.ts
-- [ ] Train degradation per distance traveled mentioned but not implemented in
-      train.ts
-- [ ] Passenger spawning mentioned as Station Agent responsibility but area
-      agent creates stations
-- [ ] Cost module (utils/cost.ts) exists but track build/repair costs are
-      calculated directly in track-agent — FIXED: Now uses centralized
-      cost-calculator.ts via re-exports.
+## Track Tasks
+
+### Degradation on Train Pass
+
+- [ ] Add degradation increment when train moves on track
+  - Suggestion: In train movement logic, track.degraded += wear rate (e.g., 0.1
+    per pass)
+- [ ] Implement repair triggering based on degradation
+  - Suggestion: In track agent, check if track.degraded > threshold, trigger
+    repair
+- [ ] Add degradation visualization
+  - Suggestion: Update track display to show degraded state (color, opacity)
+
+## Passenger Tasks
+
+### Boarding Logic
+
+- [ ] Create Passenger Agent
+  - Suggestion: New file src/passenger/passenger-agent.ts with agent function
+- [ ] Implement route planning for passengers
+  - Suggestion: When passenger spawns, calculate shortest path to destination
+- [ ] Check for compatible trains at station
+  - Suggestion: Find trains whose route matches passenger's next segment
+- [ ] Board passenger onto train
+  - Suggestion: Move passenger from station to train.passengers, update
+    locations
+- [ ] Prevent boarding full trains
+  - Suggestion: Check train.passengers.size < train.type.maximum before boarding
+
+### Disembarkment Logic
+
+- [ ] Check for destination reached on train arrival
+  - Suggestion: When train arrives at station, check passengers whose
+    destination matches
+- [ ] Disembark passengers at destination
+  - Suggestion: Move from train.passengers to station.passengers
+- [ ] Handle route continuation or end
+  - Suggestion: If passenger has more route, keep on train; else disembark
+
+## Train Tasks
+
+### Departure Logic
+
+- [ ] Create Train Agent
+  - Suggestion: New file src/train/train-agent.ts with agent function
+- [ ] Check trains ready to depart
+  - Suggestion: Find trains at stations with assigned routes
+- [ ] Validate departure conditions
+  - Suggestion: Check platform availability, route exists, train not full if
+    needed
+- [ ] Move train from station to track
+  - Suggestion: Update train.location to next track segment
+- [ ] Update train route progress
+  - Suggestion: Advance route index, set next destination
+
+### Degradation per Distance
+
+- [ ] Add distance tracking to train movement
+  - Suggestion: When train moves between locations, calculate distance traveled
+- [ ] Increment train degradation based on distance
+  - Suggestion: train.degraded += distance * train.type.wear
+- [ ] Implement repair triggering for degraded trains
+  - Suggestion: In fleet agent, check train.degraded > threshold, trigger repair
+- [ ] Add degradation effects on performance
+  - Suggestion: Reduce train speed or increase failure chance based on
+    degradation

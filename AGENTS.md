@@ -56,8 +56,8 @@ src/
 ## Feature Structure
 
 Each feature has a main implementation responsible for integrity of
-relationships in simulation, and may have an agent which can decide actions
-and execute them.
+relationships in simulation, and may have an agent which can decide actions and
+execute them.
 
 Generally there is only one class or one function per file. Typescript Types are
 defined where they are processed as input or generated as output.
@@ -116,9 +116,12 @@ In order of execution:
 1. **Fleet Agent** — Train insertion and repair
 2. **Track Agent** — Track construction and repair
 3. **Area Agent** — Station creation
-4. **Report Agent** — State reporting
+4. **Station Agent** — Passenger spawning, revenue collection, and capacity
+   management
+5. **Report Agent** — State reporting
 
-**Network Agent** - Not yet implemented. Would handle track construction/repair decisions and route planning.
+**Network Agent** - Not yet implemented. Would handle track construction/repair
+decisions and route planning.
 
 Lower-scale agents that would make fine-grained decisions (passenger boarding,
 train routing, station operations) are not yet implemented.
@@ -126,29 +129,25 @@ train routing, station operations) are not yet implemented.
 ### Agent Execution Order
 
 The agents execute in a fixed order each simulation step. Order matters because
-some agents may depend on state updates produced by earlier agents.
-Agents should be stateless between ticks and rely only on the current
-simulation state.
+some agents may depend on state updates produced by earlier agents. Agents
+should be stateless between ticks and rely only on the current simulation state.
 
 ### Agent State Mutation
 
 Agents observe the current simulation state and record actions in the journal
 via `game.event()`. State mutations (e.g., creating stations, building tracks,
-purchasing trains) occur directly via method calls on simulation objects.
-The journal serves as a record of actions for debugging and monitoring purposes.
+purchasing trains) occur directly via method calls on simulation objects. The
+journal serves as a record of actions for debugging and monitoring purposes.
 Actions do not go through the journal for execution/replay; the journal is an
 observer pattern for tracking simulation history.
 
 ## Planned Agent Types (Not Yet Implemented)
 
-- **Passenger Agent** - Would control passenger boarding and disembarkment decisions
+- **Passenger Agent** - Would control passenger boarding and disembarkment
+  decisions
 - **Train Agent** - Would control train routing, departure, driving, and arrival
-- **Station Agent** - Would control station operations including passenger spawning,
-  revenue collection, and train capacity management
-- **Network Agent** - Would control route planning and track construction decisions
+- **Network Agent** - Would handle track construction/repair decisions and route
+  planning
 
-When implemented, these agents would execute before the Fleet Agent in order from
-smallest-scale (passengers) to largest-scale (network).
-
-
-
+When implemented, these agents would execute before the Fleet Agent in order
+from smallest-scale (passengers) to largest-scale (network).

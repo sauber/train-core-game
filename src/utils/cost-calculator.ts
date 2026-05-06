@@ -6,6 +6,8 @@
 import type { Simulation } from "../simulation/mod.ts";
 import type { TrainType } from "../train/train-type.ts";
 import type { Track } from "../track/track.ts";
+import { distance } from "../area/area.ts";
+import type { Station } from "../station/mod.ts";
 
 /**
  * Calculate the cost to purchase a new train.
@@ -53,4 +55,15 @@ export function trackRepairCost(game: Simulation, track: Track): number {
     1,
     Math.round(track.distance * trackRepairUnitCost(game) * track.degraded),
   );
+}
+
+/**
+ * Calculate the fare for a passenger traveling from origin to destination.
+ * Based on the Euclidean distance between stations.
+ */
+export function passengerFare(origin: Station, destination: Station): number {
+  if (origin === destination) return 0;
+  const dist = distance(origin.location, destination.location);
+  // Fare is proportional to distance, with a minimum of 1
+  return Math.max(1, Math.round(dist * 0.5));
 }

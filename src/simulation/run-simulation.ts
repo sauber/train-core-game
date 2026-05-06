@@ -4,8 +4,15 @@ import { fleetAgent } from "../fleet/mod.ts";
 import { areaAgent } from "../area/mod.ts";
 import { trackAgent } from "../track/mod.ts";
 import { mapAgent } from "../dashboard/mod.ts";
+import { stationAgent } from "../station/mod.ts";
 
-const agents: Agents = [fleetAgent, trackAgent, areaAgent, mapAgent];
+const agents: Agents = [
+  fleetAgent,
+  trackAgent,
+  areaAgent,
+  stationAgent,
+  mapAgent,
+];
 
 /** Play a game with player controller */
 const maxSteps: number = 10;
