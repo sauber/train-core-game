@@ -8,10 +8,10 @@ transports passengers, and earns profit while maintaining tracks.
 ## Platform
 
 - Programming language: Typescript
-- Type checking: `deno check`
-- Test: `deno test`
-- Lint: `deno lint`
 - Shell: Windows 11 Powershell
+- Type checking command: `deno check`
+- Test command: `deno test`
+- Lint command: `deno lint`
 
 ## Code standards
 

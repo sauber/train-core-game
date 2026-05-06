@@ -2,14 +2,6 @@ import type { Simulation } from "../simulation/simulation.ts";
 import type { Station } from "../station/mod.ts";
 import type { Track } from "../track/mod.ts";
 
-export type RenderMapOptions = {
-  width?: number;
-  height?: number; // Total height of output in lines
-};
-
-const DEFAULT_WIDTH = 80;
-const DEFAULT_TOTAL_HEIGHT = 24;
-
 type GridPoint = {
   x: number;
   y: number;
@@ -103,33 +95,19 @@ function pointKey(point: GridPoint): string {
   return `${point.x},${point.y}`;
 }
 
-function stationSymbol(station: Station): string {
-  return station.name.trim().charAt(0).toUpperCase() || "S";
-}
-
-export function renderMap(
+export function renderMapCanvas(
   game: Simulation,
-  options: RenderMapOptions = {},
-): string {
-  const width = Math.max(20, options.width ?? DEFAULT_WIDTH);
-  const totalHeight = Math.max(10, options.height ?? DEFAULT_TOTAL_HEIGHT);
-
-  // Reserve lines for legend (2) and footer (1 balance + 3 events = 4) = 6 total
-  const legendLines = 2;
-  const footerLines = 4; // 1 balance + 3 events
-  const reservedLines = legendLines + footerLines;
-  const mapHeight = Math.max(4, totalHeight - reservedLines);
-
-  const areaWidth = game.area.width || 1;
-  const areaHeight = game.area.height || 1;
-
+  width: number,
+  mapHeight: number,
+  areaWidth: number,
+  areaHeight: number,
+): { rows: string[]; stationCellMap: Map<string, Station[]>; trainCellMap: Map<string, string> } {
   const pixelWidth = width * 2;
   const pixelHeight = mapHeight * 4;
   const pixels = createPixelGrid(pixelWidth, pixelHeight);
 
   const stationPositions = new Map<Station, GridPoint>();
   const stationCellMap = new Map<string, Station[]>();
-
   for (const station of game.stations) {
     const point = toPixelPoint(
       station.location,
@@ -186,26 +164,89 @@ export function renderMap(
     rows.push(row.join(""));
   }
 
-  for (const [key, stations] of stationCellMap.entries()) {
-    const [x, y] = key.split(",").map(Number);
-    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
-    if (x < 0 || x >= width || y < 0 || y >= mapHeight) continue;
-    const symbol = stations.length === 1 ? stationSymbol(stations[0]) : "*";
-    const row = rows[y].split("");
-    row[x] = symbol;
-    rows[y] = row.join("");
+  // Draw frame borders on the edges (left and right) as overlay
+  // Stations and trains can overlap the frame
+  const framedRows = [...rows];
+  for (let i = 0; i < framedRows.length; i++) {
+    let row = framedRows[i];
+    if (row.length < width) {
+      row = row.padEnd(width);
+    } else if (row.length > width) {
+      row = row.substring(0, width);
+    }
+    const rowChars = row.split("");
+    rowChars[0] = "│";
+    rowChars[width - 1] = "│";
+    framedRows[i] = rowChars.join("");
   }
 
+  // Add station labels (two-line format: name, P:__ T:__)
+  // Stations are drawn on top, potentially overlapping the frame
+  const labeledRows = [...framedRows];
+  for (const station of game.stations) {
+    const point = stationPositions.get(station);
+    if (!point) continue;
+    const cellX = Math.floor(point.x / 2);
+    const cellY = Math.floor(point.y / 4);
+    if (cellX < 0 || cellX >= width || cellY < 0 || cellY >= mapHeight) continue;
+
+    const trainCount = station.trains.size;
+    // Count passengers at this station
+    let passengerCount = 0;
+    for (const passenger of game.passengers) {
+      if (passenger.location === station) {
+        passengerCount++;
+      }
+    }
+
+    const nameLine = station.name.trim();
+    const countLine = `P: ${passengerCount} T: ${trainCount}`;
+    const maxLen = Math.max(nameLine.length, countLine.length);
+
+    // Center the label at the station point, nudging inwards if would go out of bounds
+    let startX = cellX - Math.floor(maxLen / 2);
+    if (startX < 0) startX = 0;
+    if (startX + maxLen > width) startX = width - maxLen;
+
+    // First line of label
+    if (cellY < mapHeight) {
+      const rowChars = labeledRows[cellY].split("");
+      for (let i = 0; i < nameLine.length && startX + i < width; i++) {
+        rowChars[startX + i] = nameLine[i];
+      }
+      labeledRows[cellY] = rowChars.join("");
+    }
+    // Second line of label
+    if (cellY + 1 < mapHeight) {
+      const rowChars = labeledRows[cellY + 1].split("");
+      for (let i = 0; i < countLine.length && startX + i < width; i++) {
+        rowChars[startX + i] = countLine[i];
+      }
+      labeledRows[cellY + 1] = rowChars.join("");
+    }
+  }
+
+  // Add trains (on top of everything else)
   for (const [key, symbol] of trainCellMap.entries()) {
     if (stationCellMap.has(key)) continue;
     const [x, y] = key.split(",").map(Number);
     if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
     if (x < 0 || x >= width || y < 0 || y >= mapHeight) continue;
-    const row = rows[y].split("");
+    const row = labeledRows[y].split("");
     row[x] = symbol;
-    rows[y] = row.join("");
+    labeledRows[y] = row.join("");
   }
 
+  // Insert top/bottom frame borders
+  const topFrame = "┌" + "─".repeat(width - 2) + "┐";
+  const bottomFrame = "└" + "─".repeat(width - 2) + "┘";
+  labeledRows.unshift(topFrame);
+  labeledRows.push(bottomFrame);
+
+  return { rows: labeledRows, stationCellMap, trainCellMap };
+}
+
+export function renderLegend(game: Simulation): string[] {
   const stationLegend = (Array.from(game.stations) as Station[])
     .map((station) => {
       const trains = station.trains.size;
@@ -218,35 +259,8 @@ export function renderMap(
       return `${ends.map((s) => s.name).join("-")}(${track.trains.size})`;
     });
 
-  const legend = [
+  return [
     `Stations: ${stationLegend.join(" ")}`,
     `Tracks: ${trackLegend.join(" ")}`,
   ];
-
-  const events = game.journal.slice(-3).map((entry: { tick: number; message: string; balance?: number }) => {
-    const balanceText = entry.balance !== undefined
-      ? ` balance=${entry.balance}`
-      : "";
-    return `Tick ${entry.tick}: ${entry.message}${balanceText}`;
-  });
-
-  // Ensure exactly 3 event lines, padding with empty strings
-  const eventLines = Array.from({ length: 3 }, (_, i) => events[i] || "");
-
-  const footer = [
-    `Tick ${game.tick} - Balance: ${game.balance}`,
-    ...eventLines,
-  ];
-
-  const output = [...rows, ...legend, ...footer].join("\n");
-
-  // Ensure total output has exactly totalHeight lines
-  const outputLines = output.split("\n");
-  const paddingNeeded = totalHeight - outputLines.length;
-  if (paddingNeeded > 0) {
-    const padding = Array.from({ length: paddingNeeded }, () => "");
-    return [...outputLines, ...padding].join("\n");
-  }
-
-  return output;
 }

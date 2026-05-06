@@ -1,6 +1,5 @@
-import type { Agent } from "../simulation/agent.ts";
-import type { Simulation } from "../simulation/simulation.ts";
-import { renderMap } from "./render-map.ts";
+import type { Agent, Simulation } from "../simulation/mod.ts";
+import { renderMap } from "./dashboard.ts";
 
 let previousLineCount = 0;
 
