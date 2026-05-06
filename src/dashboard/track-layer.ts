@@ -1,39 +1,61 @@
-import type { Simulation } from "../simulation/simulation.ts";
+import type { Layer } from "./layer.type.ts";
 import type { Station } from "../station/mod.ts";
-import type { GridPoint } from "./map-utils.ts";
-import { bresenhamLine, createPixelGrid, pointKey } from "./map-utils.ts";
+import { brailleCellValue, bresenhamLine, toPixelPoint } from "./map-utils.ts";
 
-export function createTrackLayer(
-  game: Simulation,
-  stationPositions: Map<Station, GridPoint>,
-  pixelWidth: number,
-  pixelHeight: number,
-): { pixels: Array<Array<boolean>>; trainCellMap: Map<string, string> } {
-  const pixels = createPixelGrid(pixelWidth, pixelHeight);
-  const trainCellMap = new Map<string, string>();
+/**
+ * Draw track layer on the canvas using Bresenham algorithm onto Braille characters.
+ * Only overwrites characters that are part of track lines.
+ */
+export const trackLayer: Layer = (canvas, width, height, game) => {
+  if (!game) return;
+
+  // Create pixel grid for Braille rendering
+  const pixelWidth = width * 2;
+  const pixelHeight = height * 4;
+  const pixels: Array<Array<boolean>> = Array.from({
+    length: pixelHeight,
+  }, () =>
+    Array.from({
+      length: pixelWidth,
+    }, () => false));
+
+  // Draw tracks using Bresenham algorithm
   for (const track of game.tracks) {
-    const trackStations = Array.from(track.stations) as Station[];
-    if (trackStations.length !== 2) continue;
-    const from = stationPositions.get(trackStations[0]);
-    const to = stationPositions.get(trackStations[1]);
-    if (!from || !to) continue;
-    const points = bresenhamLine(from, to);
-    for (const point of points) {
-      if (
-        point.x >= 0 && point.x < pixelWidth && point.y >= 0 &&
-        point.y < pixelHeight
-      ) {
-        pixels[point.y][point.x] = true;
+    const stations = Array.from(track.stations) as Station[];
+    if (stations.length !== 2) continue;
+
+    const [stationA, stationB] = stations;
+    const pixelA = toPixelPoint(
+      stationA.location,
+      pixelWidth,
+      pixelHeight,
+      game.area.width,
+      game.area.height,
+    );
+    const pixelB = toPixelPoint(
+      stationB.location,
+      pixelWidth,
+      pixelHeight,
+      game.area.width,
+      game.area.height,
+    );
+
+    const line = bresenhamLine(pixelA, pixelB);
+    for (const point of line) {
+      const { x, y } = point;
+      if (x >= 0 && x < pixelWidth && y >= 0 && y < pixelHeight) {
+        pixels[y][x] = true;
       }
     }
-    if (track.trains.size > 0) {
-      const midpoint = points[Math.floor(points.length / 2)];
-      const key = pointKey({
-        x: Math.floor(midpoint.x / 2),
-        y: Math.floor(midpoint.y / 4),
-      });
-      trainCellMap.set(key, "T");
+  }
+
+  // Convert pixel grid to Braille characters and only update cells with tracks
+  for (let cellY = 0; cellY < height; cellY++) {
+    for (let cellX = 0; cellX < width; cellX++) {
+      const braille = brailleCellValue(pixels, cellX, cellY);
+      if (braille !== " ") {
+        canvas.insert(cellX, cellY, braille);
+      }
     }
   }
-  return { pixels, trainCellMap };
-}
+};

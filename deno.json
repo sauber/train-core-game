@@ -4,6 +4,8 @@
   "license": "MIT",
   "exports": "./src/*.ts",
   "imports": {
+    "@cliffy/table": "jsr:@cliffy/table@^1.1.0",
+    "@sauber/widgets": "jsr:@sauber/widgets@^0.6.2",
     "@std/assert": "jsr:@std/assert@^1.0.19"
   },
   "lock": false

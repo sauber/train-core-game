@@ -1,7 +1,6 @@
 import type { Simulation } from "../simulation/simulation.ts";
 import type { Station } from "../station/mod.ts";
-import type { GridPoint } from "./map-utils.ts";
-import { pointKey, toPixelPoint } from "./map-utils.ts";
+
 import {
   createBackgroundLayer,
   createBrailleLayer,
@@ -81,19 +80,4 @@ export function renderMapCanvas(
   finalRows.unshift(topFrame);
   finalRows.push(bottomFrame);
   return { rows: finalRows, stationCellMap, trainCellMap };
-}
-
-// Preserve legend rendering for existing tests
-export function renderLegend(game: Simulation): string[] {
-  const stationLegend = (Array.from(game.stations) as Station[])
-    .map((station) => `${station.name}(${station.trains.size})`);
-  const trackLegend = (Array.from(game.tracks) as any[])
-    .map((track) => {
-      const ends = Array.from(track.stations) as Station[];
-      return `${ends.map((s) => s.name).join("-")}(${track.trains.size})`;
-    });
-  return [
-    `Stations: ${stationLegend.join(" ")}`,
-    `Tracks: ${trackLegend.join(" ")}`,
-  ];
 }

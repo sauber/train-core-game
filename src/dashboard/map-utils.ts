@@ -10,6 +10,7 @@ export function toPixelPoint(
   areaWidth: number,
   areaHeight: number,
 ): GridPoint {
+  // Invert y-axis to match canvas coordinate system (y=0 at bottom)
   return {
     x: Math.min(
       pixelWidth - 1,
@@ -17,7 +18,12 @@ export function toPixelPoint(
     ),
     y: Math.min(
       pixelHeight - 1,
-      Math.max(0, Math.round((location.y / areaHeight) * (pixelHeight - 1))),
+      Math.max(
+        0,
+        Math.round(
+          ((areaHeight - location.y) / areaHeight) * (pixelHeight - 1),
+        ),
+      ),
     ),
   };
 }
@@ -33,15 +39,18 @@ export function brailleCellValue(
   cellY: number,
 ): string {
   const base = 0x2800;
+  // Offsets map pixel positions within a Braille cell to the correct bit.
+  // The canvas y-axis has y=0 at the bottom, so we invert the y-offset
+  // to map pixels to Braille dots correctly (dot 1 at top, dot 3 at bottom).
   const offsets = [
-    { x: 0, y: 0, bit: 1 },
-    { x: 0, y: 1, bit: 2 },
-    { x: 0, y: 2, bit: 4 },
-    { x: 0, y: 3, bit: 64 },
-    { x: 1, y: 0, bit: 8 },
-    { x: 1, y: 1, bit: 16 },
-    { x: 1, y: 2, bit: 32 },
-    { x: 1, y: 3, bit: 128 },
+    { x: 0, y: 3, bit: 1 }, // pixel y+3 (top of cell) -> dot 1 (top-left)
+    { x: 0, y: 2, bit: 2 }, // pixel y+2 -> dot 2
+    { x: 0, y: 1, bit: 4 }, // pixel y+1 -> dot 3 (bottom-left)
+    { x: 0, y: 0, bit: 64 }, // pixel y+0 (bottom of cell) -> dot 7
+    { x: 1, y: 3, bit: 8 }, // pixel y+3 -> dot 4 (top-right)
+    { x: 1, y: 2, bit: 16 }, // pixel y+2 -> dot 5
+    { x: 1, y: 1, bit: 32 }, // pixel y+1 -> dot 6 (bottom-right)
+    { x: 1, y: 0, bit: 128 }, // pixel y+0 -> dot 8
   ];
   let value = 0;
   for (const offset of offsets) {

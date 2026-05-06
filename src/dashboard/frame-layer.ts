@@ -1,15 +1,20 @@
-export function createFrameLayer(
-  width: number,
-  mapHeight: number,
-): { topFrame: string; bottomFrame: string; sideFrames: string[] } {
-  const topFrame = "┌" + "─".repeat(width - 2) + "┐";
-  const bottomFrame = "└" + "─".repeat(width - 2) + "┘";
-  const sideFrames = [];
-  for (let i = 0; i < mapHeight; i++) {
-    const rowChars = Array(width).fill(" ");
-    rowChars[0] = "│";
-    rowChars[width - 1] = "│";
-    sideFrames.push(rowChars.join(""));
+import type { Layer } from "./layer.type.ts";
+
+export const frameLayer: Layer = (canvas, width, height) => {
+  // Insert corners
+  canvas.insert(0, height - 1, "╭");
+  canvas.insert(width - 1, height - 1, "╮");
+  canvas.insert(0, 0, "╰");
+  canvas.insert(width - 1, 0, "╯");
+
+  // Lines
+  for (let x = 1; x < width - 1; x++) {
+    canvas.insert(x, height - 1, "─");
+    canvas.insert(x, 0, "─");
   }
-  return { topFrame, bottomFrame, sideFrames };
-}
+  // Sides
+  for (let y = 1; y < height - 1; y++) {
+    canvas.insert(width - 1, y, "│");
+    canvas.insert(0, y, "│");
+  }
+};
