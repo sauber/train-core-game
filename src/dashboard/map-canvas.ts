@@ -3,6 +3,7 @@ import type { Station } from "../station/mod.ts";
 import type { GridPoint } from "./map-utils.ts";
 import { pointKey, toPixelPoint } from "./map-utils.ts";
 import {
+  createBackgroundLayer,
   createBrailleLayer,
   createFrameLayer,
   createLabelLayer,
@@ -38,19 +39,29 @@ export function renderMapCanvas(
     pixelWidth,
     pixelHeight,
   );
+  const backgroundRows = createBackgroundLayer(width, mapHeight);
   const brailleRows = createBrailleLayer(pixels, width, mapHeight);
   const { topFrame, bottomFrame, sideFrames } = createFrameLayer(
     width,
     mapHeight,
   );
-  const framedRows = brailleRows.map((row, i) => {
+  // Merge background with braille (tracks) before framing
+  const baseRows = backgroundRows.map((bgRow: string, i: number) => {
+    const brailleRow = brailleRows[i];
+    const merged: string[] = [];
+    for (let x = 0; x < width; x++) {
+      merged[x] = brailleRow[x] !== " " ? brailleRow[x] : bgRow[x];
+    }
+    return merged.join("");
+  });
+  const framedRows = baseRows.map((row: string, i: number) => {
     const chars = row.split("");
     chars[0] = sideFrames[i][0];
     chars[width - 1] = sideFrames[i][width - 1];
     return chars.join("");
   });
   const labelRows = createLabelLayer(game, stationPositions, width, mapHeight);
-  const mergedRows = framedRows.map((row, i) => {
+  const mergedRows = framedRows.map((row: string, i: number) => {
     const base = row.split("");
     const label = labelRows[i].split("");
     for (let x = 0; x < width; x++) {
@@ -59,7 +70,7 @@ export function renderMapCanvas(
     return base.join("");
   });
   const trainRows = createTrainLayer(trainCellMap, width, mapHeight);
-  const finalRows = mergedRows.map((row, i) => {
+  const finalRows = mergedRows.map((row: string, i: number) => {
     const base = row.split("");
     const train = trainRows[i].split("");
     for (let x = 0; x < width; x++) {

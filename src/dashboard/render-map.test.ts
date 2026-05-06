@@ -33,5 +33,5 @@ Deno.test("Render ASCII map with stations, track and trains", () => {
   assertStringIncludes(map, "Balance: 1000");
   assertStringIncludes(map, "Tick 0: Built track from Rosbo to Skærbølle");
   assertStringIncludes(map, "Tick 0: Inserted train at Rosbo");
-  console.log(map);
+  // console.log(map);
 });

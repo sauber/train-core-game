@@ -1,38 +1,55 @@
 # DASHBOARD
 
-Give user a visual representation of current simulation status.
+Visual representation of simulation state through layered rendering. Implements:
 
-Create a fixed sized string (such as 24 lines of 80 chars) for displaying on
-terminal.
-
-Use Unicode, Braille chars, and ANSI codes creatively.
+- Braille character mapping for terminal output
+- ANSI escape sequences for terminal control
+- Layered composition of map, inventory, and event sections
 
 ## Content
 
-The screen is divided into sections. Map (top), Inventory (middle) and Events
-(bottom).
+The dashboard is composed of three primary sections:
 
-### Events
+1. **Map (70% of screen)**
+   - Rendered using Braille characters and frame layers
+   - Implemented in: map-canvas.ts, braille-layer.ts, frame-layer.ts
+   - Uses Bresenham algorithm for track rendering
 
-Use 15% of available lines for displaying most recent events
+2. **Inventory (15% of screen)**
+   - Shows real-time game state metrics
+   - Implemented in: inventory.ts
+   - Displays: Tick count, Balance
 
-### Inventory
-
-Use 15% of available lines for displaying Stations, Trains, Balance, Tick
-
-### Map
-
-Use remaining number of lines.
-
-Generates output by merging layers. The layers are from lowest to highest:
-
-- Background
-- Frame at edge within canvas size
-- Tracks drawn as lines by Braille chars using Bresenham alrorithm
-- Stations with names, count of trains and passenger in station
-- Trains
+3. **Events (15% of screen)**
+   - Shows recent simulation events
+   - Implemented in: journal.ts
+   - Limited to last 3 events by default
 
 ## Structure
 
-Each section or layer is in seperate files, and a entrypoint file for dividing
-and assembling the parts.
+Modular architecture with dedicated layers:
+
+- map-canvas.ts: Coordinates overall rendering
+- background-layer.ts: Base canvas
+- frame-layer.ts: Border framing
+- braille-layer.ts: Character mapping
+- track-layer.ts: Track rendering
+- station-layer.ts: Station visualization
+- train-layer.ts: Train positioning
+- label-layer.ts: Text annotations
+- map-utils.ts: Geometric calculations
+
+The dashboard is assembled by dashboard.ts which combines layers in this order:
+
+1. Background
+2. Frame
+3. Tracks
+4. Stations
+5. Trains
+6. Labels
+7. Inventory
+8. Events
+
+The mapAgent handles real-time updates by clearing previous output and redrawing
+the map at each simulation step using ANSI escape sequences for in-place
+updates.
