@@ -1,5 +1,5 @@
 import type { Simulation } from "../simulation/simulation.ts";
-import { renderMapCanvas, renderLegend } from "./map-canvas.ts";
+import { renderLegend, renderMapCanvas } from "./map-canvas.ts";
 import { renderInventory } from "./inventory.ts";
 import { renderJournal } from "./journal.ts";
 
@@ -18,20 +18,29 @@ export function renderMap(
   const width = Math.max(20, options.width ?? DEFAULT_WIDTH);
   const totalHeight = Math.max(10, options.height ?? DEFAULT_TOTAL_HEIGHT);
 
-  // Reserve lines for legend (2) and footer (1 balance + 3 events = 4) = 6 total
-  const legendLines = 2;
-  const footerLines = 4; // 1 balance + 3 events
-  const reservedLines = legendLines + footerLines;
+  // Calculate line allocation based on AGENTS.md percentages:
+  // Map: 70%, Inventory: 15%, Events: 15%
+  const mapLines = Math.floor(totalHeight * 0.7);
+  const inventoryLines = Math.floor(totalHeight * 0.15);
+  const eventsLines = Math.floor(totalHeight * 0.15);
+  const reservedLines = inventoryLines + eventsLines;
   const mapHeight = Math.max(4, totalHeight - reservedLines);
 
   const areaWidth = game.area.width || 1;
   const areaHeight = game.area.height || 1;
 
-  const { rows } = renderMapCanvas(game, width, mapHeight, areaWidth, areaHeight);
+  const { rows } = renderMapCanvas(
+    game,
+    width,
+    mapHeight,
+    areaWidth,
+    areaHeight,
+  );
   const legend = renderLegend(game);
-  const footer = [renderInventory(game), ...renderJournal(game)];
+  const inventory = renderInventory(game);
+  const events = renderJournal(game);
 
-  const output = [...rows, ...legend, ...footer].join("\n");
+  const output = [...rows, ...legend, inventory, ...events].join("\n");
 
   // Ensure total output has exactly totalHeight lines
   const outputLines = output.split("\n");

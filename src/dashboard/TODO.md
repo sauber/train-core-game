@@ -1,10 +1,8 @@
 # Dashboard TODO
 
-- [ ] Ensure each layer implemented in seperate files and with seperate files of
+- [x] Ensure each layer implemented in seperate files and with seperate files of
       test cases.
-- [ ] Implement a background layer (e.g., terrain or grid) as described in
-      `AGENTS.md` (currently missing).
-- [ ] Align line allocation with the percentages specified in `AGENTS.md` (15%
+- [x] Align line allocation with the percentages specified in `AGENTS.md` (15%
       for events, 15% for inventory). The current implementation uses fixed line
       counts (legend 2, footer 4). Refactor `renderMap` to calculate these
       dynamically based on total height.
@@ -18,3 +16,5 @@
       (currently assumes previous line count matches output lines).
 - [ ] Tighten Station inventory label in map from (example) "P: 4 T: 1" to "P4
       T1".
+- [ ] Implement a background layer (e.g., terrain or grid) as described in
+      `AGENTS.md` (currently missing).
