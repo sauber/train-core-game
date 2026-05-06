@@ -12,6 +12,10 @@ export function createTrain(
 ): Train | Error {
   const train = new Train(type);
   if (!target.trains.add(train)) return new Error("Could not add train");
+  target.trains.add(train);
+  train.location = target;
   game.trains.add(train);
+  // console.log(train);
+  // throw new Error("Train created with out event");
   return train;
 }

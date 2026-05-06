@@ -143,8 +143,8 @@ export class Simulation {
   /** Run the simulation until end
    * Run each step every ms
    */
-  public run(agents: Agents, maxSteps: number, ms: number): void {
-    every(
+  public async run(agents: Agents, maxSteps: number, ms: number): void {
+    await every(
       ms,
       () => !this.terminated && this.tick < maxSteps,
       () => this.step(agents),

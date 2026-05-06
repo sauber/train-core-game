@@ -17,4 +17,4 @@ const agents: Agents = [
 /** Play a game with player controller */
 const maxSteps: number = 10;
 const game = new Simulation();
-game.run(agents, maxSteps, 500);
+await game.run(agents, maxSteps, 500);

@@ -43,8 +43,10 @@ export function insertTrains(game: Simulation): boolean {
 
   // Insert train at station
   const cost = trainPurchaseCost(type);
-  createTrain(game, type, station);
+  const train = createTrain(game, type, station);
   game.event(`${type.name} train inserted in ${station.name}`, -cost);
+  // console.log(game.journal);
+  // throw new Error("Train created with out event");
 
   return true;
 }

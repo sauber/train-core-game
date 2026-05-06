@@ -17,6 +17,11 @@ export const trainLayer: Layer = (canvas, width, height, game?: Simulation) => {
   // Draw trains at their locations
   for (const train of game.trains) {
     const location = train.location;
+    if (!location) {
+      console.log(train);
+      console.log(game);
+      throw new Error("Train is nowhere");
+    }
     if (!location) continue;
 
     let pixelPoint;
@@ -65,8 +70,6 @@ export const trainLayer: Layer = (canvas, width, height, game?: Simulation) => {
     const cellY = Math.floor(pixelPoint.y / 4);
 
     // Draw train symbol (T for train)
-    if (cellX >= 0 && cellX < width && cellY >= 0 && cellY < height) {
-      canvas.insert(cellX, cellY, "T");
-    }
+    canvas.insert(cellX, cellY, train.type.name[0]);
   }
 };
