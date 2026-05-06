@@ -1,4 +1,4 @@
-export type GridPoint = {
+type GridPoint = {
   x: number;
   y: number;
 };

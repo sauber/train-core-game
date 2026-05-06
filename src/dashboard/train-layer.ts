@@ -7,7 +7,7 @@ import { toPixelPoint } from "./map-utils.ts";
  * Draw train layer on the canvas.
  * Places train symbols at their current locations (on tracks or at stations).
  */
-export const trainLayer: Layer = (canvas, width, height, game?) => {
+export const trainLayer: Layer = (canvas, width, height, game?: Simulation) => {
   if (!game) return;
 
   const area = game.area;

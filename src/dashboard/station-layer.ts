@@ -1,10 +1,5 @@
 import type { Layer } from "./layer.type.ts";
-import type { Simulation } from "../simulation/simulation.ts";
-import type { Station } from "../station/mod.ts";
-import type { Train } from "../train/mod.ts";
-import type { Passenger } from "../passenger/mod.ts";
-import type { GridPoint } from "./map-utils.ts";
-import { pointKey, toPixelPoint } from "./map-utils.ts";
+import { toPixelPoint } from "./map-utils.ts";
 
 /**
  * Draw station layer on the canvas with name, train count, and passenger count.
