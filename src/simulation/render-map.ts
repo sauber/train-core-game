@@ -14,78 +14,88 @@ type GridPoint = {
   y: number;
 };
 
-function toGridPoint(
+function toPixelPoint(
   location: { x: number; y: number },
-  width: number,
-  height: number,
+  pixelWidth: number,
+  pixelHeight: number,
   areaWidth: number,
   areaHeight: number,
 ): GridPoint {
   return {
     x: Math.min(
-      width - 1,
-      Math.max(0, Math.round((location.x / areaWidth) * (width - 1))),
+      pixelWidth - 1,
+      Math.max(0, Math.round((location.x / areaWidth) * (pixelWidth - 1))),
     ),
     y: Math.min(
-      height - 1,
-      Math.max(0, Math.round((location.y / areaHeight) * (height - 1))),
+      pixelHeight - 1,
+      Math.max(0, Math.round((location.y / areaHeight) * (pixelHeight - 1))),
     ),
   };
 }
 
-function straightLine(start: GridPoint, end: GridPoint): Array<GridPoint> {
+function createPixelGrid(width: number, height: number): Array<Array<boolean>> {
+  return Array.from(
+    { length: height },
+    () => Array.from({ length: width }, () => false),
+  );
+}
+
+function bresenhamLine(start: GridPoint, end: GridPoint): Array<GridPoint> {
   const points: Array<GridPoint> = [];
-  if (start.x === end.x) {
-    const step = start.y < end.y ? 1 : -1;
-    for (let y = start.y; y !== end.y + step; y += step) {
-      points.push({ x: start.x, y });
+  let x0 = start.x;
+  let y0 = start.y;
+  const x1 = end.x;
+  const y1 = end.y;
+  const dx = Math.abs(x1 - x0);
+  const dy = Math.abs(y1 - y0);
+  const sx = x0 < x1 ? 1 : -1;
+  const sy = y0 < y1 ? 1 : -1;
+  let err = dx - dy;
+
+  while (true) {
+    points.push({ x: x0, y: y0 });
+    if (x0 === x1 && y0 === y1) break;
+    const e2 = err * 2;
+    if (e2 > -dy) {
+      err -= dy;
+      x0 += sx;
     }
-    return points;
-  }
-  if (start.y === end.y) {
-    const step = start.x < end.x ? 1 : -1;
-    for (let x = start.x; x !== end.x + step; x += step) {
-      points.push({ x, y: start.y });
+    if (e2 < dx) {
+      err += dx;
+      y0 += sy;
     }
-    return points;
   }
-  throw new Error("straightLine must be horizontal or vertical");
+
+  return points;
 }
 
-function linePoints(start: GridPoint, end: GridPoint): Array<GridPoint> {
-  if (start.x === end.x || start.y === end.y) {
-    return straightLine(start, end);
-  }
-
-  const corner: GridPoint = { x: end.x, y: start.y };
-  const firstSegment = straightLine(start, corner);
-  const secondSegment = straightLine(corner, end).slice(1);
-  return [...firstSegment, ...secondSegment];
-}
-
-function trackCharacter(
-  previous: GridPoint,
-  current: GridPoint,
-  next: GridPoint,
+function brailleCellValue(
+  pixels: Array<Array<boolean>>,
+  cellX: number,
+  cellY: number,
 ): string {
-  const dxPrev = current.x - previous.x;
-  const dyPrev = current.y - previous.y;
-  const dxNext = next.x - current.x;
-  const dyNext = next.y - current.y;
+  const base = 0x2800;
+  const offsets = [
+    { x: 0, y: 0, bit: 1 },
+    { x: 0, y: 1, bit: 2 },
+    { x: 0, y: 2, bit: 4 },
+    { x: 0, y: 3, bit: 64 },
+    { x: 1, y: 0, bit: 8 },
+    { x: 1, y: 1, bit: 16 },
+    { x: 1, y: 2, bit: 32 },
+    { x: 1, y: 3, bit: 128 },
+  ];
 
-  if (dxPrev !== 0 && dxNext !== 0) return "═";
-  if (dyPrev !== 0 && dyNext !== 0) return "║";
+  let value = 0;
+  for (const offset of offsets) {
+    const x = cellX * 2 + offset.x;
+    const y = cellY * 4 + offset.y;
+    if (pixels[y]?.[x]) {
+      value |= offset.bit;
+    }
+  }
 
-  if (dxPrev > 0 && dyNext > 0) return "╗";
-  if (dxPrev > 0 && dyNext < 0) return "╝";
-  if (dxPrev < 0 && dyNext > 0) return "╔";
-  if (dxPrev < 0 && dyNext < 0) return "╚";
-  if (dyPrev > 0 && dxNext > 0) return "╚";
-  if (dyPrev > 0 && dxNext < 0) return "╔";
-  if (dyPrev < 0 && dxNext > 0) return "╝";
-  if (dyPrev < 0 && dxNext < 0) return "╗";
-
-  return "═";
+  return value === 0 ? " " : String.fromCodePoint(base + value);
 }
 
 function pointKey(point: GridPoint): string {
@@ -112,30 +122,32 @@ export function renderMap(
   const areaWidth = game.area.width || 1;
   const areaHeight = game.area.height || 1;
 
-  const grid = Array.from(
-    { length: mapHeight },
-    () => Array.from({ length: width }, () => " "),
-  );
+  const pixelWidth = width * 2;
+  const pixelHeight = mapHeight * 4;
+  const pixels = createPixelGrid(pixelWidth, pixelHeight);
 
   const stationPositions = new Map<Station, GridPoint>();
-  const stationIndexByKey = new Map<string, Station[]>();
+  const stationCellMap = new Map<string, Station[]>();
 
   for (const station of game.stations) {
-    const point = toGridPoint(
+    const point = toPixelPoint(
       station.location,
-      width,
-      mapHeight,
+      pixelWidth,
+      pixelHeight,
       areaWidth,
       areaHeight,
     );
     stationPositions.set(station, point);
-    const key = pointKey(point);
-    const existing = stationIndexByKey.get(key) ?? [];
+    const key = pointKey({
+      x: Math.floor(point.x / 2),
+      y: Math.floor(point.y / 4),
+    });
+    const existing = stationCellMap.get(key) ?? [];
     existing.push(station);
-    stationIndexByKey.set(key, existing);
+    stationCellMap.set(key, existing);
   }
 
-  const trackTrainPositions = new Set<string>();
+  const trainCellMap = new Map<string, string>();
 
   for (const track of game.tracks) {
     const trackStations = Array.from(track.stations);
@@ -144,48 +156,54 @@ export function renderMap(
     const to = stationPositions.get(trackStations[1]);
     if (!from || !to) continue;
 
-    const points = linePoints(from, to);
-    for (let index = 1; index < points.length - 1; index++) {
-      const point = points[index];
-      const key = pointKey(point);
-      if (stationIndexByKey.has(key)) continue;
-      grid[point.y][point.x] = trackCharacter(
-        points[index - 1],
-        point,
-        points[index + 1],
-      );
+    const points = bresenhamLine(from, to);
+    for (const point of points) {
+      if (
+        point.x >= 0 && point.x < pixelWidth && point.y >= 0 &&
+        point.y < pixelHeight
+      ) {
+        pixels[point.y][point.x] = true;
+      }
     }
 
     if (track.trains.size > 0) {
       const midpoint = points[Math.floor(points.length / 2)];
-      const key = pointKey(midpoint);
-      if (!stationIndexByKey.has(key)) {
-        grid[midpoint.y][midpoint.x] = "T";
-        trackTrainPositions.add(key);
-      }
+      const key = pointKey({
+        x: Math.floor(midpoint.x / 2),
+        y: Math.floor(midpoint.y / 4),
+      });
+      trainCellMap.set(key, "T");
     }
   }
 
-  for (const [key, stations] of stationIndexByKey.entries()) {
+  const rows = [] as string[];
+  for (let cellY = 0; cellY < mapHeight; cellY++) {
+    const row = [] as string[];
+    for (let cellX = 0; cellX < width; cellX++) {
+      row.push(brailleCellValue(pixels, cellX, cellY));
+    }
+    rows.push(row.join(""));
+  }
+
+  for (const [key, stations] of stationCellMap.entries()) {
     const [x, y] = key.split(",").map(Number);
     if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
-    if (stations.length === 1) {
-      grid[y][x] = stationSymbol(stations[0]);
-    } else {
-      grid[y][x] = "*";
-    }
+    if (x < 0 || x >= width || y < 0 || y >= mapHeight) continue;
+    const symbol = stations.length === 1 ? stationSymbol(stations[0]) : "*";
+    const row = rows[y].split("");
+    row[x] = symbol;
+    rows[y] = row.join("");
   }
 
-  for (const station of game.stations) {
-    const point = stationPositions.get(station);
-    if (!point) continue;
-    if (station.trains.size > 0) {
-      const overlay = stationSymbol(station);
-      grid[point.y][point.x] = overlay;
-    }
+  for (const [key, symbol] of trainCellMap.entries()) {
+    if (stationCellMap.has(key)) continue;
+    const [x, y] = key.split(",").map(Number);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+    if (x < 0 || x >= width || y < 0 || y >= mapHeight) continue;
+    const row = rows[y].split("");
+    row[x] = symbol;
+    rows[y] = row.join("");
   }
-
-  const rows = grid.map((row) => row.join(""));
 
   const stationLegend = Array.from(game.stations).map((station) => {
     const trains = station.trains.size;
