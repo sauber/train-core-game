@@ -2,6 +2,13 @@
 
 A Train is a carrier of passengers that moves between stations along tracks.
 
+## Lifecycle Responsibilities (Fleet Lifecycle)
+
+- **Add train**: Logged via `game.event()`, purchase cost deducted from Balance
+- **Repair train**: Logged via `game.event()`, repair cost deducted from Balance
+- **Delete train**: Logged via `game.event()`, revenue (if any) added to Balance
+- Ensures train is properly linked to stations before deletion
+
 ## Type
 
 Different train types vary by name, speed, cost, and passenger capacity. Train
@@ -9,7 +16,12 @@ types are defined in `train-type.ts`.
 
 ## States
 
-- **Operational**: Functional and can transport passengers (degradation < 1.0)
+- **Idle**: Train not assigned to any route
+- **Waiting for route**: Train at station waiting for route assignment
+- **Waiting for passengers**: Train at station waiting for passengers to board
+- **Departs**: Train leaves station onto track
+- **Runs**: Train moving along track
+- **Arrives**: Train reaches destination station
 - **Broken**: Non-functional (degradation ≥ 1.0)
 
 ## Route (Planned)
@@ -52,13 +64,13 @@ A train arrives at a station when:
 
 Trains exist and can:
 
-- Be added to/removed from the simulation
+- Be added to/removed from the simulation (via Lifecycle)
 - Move between stations and tracks (immediate, not tick-based)
 - Hold passengers up to their type's capacity
 - Track their own degradation level
 - Be inserted by the Fleet Agent
 
-**Note:** Automated route following, speed-based travel, departure/arrival
+**Note**: Automated route following, speed-based travel, departure/arrival
 logic, and degradation during travel are not yet implemented. These will be
 handled by the planned Train Agent (not yet implemented).
 
@@ -71,4 +83,4 @@ When implemented:
 
 - Trains will degrade per unit of distance traveled
 - Degradation ≥ 1.0 marks a train as broken
-- Broken trains can be repaired for a cost
+- Broken trains can be repaired for a cost (via Lifecycle)

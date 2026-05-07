@@ -14,20 +14,21 @@ When a new track is built, two previously separate Networks may merge into one.
 When a track is deleted, a single Network may split into multiple isolated
 Networks.
 
-Because Networks are stateless abstractions, there is no Network Agent with
-internal state or autonomous triggers. Other agents generate Network views to:
+## Lifecycle Responsibilities (Network Lifecycle)
 
-- Find reachable stations for a given origin
-- Evaluate connectivity and isolation
-- Plan routes (shortest/fastest paths)
-- Determine buildable track locations
+- **Add track**: Logged via `game.event()`, build cost deducted from Balance
+- **Repair track**: Logged via `game.event()`, repair cost deducted from Balance
+- **Delete track**: Logged via `game.event()`, revenue (if any) added to Balance
+- Ensures track is properly linked to two stations before addition
+- Ensures stations are updated when track is deleted
 
 ## Network Agent (Current)
 
-The Network Agent makes track construction and repair decisions. It operates
-on network connectivity to:
+The Network Agent makes track construction and repair decisions. It operates on
+network connectivity to:
 
-1. **Repair tracks** — Fix broken tracks when affordable, prioritizing critical connections
+1. **Repair tracks** — Fix broken tracks when affordable, prioritizing critical
+   connections
 2. **Add tracks** — Connect isolated stations to improve network reachability
 
 ## Current Implementation
@@ -36,6 +37,7 @@ The Network Agent uses `list-networks.ts` and related functions to generate
 network views. It prioritizes repairing broken tracks over building new ones.
 
 Track construction/repair decisions consider:
+
 - Available capital and repair budgets
 - Track distance and degradation state
 - Cost-effectiveness via centralized cost calculations
@@ -65,3 +67,11 @@ Network generation and route planning are triggered by agent requests rather
 than by autonomous Network actions. Actions that affect connectivity (building,
 repairing, removing tracks) are performed by other agents and result in updated
 simulation state from which Networks are subsequently generated.
+
+## Track State Machine
+
+- **New**: Track just added, degradation = 0
+- **Operational**: Track functional (degradation < 1.0)
+- **Degrading**: Track degradation increasing with train usage
+- **Broken**: Track non-functional (degradation ≥ 1.0)
+- **Repaired**: Track restored to operational state

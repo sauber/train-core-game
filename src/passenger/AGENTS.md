@@ -4,8 +4,13 @@ Passengers are travellers from one station to another. Origin and destination
 are static for each traveller. The objective for a traveller is to reach
 destination as fast as possible.
 
-Passengers do not manage their own lifecycle. A passenger is always at exactly
-one location: either waiting at a station or aboard a train.
+## Lifecycle Responsibilities (Population Lifecycle)
+
+- **Spawn passenger**: Logged via `game.event()`, no cost (free to create)
+- **Delete passenger**: Logged via `game.event()`, fare revenue added to station
+  Balance
+- Ensures passenger is properly linked to origin station before spawning
+- Ensures destination is reachable before spawning
 
 ## Current Implementation
 
@@ -17,6 +22,8 @@ be handled by the planned Passenger Agent (not yet implemented).
 
 - **Waiting**: At a station, awaiting transport
 - **In Transit**: Aboard a train
+- **Boarded**: On train moving to destination
+- **Disembarked**: Arrived at destination station
 
 ## Boarding (Planned)
 
@@ -29,8 +36,10 @@ waits. Passengers will not board full trains.
 ## Disembarkment (Planned)
 
 Passengers disembark when:
+
 - Their destination station is reached, or
-- Continuing on the current train's route no longer aligns with their planned path
+- Continuing on the current train's route no longer aligns with their planned
+  path
 
 If a train reaches its final route station, all passengers whose destination
 matches will disembark. Other passengers may remain only if a compatible
@@ -41,13 +50,16 @@ If a train has no route, all passengers on board will disembark.
 ## Fare Collection (Planned)
 
 When passengers reach their destination station, the Station Agent will:
-1. Calculate the fare based on the shortest path distance from origin to destination
-2. Add the fare to the station's revenue
-3. Remove the passenger from the simulation
+
+1. Calculate the fare based on the shortest path distance from origin to
+   destination
+2. Add the fare to the station's revenue (via Lifecycle, added to Balance)
+3. Remove the passenger from the simulation (via Lifecycle)
 
 ## Planned Passenger Agent
 
 The not-yet-implemented Passenger Agent will control:
+
 - Route planning for individual passengers
 - Boarding/disembarkment decisions
 - Waiting behavior at stations

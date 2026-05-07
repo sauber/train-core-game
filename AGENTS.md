@@ -141,6 +141,42 @@ journal serves as a record of actions for debugging and monitoring purposes.
 Actions do not go through the journal for execution/replay; the journal is an
 observer pattern for tracking simulation history.
 
+## Lifecycle Management
+
+### Abstract Lifecycle Class
+
+An abstract `Lifecycle` class provides controlled object creation and
+destruction through inherited classes for each game object type. It ensures:
+
+- All spawn and destroy activities are logged in the Simulation journal via
+  `game.event()`
+- All payments are deducted from the Simulation Balance
+- All revenue is added to the Balance
+- Integrity of relationships between objects is maintained (e.g., track linked
+  to two stations, each station linked to the track)
+
+### Lifecycle Inheritance
+
+Each game object type has an inherited Lifecycle class responsible for spawning
+and destroying specific objects:
+
+- **Area Lifecycle** — add/delete stations
+- **Network Lifecycle** — add/repair/delete/navigate tracks
+- **Fleet Lifecycle** — add/repair/delete trains
+- **Population Lifecycle** — add/delete passengers
+
+### State Machines
+
+Game objects become state machines with lifecycle transitions:
+
+- **Station**: idle -> waiting for platforms -> platforms increased ->
+  operational
+- **Track**: new -> operational -> degrading -> broken -> repaired
+- **Train**: idle -> waiting for route -> waiting for passengers -> departs ->
+  runs -> arrives -> waiting for route
+- **Passenger**: spawned -> waiting -> board -> in transit -> disembark ->
+  waiting -> arrive
+
 ## Planned Agent Types (Not Yet Implemented)
 
 - **Passenger Agent** - Would control passenger boarding and disembarkment

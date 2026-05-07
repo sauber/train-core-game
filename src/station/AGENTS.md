@@ -3,6 +3,16 @@
 A Station is a node on the map where trains can stop, passengers can wait, and
 tracks connect to other stations.
 
+## Lifecycle Responsibilities
+
+The Station Lifecycle (inherited from Area Lifecycle) manages station creation
+and deletion:
+
+- Station creation logged via `game.event()`, no cost deducted
+- Station deletion logged via `game.event()`, revenue from station operations
+  added to Balance
+- Ensures all tracks connected to station are handled before deletion
+
 ## Properties
 
 - **Name**: Unique identifier
@@ -34,27 +44,19 @@ When passengers reach their destination station, the Station Agent will:
 1. Check passengers waiting at the station
 2. For each passenger whose destination matches the station:
    - Calculate fare based on Euclidean distance from origin to destination
-   - Add fare to station revenue
-   - Remove passenger from simulation
+   - Add fare to station revenue (via Lifecycle, added to Balance)
+   - Remove passenger from simulation (via Lifecycle)
 
-Station revenue is collected but not yet transferred to the Simulation Balance.
+Station revenue is collected and transferred to the Simulation Balance via
+Lifecycle.
 
 ## Passenger Spawning (Implemented)
 
 The Station Agent spawns new passengers at random connected stations each tick.
 Newly spawned passengers have random origin and destination within the network.
 
-## Current Implementation
+## State Machine
 
-Stations exist and can:
-
-- Hold trains (up to platform capacity, which grows with activity)
-- Connect to other stations via tracks
-- Collect revenue from arriving passengers
-- Spawn new passengers each tick
-- Hold waiting passengers (no current limits)
-- Have their capacity determined by initial platforms (not yet by activity)
-
-Boarding/disembarkment decisions, revenue collection, and passenger spawning are
-not yet automated. These will be handled by the planned Station Agent (not yet
-implemented).
+- **Waiting for platforms**: Station exists but has no platforms
+- **Platforms increased**: Station capacity grows based on activity
+- **Operational**: Station has platforms and is ready for trains
