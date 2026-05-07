@@ -2,7 +2,7 @@ import type { TrainType } from "./train-type.ts";
 import { Passengers } from "../passenger/mod.ts";
 import { LimitSet } from "../utils/limitset.ts";
 import { Station } from "../station/station.ts";
-import type { Track } from "../track/track.ts";
+import { Track } from "../track/track.ts";
 import type { Simulation } from "../simulation/mod.ts";
 
 export class Trains extends LimitSet<Train> {
@@ -73,6 +73,12 @@ export class Train {
     current.trains.delete(this);
     this.location = target;
     target.trains.add(this);
+
+    // Increment track degradation when train moves on track
+    if (target instanceof Track) {
+      target.degraded += 0.1; // Wear rate of 0.1 per pass
+    }
+
     return true;
   }
 }

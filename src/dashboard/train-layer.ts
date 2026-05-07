@@ -27,43 +27,33 @@ export const trainLayer: Layer = (canvas, width, height, game?: Simulation) => {
     let pixelPoint;
 
     // Check if location is a Station
-    if ("name" in location && "location" in location) {
-      // Train is at a station
-      const station = location as Station;
-      pixelPoint = toPixelPoint(
-        station.location,
-        pixelWidth,
-        pixelHeight,
-        area.width,
-        area.height,
-      );
-    } else {
-      // Train is on a track - draw at midpoint
-      const track = location as { stations: Set<Station> };
-      const stations = Array.from(track.stations) as Station[];
-      if (stations.length !== 2) continue;
+    if ("name" in location && "location" in location) return;
 
-      const [stationA, stationB] = stations;
-      const pixelA = toPixelPoint(
-        stationA.location,
-        pixelWidth,
-        pixelHeight,
-        area.width,
-        area.height,
-      );
-      const pixelB = toPixelPoint(
-        stationB.location,
-        pixelWidth,
-        pixelHeight,
-        area.width,
-        area.height,
-      );
+    // Train is on a track - draw at midpoint
+    const track = location as { stations: Set<Station> };
+    const stations = Array.from(track.stations) as Station[];
+    if (stations.length !== 2) continue;
 
-      pixelPoint = {
-        x: Math.floor((pixelA.x + pixelB.x) / 2),
-        y: Math.floor((pixelA.y + pixelB.y) / 2),
-      };
-    }
+    const [stationA, stationB] = stations;
+    const pixelA = toPixelPoint(
+      stationA.location,
+      pixelWidth,
+      pixelHeight,
+      area.width,
+      area.height,
+    );
+    const pixelB = toPixelPoint(
+      stationB.location,
+      pixelWidth,
+      pixelHeight,
+      area.width,
+      area.height,
+    );
+
+    pixelPoint = {
+      x: Math.floor((pixelA.x + pixelB.x) / 2),
+      y: Math.floor((pixelA.y + pixelB.y) / 2),
+    };
 
     // Convert to Braille cell coordinates
     const cellX = Math.floor(pixelPoint.x / 2);

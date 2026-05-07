@@ -37,13 +37,15 @@ Deno.test("Station agent collects revenue from arrived passengers", () => {
   station1.passengers.add(passenger);
   game.passengers.add(passenger);
 
-  assertEquals(station1.revenue, 0);
+  const initialBalance = game.balance;
   stationAgent(game);
 
   // Passenger should be removed and revenue collected
   assertEquals(game.passengers.size, 0);
   assertEquals(station1.passengers.size, 0);
-  assertEquals(station1.revenue > 0, true);
+  // Revenue is transferred to game balance and station.revenue is reset
+  assertEquals(station1.revenue, 0);
+  assertEquals(game.balance > initialBalance, true);
   assertStringIncludes(game.journal[0].message, "Passenger arrived");
 });
 

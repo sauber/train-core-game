@@ -46,6 +46,12 @@ export const stationAgent: Agent = (game: Simulation): void => {
     }
   }
 
+  // Transfer station revenue to game balance
+  for (const station of game.stations) {
+    game.balance += station.revenue;
+    station.revenue = 0;
+  }
+
   // Passenger spawning: spawn one passenger per tick (simple implementation)
   if (game.stations.size >= 2) { // Need at least 2 stations for passengers
     const result = createPassenger(game);
