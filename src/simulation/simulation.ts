@@ -58,14 +58,17 @@ function every(
   ms: number,
   condition: () => boolean,
   callback: () => void,
-): void {
-  const interval = setInterval(() => {
-    if (condition()) {
-      callback();
-    } else {
-      clearInterval(interval);
-    }
-  }, ms);
+): Promise<void> {
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if (condition()) {
+        callback();
+      } else {
+        clearInterval(interval);
+        resolve();
+      }
+    }, ms);
+  });
 }
 
 /** All the objects in a game */
@@ -143,7 +146,7 @@ export class Simulation {
   /** Run the simulation until end
    * Run each step every ms
    */
-  public async run(agents: Agents, maxSteps: number, ms: number): void {
+  public async run(agents: Agents, maxSteps: number, ms: number): Promise<void> {
     await every(
       ms,
       () => !this.terminated && this.tick < maxSteps,
