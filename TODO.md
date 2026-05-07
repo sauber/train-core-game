@@ -6,7 +6,7 @@ Steps to complete towards implementation
 
 ### Capacity Growth
 
-- [ ] Add activity counter to Station class
+- [x] Add activity counter to Station class
   - Suggestion: Add `activity: number = 0` property to track
     boardings/disembarkments
 - [ ] Increment activity on passenger events

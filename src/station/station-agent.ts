@@ -6,6 +6,17 @@ import { passengerFare } from "../utils/mod.ts";
 export const stationAgent: Agent = (game: Simulation): void => {
   // Process each station
   for (const station of game.stations) {
+    // Boarding events: passengers boarding trains at this station
+    for (const train of station.trains) {
+      for (const passenger of train.passengers) {
+        if (passenger.origin === station) {
+          // Passenger has boarded a train at their origin station
+          station.activity++; // Count boarding
+          game.event(`Passenger boarded train at ${station.name}`);
+        }
+      }
+    }
+
     // Revenue collection: check for passengers who have reached their destination
     const toRemove: Set<Passenger> = new Set();
     for (const passenger of station.passengers) {
