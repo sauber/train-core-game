@@ -1,21 +1,23 @@
-import type { Agent, Balance, Simulation } from "../simulation/mod.ts";
-import { createStation, type Station } from "../station/mod.ts";
+import type { Agent, Simulation } from "../simulation/mod.ts";
+import { AreaLifecycle } from "../lifecycle/area-lifecycle.ts";
+import type { Station } from "../station/mod.ts";
 
-/** Spawn stations and defined capital levels */
+/** Spawn stations at defined capital levels */
 export const areaAgent: Agent = (game: Simulation): void => {
   // Number of stations in game
   const current_station_count = game.stations.size;
 
   // Number of stations required
   let stations_required = 0;
-  game.stationLevels.forEach((balance: Balance, index: number) => {
+  game.stationLevels.forEach((balance: number, index: number) => {
     if (game.balance >= balance) stations_required = index + 1;
   });
 
   // Spawn missing stations
   for (let i = current_station_count; i < stations_required; i++) {
-    const station: Station = createStation(game);
-    game.event(`${station.name} station built`);
+    // Use AreaLifecycle to create station with proper logging and balance handling
+    const lifecycle = new AreaLifecycle(game);
+    const station: Station = lifecycle.spawn("Station" + (i + 1), 1);
     // Max one station per tick
     return;
   }

@@ -65,4 +65,20 @@ export class Area {
     this.stations.add(station);
     return station;
   }
+
+  /** Create a station at a specific location (used by lifecycle) */
+  public createStationAt(
+    name: string,
+    location: Location,
+    platforms: number,
+  ): Station {
+    const station = new Station(name, location, platforms);
+    this.stations.add(station);
+    return station;
+  }
+
+  /** Expose empty location finder for lifecycle usage */
+  public getEmptyLocation(): Location {
+    return this.findEmptyLocation();
+  }
 }

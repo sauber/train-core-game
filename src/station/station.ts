@@ -70,4 +70,28 @@ export class Station {
     this.tracks.delete(track);
     return true;
   }
+
+  /** Update activity count and manage platform growth */
+  public updateActivity(): void {
+    this.activity++;
+    // Platform growth thresholds
+    const thresholds = [
+      { count: 0, platforms: 1 },
+      { count: 100, platforms: 2 },
+      { count: 250, platforms: 3 },
+      { count: 500, platforms: 4 },
+    ];
+
+    for (const threshold of thresholds) {
+      if (
+        this.activity >= threshold.count && this.platforms < threshold.platforms
+      ) {
+        this.platforms = threshold.platforms;
+        // Revenue from increased capacity
+        const additionalRevenue =
+          (threshold.platforms - (threshold.platforms - 1)) * 50;
+        this.revenue += additionalRevenue;
+      }
+    }
+  }
 }
