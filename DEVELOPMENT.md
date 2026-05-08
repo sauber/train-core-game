@@ -1,5 +1,7 @@
 # DEVELOPMENT.md
 
+Platforms, tools, process and code structure for development.
+
 ## Platform
 
 - Programming language: Typescript
@@ -25,8 +27,6 @@
   3. Implement the feature in `src/<folder>/<module>.ts` until the test passes.
   4. Run `deno test` to ensure the entire test suite passes and no regressions
      appear.
-- Test files are placed side‑by‑side with their implementation files, e.g.
-  `src/train/train.ts` and `src/train/train.test.ts`.
 - Use "@std/assert" for assert functions. Avoid to use the generic `assert()`
   and use instead more specific ones such as `assertEquals()`,
   `assertInstanceOf()` etc.
@@ -51,5 +51,5 @@ import { <symbol>, type <symbol> } from "../<feature>/<file>.ts;
 Importing files from same folder should never use `mod.ts`. Its use is only for
 other features.
 
-When importing multiple symbols from other folder, keep all symbols on same
+When importing multiple symbols from other folder, keep all symbols on same one
 import line.

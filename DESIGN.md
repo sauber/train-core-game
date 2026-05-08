@@ -1,84 +1,30 @@
 # DESIGN.md
 
-## Game Overview
+## Project Overview
 
-A logistics strategy game. The player manages a railway network, which
-transports passengers, and earns profit while maintaining tracks.
+A transportation simulation. The objective is to transport as many passengers
+from one station to another to maximize revenue from tickets sold. Passengers
+are transported by trains. Trains drive on tracks. Tracks connect stations.
 
-## Code Structure
+## Economy
 
-Code is divided into folders by feature.
+Simulation has a balance. Costs are deducted from balance and revenue is added
+to balance.
 
-```
-src/
-├── area/        # Stations on a map
-├── fleet/       # Trains in networks
-├── network/     # Graphs of stations connected by tracks
-├── passenger/   # A traveller on a train or at a station
-├── simulation/  # Execute steps of simulation
-├── station/     # A node on the map with passengers, tracks and trains
-├── track/       # Link between two stations
-├── train/       # Transportation of passengers
-└── utils/       # Supporting functions
-```
-
-## Feature Structure
-
-Each feature has a main implementation responsible for integrity of
-relationships in simulation, and may have an agent which can decide actions and
-execute them.
-
-Generally there is only one class or one function per file. Typescript Types are
-defined where they are processed as input or generated as output.
-
-```
-src/<feature>/
-├── <feature>.ts             # Add, remove, change object in game. Ensure relationships constrains
-├── <feature>.test.ts        # Test cases for <feature>.ts
-├── <feature>-agent.ts       # Decide events for all objects of type, calculate cost, execute events, record in simulation journal.
-├── <feature>-agent.test.ts  # Test cases for <feature>-agent.ts
-├── mod.ts                   # Export symbols from <feature>.ts and <feature>-agent.ts
-└...                         # Other supporting files
-```
+- Trains and tracks are cost money to obtain.
+- Trains and tracks degrade and cost money to repair.
+- Passengers pay a fare when they arrive at destination station.
 
 ## Agent
 
-An Agent is an autonomous decision-maker that controls a specific set of objects
-or aspects of the simulation. Each agent observes the simulation state and makes
-decisions to transition objects (e.g., board trains, build tracks, spawn
-passengers) according to defined rules and objectives.
+An Agent is an autonomous decision-maker that controls a specific set of
+objects. Each agent observes the simulation state and makes decisions to
+transition objects (e.g., board trains, build tracks, spawn passengers)
+according to defined rules and objectives.
 
 In every simulation step, all registered agents are executed in a single pass.
-Each agent is stateless between ticks and operates only on the current
-simulation state.
 
-Multitick goals are stored as Routes in trains and passenger objects. Agents
-help objects reach goals.
-
-### Current Agents
-
-In order of execution:
-
-1. **Fleet Agent** — Train insertion and repair
-2. **Track Agent** — Track construction and repair
-3. **Area Agent** — Station creation
-4. **Station Agent** — Passenger spawning, revenue collection, and capacity
-   management
-5. **Report Agent** — State reporting
-
-**Network Agent** - Not yet implemented. Would handle track construction/repair
-decisions and route planning.
-
-Lower-scale agents that would make fine-grained decisions (passenger boarding,
-train routing, station operations) are not yet implemented.
-
-### Agent Execution Order
-
-The agents execute in a fixed order each simulation step. Order matters because
-some agents may depend on state updates produced by earlier agents. Agents
-should be stateless between ticks and rely only on the current simulation state.
-
-### Agent State Mutation
+### Journaling
 
 Agents observe the current simulation state and record actions in the journal
 via `game.event()`. State mutations (e.g., creating stations, building tracks,
@@ -89,47 +35,38 @@ observer pattern for tracking simulation history.
 
 ## Lifecycle Management
 
-### Abstract Lifecycle Class
+Factories add and remove objects and ensures consistency. The factories
+themselves are created at start of simulation and factory agents make decisions
+for the factories. For example the Fleet factory creates trains, and ensures
+train is placed at a station with an available platform, and that train itself
+is aware of location at the given station.
 
-An abstract `Lifecycle` class provides controlled object creation and
-destruction through inherited classes for each game object type. It ensures:
+List of factories:
 
-- All spawn and destroy activities are logged in the Simulation journal via
-  `game.event()`
-- All payments are deducted from the Simulation Balance
-- All revenue is added to the Balance
-- Integrity of relationships between objects is maintained (e.g., track linked
-  to two stations, each station linked to the track)
+- **Area**: Creates stations
+- **Network**: Creates, repairs and deletes tracks
+- **Fleet**: Creates, repairs and delete trains.
+- **Population**: Creates and deletes passengers
+- **Navigation**: Create routes
 
-### Lifecycle Inheritance
+See `src/<factory>/<FACTORY>.md` for more details.
 
-Each game object type has an inherited Lifecycle class responsible for spawning
-and destroying specific objects:
+## Objects
 
-- **Area Lifecycle** — add/delete stations
-- **Network Lifecycle** — add/repair/delete/navigate tracks
-- **Fleet Lifecycle** — add/repair/delete trains
-- **Population Lifecycle** — add/delete passengers
+Game objects are state machines, that cycle through states. Game object agents
+confirm if next state is possible, and proceeds.
 
-### State Machines
+List of objects:
 
-Game objects become state machines with lifecycle transitions:
+- **Station**: Has location in Area, a max number of capacity for trains, a set
+  of trains currently at station, a set of passengers waiting for trains and
+  waiting to exit, a set of tracks connecting to other stations.
+- **Track**: Has two stations as endpoints, a distance, a degraded status and
+  may have zero or one trains running on it.
+- **Passenger**: Has origin station and destination station, has a route for
+  desired path to destination, and has current location which is either a
+  station or a track.
+- **Train**: Has a type and a route. Is located at a station or on a track.
+- **Route**: Chain of stations and tracks from one station to another station.
 
-- **Station**: idle -> waiting for platforms -> platforms increased ->
-  operational
-- **Track**: new -> operational -> degrading -> broken -> repaired
-- **Train**: idle -> waiting for route -> waiting for passengers -> departs ->
-  runs -> arrives -> waiting for route
-- **Passenger**: spawned -> waiting -> board -> in transit -> disembark ->
-  waiting -> arrive
-
-## Planned Agent Types (Not Yet Implemented)
-
-- **Passenger Agent** - Would control passenger boarding and disembarkment
-  decisions
-- **Train Agent** - Would control train routing, departure, driving, and arrival
-- **Network Agent** - Would handle track construction/repair decisions and route
-  planning
-
-When implemented, these agents would execute before the Fleet Agent in order
-from smallest-scale (passengers) to largest-scale (network).
+See `src/<object>/<OBJECT>.md` for more details.
