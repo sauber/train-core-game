@@ -34,8 +34,8 @@ class AreaLifecycle extends Lifecycle<Station> {
     const revenue = this.calculateDestructionRevenue(station);
     this.game.event(`Removed station ${station.name}`, revenue);
 
-    // Remove from area
-    this.game.area.stations.delete(station);
+    // Do not remove from area
+    // this.game.area.stations.delete(station);
   }
 
   private calculateCreationCost(station: Station): number {
@@ -48,6 +48,4 @@ class AreaLifecycle extends Lifecycle<Station> {
     return station.platforms * 50;
   }
 }
-
-// Export class for instantiation by agents
 export { AreaLifecycle };

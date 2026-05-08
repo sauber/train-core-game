@@ -13,6 +13,15 @@ export class Trains extends LimitSet<Train> {
 
 export type Location = Station | Track;
 
+export type TrainState =
+  | "idle"
+  | "waiting_for_route"
+  | "waiting_for_passengers"
+  | "departs"
+  | "runs"
+  | "arrives"
+  | "broken";
+
 export class Train {
   /** Passengers */
   public readonly passengers: Passengers;
@@ -22,6 +31,9 @@ export class Train {
 
   /** Degraded state of train */
   public degraded: number = 0;
+
+  /** Current state of train */
+  public state: TrainState = "idle";
 
   constructor(
     /** Type of train */
@@ -36,6 +48,7 @@ export class Train {
     target.trains.add(this);
     this.location = target;
     game.trains.add(this);
+    this.state = "waiting_for_route";
     return true;
   }
 
@@ -60,6 +73,7 @@ export class Train {
       if (!station.tracks.has(track)) {
         return new Error("Target track not at station, cannot leave.");
       }
+      this.state = "departs";
     } else {
       // Entering
       const track = this.location as Track;
@@ -67,6 +81,7 @@ export class Train {
       if (!track.stations.has(station)) {
         return new Error("Track not at target station, cannot enter.");
       }
+      this.state = "arrives";
     }
 
     const current: Location = this.location as Location;
@@ -77,8 +92,23 @@ export class Train {
     // Increment track degradation when train moves on track
     if (target instanceof Track) {
       target.degraded += 0.1; // Wear rate of 0.1 per pass
+      this.state = "runs";
+    } else if (target instanceof Station) {
+      this.state = "waiting_for_passengers";
     }
 
     return true;
+  }
+
+  /** Break the train */
+  public break(): void {
+    this.state = "broken";
+    this.degraded = 1;
+  }
+
+  /** Repair the train */
+  public repair(): void {
+    this.degraded = 0;
+    this.state = "idle";
   }
 }

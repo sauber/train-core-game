@@ -16,7 +16,7 @@ Deno.test("Uniq station names", () => {
   assertNotEquals(n1, n2);
 });
 
-Deno.test("Several uniq names", { ignore: true }, () => {
+Deno.test("Several uniq names", () => {
   const size = 25;
   const stations = new Set<string>();
   for (let i = 0; i < size; i++) {
