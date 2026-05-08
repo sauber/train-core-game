@@ -46,4 +46,5 @@ Changes:
 ## Fee
 
 To calculate the fee, request shortest route from Origin to Destination. Fee is
-5% of distance.
+a ratio of distance. The exact ratio, typically 5%, is Simulation configuration
+parameter.
