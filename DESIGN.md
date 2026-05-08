@@ -28,6 +28,10 @@ Agents are not part part of the objects class, but a separate function which can
 change state of an object by evaluation conditions and making changes. Agents
 ensure rules for conditions and station transitions are follow.
 
+Often Agents need to modify multiple objects. For example when a Track is
+created, the Track need to be added to Stations at each end of Track and added
+to Network of all Tracks.
+
 ### Journaling
 
 Agents observe the current simulation state and record actions in the journal
