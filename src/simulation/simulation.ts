@@ -114,7 +114,7 @@ export class Simulation {
 
   /** Add an event to the journal */
   event(message: string, transaction?: number) {
-    if (transaction) {
+    if (transaction !== undefined) {
       // const calc = `${this.balance}${
       //   transaction < 0 ? transaction : "+" + transaction
       // } = ${this.balance + transaction}`;
@@ -146,7 +146,11 @@ export class Simulation {
   /** Run the simulation until end
    * Run each step every ms
    */
-  public async run(agents: Agents, maxSteps: number, ms: number): Promise<void> {
+  public async run(
+    agents: Agents,
+    maxSteps: number,
+    ms: number,
+  ): Promise<void> {
     await every(
       ms,
       () => !this.terminated && this.tick < maxSteps,

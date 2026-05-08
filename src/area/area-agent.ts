@@ -1,5 +1,6 @@
 import type { Agent, Simulation } from "../simulation/mod.ts";
 import { AreaLifecycle } from "../lifecycle/area-lifecycle.ts";
+import { createStationName } from "../station/create-station-name.ts";
 import type { Station } from "../station/mod.ts";
 
 /** Spawn stations at defined capital levels */
@@ -17,7 +18,8 @@ export const areaAgent: Agent = (game: Simulation): void => {
   for (let i = current_station_count; i < stations_required; i++) {
     // Use AreaLifecycle to create station with proper logging and balance handling
     const lifecycle = new AreaLifecycle(game);
-    const station: Station = lifecycle.spawn("Station" + (i + 1), 1);
+    const name = createStationName();
+    const station: Station = lifecycle.spawn(name, 1);
     // Max one station per tick
     return;
   }

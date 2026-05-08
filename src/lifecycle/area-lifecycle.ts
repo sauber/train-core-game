@@ -15,10 +15,10 @@ class AreaLifecycle extends Lifecycle<Station> {
     const station = this.game.area.createStationAt(name, location, platforms);
 
     // Log event with cost (event() handles balance adjustment)
-    const cost = this.calculateCreationCost(station);
+    const cost = 0;
     this.game.event(
       `Created station ${name} at ${location.x},${location.y}`,
-      -cost,
+      cost,
     );
 
     return station;
@@ -36,11 +36,6 @@ class AreaLifecycle extends Lifecycle<Station> {
 
     // Do not remove from area
     // this.game.area.stations.delete(station);
-  }
-
-  private calculateCreationCost(station: Station): number {
-    // Cost based on station size/platforms
-    return station.platforms * 100;
   }
 
   private calculateDestructionRevenue(station: Station): number {

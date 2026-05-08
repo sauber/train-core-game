@@ -33,8 +33,8 @@ export class Area {
   // A random location on the map
   private randomLocation(): Location {
     return {
-      x: Math.random() * (this.width - 2 * this.margin) + this.margin,
-      y: Math.random() * (this.height - 2 * this.margin) + this.margin,
+      x: Math.floor(Math.random() * (this.width - 2 * this.margin)) + this.margin,
+      y: Math.floor(Math.random() * (this.height - 2 * this.margin)) + this.margin,
     };
   }
 

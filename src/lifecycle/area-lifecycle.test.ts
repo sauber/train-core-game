@@ -11,13 +11,13 @@ Deno.test("AreaLifecycle - can spawn station with journal logging", () => {
 
   assertEquals(station.name, "Test Station");
   assertEquals(station.platforms, 2);
-  assertEquals(game.balance, 800); // 1000 - (2 platforms * 100 cost)
+  assertEquals(game.balance, 1000); // No cost to create stations
   assertEquals(game.journal.length, 1);
   assertEquals(
     game.journal[0].message.includes("Created station Test Station"),
     true,
   );
-  assertEquals(game.journal[0].transaction, -200);
+  assertEquals(game.journal[0].transaction, 0);
 });
 
 Deno.test("AreaLifecycle - can destroy station", () => {
@@ -32,14 +32,14 @@ Deno.test("AreaLifecycle - can destroy station", () => {
 
   lifecycle.destroy(station);
 
-  // Balance should be 800 + 100 (revenue) = 900
-  assertEquals(game.balance, 900); // 800 + (2 platforms * 50 revenue)
+  // Balance should be 1000 + 100 (revenue) = 1100
+  assertEquals(game.balance, 1100); // 1000 + (2 platforms * 50 revenue)
   assertEquals(game.journal.length, 1);
   assertEquals(
     game.journal[0].message.includes("Removed station Test Station"),
     true,
   );
-  assertEquals(game.journal[0].transaction, 100);
+  assertEquals(game.journal[0].transaction, 100); // Revenue from destruction
 });
 
 Deno.test("AreaLifecycle - journal entries include tick", () => {

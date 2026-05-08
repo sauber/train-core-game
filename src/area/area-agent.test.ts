@@ -16,8 +16,8 @@ Deno.test("Area Agent - spawns station using lifecycle", () => {
   // Should have created a station
   assertEquals(game.stations.size, 1);
   assertEquals(game.journal.length >= 1, true);
-  // Balance should be reduced by station cost (1 platform * 100)
-  assertEquals(game.balance, 900);
+  // No cost to create stations, balance remains unchanged
+  assertEquals(game.balance, 1000);
 });
 
 Deno.test("Area Agent - only spawns one station per tick", () => {
