@@ -24,6 +24,10 @@ according to defined rules and objectives.
 
 In every simulation step, all registered agents are executed in a single pass.
 
+Agents are not part part of the objects class, but a separate function which can
+change state of an object by evaluation conditions and making changes. Agents
+ensure rules for conditions and station transitions are follow.
+
 ### Journaling
 
 Agents observe the current simulation state and record actions in the journal
@@ -43,13 +47,11 @@ is aware of location at the given station.
 
 List of factories:
 
-- **Area**: Creates stations
-- **Network**: Creates, repairs and deletes tracks
-- **Fleet**: Creates, repairs and delete trains.
-- **Population**: Creates and deletes passengers
-- **Navigation**: Create routes
-
-See `src/<factory>/<FACTORY>.md` for more details.
+- **Area**: Manages stations. See `src/area/AREA.md` for details.
+- **Network**: Manages trakcs. See `src/network/NETWORK.md` for details.
+- **Fleet**: Manages trains. See `src/fleet/FLEET.md` for details.
+- **Population**: Manages passengers. See `src/population/POPULATION.md` for
+  details.
 
 ## Objects
 
@@ -58,15 +60,26 @@ confirm if next state is possible, and proceeds.
 
 List of objects:
 
-- **Station**: Has location in Area, a max number of capacity for trains, a set
-  of trains currently at station, a set of passengers waiting for trains and
-  waiting to exit, a set of tracks connecting to other stations.
-- **Track**: Has two stations as endpoints, a distance, a degraded status and
-  may have zero or one trains running on it.
-- **Passenger**: Has origin station and destination station, has a route for
-  desired path to destination, and has current location which is either a
-  station or a track.
-- **Train**: Has a type and a route. Is located at a station or on a track.
-- **Route**: Chain of stations and tracks from one station to another station.
+- **Station**: A location in the area. See `src/station/STATION.md` for details.
+- **Track**: Connecting two stations. See `src/track/TRACK.md` for details.
+- **Passenger**: Travellers between stations. See
+  `src/passenger/PASSENGER.md`for details.
+- **Train**: Carrier of passengers betweem stations. See `src/train/TRAIN.md`
+  for details.
 
-See `src/<object>/<OBJECT>.md` for more details.
+## Simulation
+
+Simulation container of all factory objects. When a simulation runs, it takes
+one step at a time. At each step, all the factory agents are called once one by
+one. The factory agents call the object agents for all objects that it manages.
+
+For example Simulation call the Fleet agent. The fleet agent calls the Train
+agent for each train created. The train agent for each train is allowed to take
+one action per step.
+
+The order of calling agents are:
+
+- Population -> All Passenger Agents -> Population Agent
+- Fleet -> All Train Agents -> Fleet Agent
+- Network -> All Track Agents -> Network Agent
+- Area -> All Station Agents -> Area Agent
