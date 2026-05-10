@@ -1,7 +1,14 @@
 import { assertEquals } from "@std/assert";
 import { Simulation } from "../simulation/mod.ts";
 import { Station } from "./station.ts";
-import { Location } from "../area/mod.ts";
+import type { Location } from "../area/mod.ts";
+
+/** Test cases for "./station-agent.ts"
+Confirm requirements are met:
+- Capacity for Trains grows at defined levels
+- Capacity can grwo up to maximum and not any furter
+- Increase in Capacity is reported to simulation journal
+*/
 
 Deno.test("Station Agent - collects revenue and updates balance via lifecycle", () => {
   const game = new Simulation({ balance: 1000 });

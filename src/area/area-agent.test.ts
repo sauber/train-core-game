@@ -1,10 +1,17 @@
 import { assertEquals } from "@std/assert";
 import { Simulation } from "../simulation/mod.ts";
 import { areaAgent } from "./area-agent.ts";
-import { AreaLifecycle } from "../lifecycle/area-lifecycle.ts";
 
-// Mock the areaAgent to use lifecycle
-Deno.test("Area Agent - spawns station using lifecycle", () => {
+/** Test cases for "./area-agent.ts"
+Confirm requirements are met:
+- Stations are added at the defined balance levels
+- Only one station added per tick is added
+- Max number of stations can be added
+- No more than maximum can be added
+- Can generate station name
+*/
+
+Deno.test("Area Agent - spawns station", () => {
   const game = new Simulation({
     balance: 1000,
     stationLevels: [0, 0, 0, 0, 6000],

@@ -1,6 +1,17 @@
 import { assertEquals } from "@std/assert";
 import { Station } from "./station.ts";
-import { Location } from "../area/mod.ts";
+import type { Location } from "../area/mod.ts";
+
+/** Test cases for "./station.ts"
+Confirm requirements are met:
+- Has a Name
+- Has a Location
+- Can add and remove Trains
+- Can add and remove Tracks
+- Can add and remove Passengers
+- Can report number of free capacity for Trains
+- Increments transits when passengers board or disembark
+*/
 
 Deno.test("Station - platform growth state machine", () => {
   const location: Location = { x: 0, y: 0 };

@@ -1,4 +1,4 @@
-import { createStationName } from "./create-station-name.ts";
+import { createStationName } from "../area/create-station-name.ts";
 import type { Simulation } from "../simulation/mod.ts";
 import type { Station } from "../station/mod.ts";
 
