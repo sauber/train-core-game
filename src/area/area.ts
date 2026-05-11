@@ -1,84 +1,57 @@
-import { Station, Stations } from "../station/mod.ts";
-
-export type Distance = number;
-
-// A coordinate on the map
-export type Location = {
-  x: number;
-  y: number;
-};
-
-// Distance between two locations
-export function distance(a: Location, b: Location): number {
-  return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
-}
+import type { Distance, iArea, iStation, Location } from "../types.ts";
+import { LimitSet } from "../utils/limitset.ts";
+import { distance } from "./distance.ts";
 
 /** Game map */
-export class Area {
-  public readonly stations: Stations = new Stations();
+export class Area implements iArea {
+  public readonly stations: LimitSet<iStation>;
 
   /** Width of map */
-  public readonly width: number = 1000;
+  public readonly width: Distance = 1000;
   /** Height of map */
-  public readonly height: number = 600;
+  public readonly height: Distance = 600;
   /** Minimum distance between stations */
-  public readonly distance: number = 100;
+  public readonly distance: Distance = 100;
   /** Margin to edges within the map */
-  public readonly margin: number = 50;
+  public readonly margin: Distance = 50;
+  /** Max number of stations */
+  public readonly maxStations: number = 12;
 
   constructor(p: Partial<Area> = {}) {
     Object.assign(this, p);
+    this.stations = new LimitSet<iStation>(this.maxStations);
   }
 
-  // A random location on the map
-  private randomLocation(): Location {
-    return {
-      x: Math.floor(Math.random() * (this.width - 2 * this.margin)) + this.margin,
-      y: Math.floor(Math.random() * (this.height - 2 * this.margin)) + this.margin,
-    };
-  }
+  /** Find a random location on the map with minimum distance to existing stations */
+  public findLocation(): Location {
+    const m = this.margin;
+    for (let i = 0; i < 100; i++) {
+      const x = Math.floor(Math.random() * (this.width - 2 * m)) + m;
+      const y = Math.floor(Math.random() * (this.height - 2 * m)) + m;
+      const loc: Location = { x, y };
 
-  // What is the shortest distance from a location to any existing stations
-  private shortestDistance(location: Location): number {
-    let shortest = Infinity;
-    this.stations.forEach((station: Station) => {
-      const dist = distance(location, station.location);
-      if (dist < shortest) shortest = dist;
-    });
-    return shortest;
-  }
-
-  // Find a random location on the map with minimum distance to existing stations
-  private findEmptyLocation(): Location {
-    // TODO: Fail after maximum number of tries
-    while (true) {
-      const location: Location = this.randomLocation();
-      const distance = this.shortestDistance(location);
-      if (distance >= this.distance) return location;
+      let ok = true;
+      for (const s of this.stations.values()) {
+        if (distance(loc, s.location) < this.distance) {
+          ok = false;
+          break;
+        }
+      }
+      if (ok) return loc;
     }
+    throw new Error("Could not find empty location for station");
   }
 
   /** Add station somewhere on the map */
-  public createStation(name: string, platforms: number): Station {
-    const location = this.findEmptyLocation();
-    const station = new Station(name, location, platforms);
+  public addStation(station: iStation): boolean {
+    if (this.stations.size >= this.maxStations) {
+      throw new Error("Maximum number of stations reached");
+    }
     this.stations.add(station);
-    return station;
+    return true;
   }
 
-  /** Create a station at a specific location (used by lifecycle) */
-  public createStationAt(
-    name: string,
-    location: Location,
-    platforms: number,
-  ): Station {
-    const station = new Station(name, location, platforms);
-    this.stations.add(station);
-    return station;
-  }
-
-  /** Expose empty location finder for lifecycle usage */
-  public getEmptyLocation(): Location {
-    return this.findEmptyLocation();
+  public get size(): number {
+    return this.stations.size;
   }
 }

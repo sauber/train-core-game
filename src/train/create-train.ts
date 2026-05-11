@@ -1,21 +1,13 @@
-import type { Station } from "../station/mod.ts";
-import type { Track } from "../track/mod.ts";
-import type { TrainType } from "./train-type.ts";
-import { Train } from "./mod.ts";
-import type { Simulation } from "../simulation/mod.ts";
+import type { iTrain, TrainLocation, TrainType } from "../types.ts";
+import { Train } from "./train.ts";
 
 /** Insert a new train at a station or on a track */
 export function createTrain(
-  game: Simulation,
   type: TrainType,
-  target: Station | Track,
-): Train | Error {
-  const train = new Train(type);
-  if (!target.trains.add(train)) return new Error("Could not add train");
-  target.trains.add(train);
-  train.location = target;
-  game.trains.add(train);
-  // console.log(train);
-  // throw new Error("Train created with out event");
+  target: TrainLocation,
+): iTrain {
+  const train: iTrain = new Train(type, target);
+  if (target.isFull) throw new Error("Could not add train");
+  if (!target.addTrain(train)) throw new Error("Could not add train");
   return train;
 }

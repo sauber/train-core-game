@@ -1,5 +1,5 @@
 import { CharPlot } from "@sauber/widgets";
-import type { Simulation } from "../simulation/mod.ts";
+import type { iSimulation } from "../types.ts";
 import { renderInventory } from "./inventory.ts";
 import { renderJournal } from "./journal.ts";
 import { backgroundLayer } from "./background-layer.ts";
@@ -17,7 +17,7 @@ const DEFAULT_WIDTH = 80;
 const DEFAULT_TOTAL_HEIGHT = 24;
 
 export function renderMap(
-  game: Simulation,
+  sim: iSimulation,
   options: RenderMapOptions = {},
 ): string {
   const width = Math.max(20, options.width ?? DEFAULT_WIDTH);
@@ -33,11 +33,11 @@ export function renderMap(
   const canvas = new CharPlot();
   backgroundLayer(canvas, width, mapHeight);
   frameLayer(canvas, width, mapHeight);
-  trackLayer(canvas, width, mapHeight, game);
-  stationLayer(canvas, width, mapHeight, game);
-  trainLayer(canvas, width, mapHeight, game);
+  trackLayer(canvas, width, mapHeight, sim);
+  stationLayer(canvas, width, mapHeight, sim);
+  trainLayer(canvas, width, mapHeight, sim);
 
-  const inventory = renderInventory(game);
-  const events = renderJournal(game, eventsLines);
+  const inventory = renderInventory(sim);
+  const events = renderJournal(sim, eventsLines);
   return [canvas.toString(), inventory, ...events].join("\n");
 }

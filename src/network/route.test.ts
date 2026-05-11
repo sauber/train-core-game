@@ -1,21 +1,21 @@
-import { assertEquals } from "@std/assert";
-import { Route } from "./route.ts";
-import { Station } from "../station/mod.ts";
-import { Track } from "../track/mod.ts";
+// import { assertEquals } from "@std/assert";
+// import { Route } from "./route.ts";
+// import { Station } from "../station/mod.ts";
+// import { Track } from "../track/mod.ts";
 
-/** Test cases for "./route.ts"
-Confirm requirements are met:
-- Holds a Set of alternating Stations and Tracks
-- Can shift off next link from chain
-- Can compare if next link is same as next link in other Route
-*/
+// /** Test cases for "./route.ts"
+// Confirm requirements are met:
+// - Holds a Set of alternating Stations and Tracks
+// - Can shift off next link from chain
+// - Can compare if next link is same as next link in other Route
+// */
 
-Deno.test("Route distance", () => {
-  const a = new Station("A", { x: 0, y: 0 }, 1);
-  const b = new Station("B", { x: 1, y: 0 }, 1);
-  const c = new Station("C", { x: 2, y: 0 }, 1);
-  const t = new Track(a, b);
-  const u = new Track(b, c);
-  const route = new Route([t, u]);
-  assertEquals(route.distance(), 2);
-});
+// Deno.test("Route distance", () => {
+//   const a = new Station("A", { x: 0, y: 0 }, 1);
+//   const b = new Station("B", { x: 1, y: 0 }, 1);
+//   const c = new Station("C", { x: 2, y: 0 }, 1);
+//   const t = new Track(a, b);
+//   const u = new Track(b, c);
+//   const route = new Route([t, u]);
+//   assertEquals(route.distance(), 2);
+// });

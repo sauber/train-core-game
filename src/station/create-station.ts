@@ -1,17 +1,12 @@
-import { createStationName } from "../area/create-station-name.ts";
-import type { Simulation } from "../simulation/mod.ts";
-import type { Station } from "../station/mod.ts";
+import type { iStation, Location } from "../types.ts";
+import { createStationName } from "./create-station-name.ts";
+import { Station } from "./station.ts";
 
-/** Create a station on the area */
-export function createStation(state: Simulation): Station {
-  // Pick random station name
-  const name: string = createStationName();
-
-  // Create station somewhere on the map
-  const station: Station = state.area.createStation(name, 1);
-
-  // Add to list of stations
-  state.stations.add(station);
-
-  return station;
+/** Create a station */
+export function createStation(
+  location: Location,
+  platforms: number = 1,
+): iStation {
+  const name = createStationName();
+  return new Station(name, location, platforms);
 }

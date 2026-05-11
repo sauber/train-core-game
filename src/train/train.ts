@@ -1,9 +1,11 @@
-import type { TrainType } from "./train-type.ts";
-import { Passengers } from "../passenger/mod.ts";
+import {
+  Doors,
+  type iPassenger,
+  type iTrain,
+  type TrainLocation,
+  type TrainType,
+} from "../types.ts";
 import { LimitSet } from "../utils/limitset.ts";
-import { Station } from "../station/station.ts";
-import { Track } from "../track/track.ts";
-import type { Simulation } from "../simulation/mod.ts";
 
 export class Trains extends LimitSet<Train> {
   constructor(limit: number = Infinity) {
@@ -11,7 +13,9 @@ export class Trains extends LimitSet<Train> {
   }
 }
 
-export type Location = Station | Track;
+type Passengers = LimitSet<iPassenger>;
+
+// export type Location = Station | Track;
 
 export type TrainState =
   | "idle"
@@ -22,12 +26,12 @@ export type TrainState =
   | "arrives"
   | "broken";
 
-export class Train {
+export class Train implements iTrain {
   /** Passengers */
   public readonly passengers: Passengers;
 
   /** Location of train */
-  public location: Location | undefined;
+  // public location: Location | undefined;
 
   /** Degraded state of train */
   public degraded: number = 0;
@@ -38,77 +42,126 @@ export class Train {
   constructor(
     /** Type of train */
     public readonly type: TrainType,
+    public location: TrainLocation,
   ) {
-    this.passengers = new Passengers(type.maximum);
+    this.passengers = new LimitSet<iPassenger>(type.size);
+  }
+
+  public addPassenger(passenger: iPassenger): boolean {
+    if (this.passengers.isFull) return false;
+    this.passengers.add(passenger);
+    return true;
+  }
+
+  public delPassenger(passenger: iPassenger): boolean {
+    if (!this.passengers.has(passenger)) return false;
+    this.passengers.delete(passenger);
+    return true;
+  }
+
+  public get isFull(): boolean {
+    return this.passengers.isFull;
+  }
+
+  public repair(): boolean {
+    this.degraded = 0;
+    this.state = "idle";
+    return true;
+  }
+
+  public get isBroken(): boolean {
+    return this.state === "broken";
+  }
+
+  /** Status of doors */
+  public get doors(): Doors {
+    if (this.isBroken) return Doors.Exit;
+    if ("name" in this.location) return Doors.Open;
+    return Doors.Closed;
+  }
+
+  /** Percent distance from previous station towards next station
+   * TODO
+   */
+  public move(): boolean {
+    return true;
+  }
+
+  public depart(): boolean {
+    return true;
+  }
+
+  public arrive(): boolean {
+    return true;
   }
 
   /** Insert train in simulation */
-  public add(game: Simulation, target: Location): true | Error {
-    if (target.trains.isFull) return new Error("Full");
-    target.trains.add(this);
-    this.location = target;
-    game.trains.add(this);
-    this.state = "waiting_for_route";
-    return true;
-  }
+  // public add(game: Simulation, target: Location): true | Error {
+  //   if (target.trains.isFull) return new Error("Full");
+  //   target.trains.add(this);
+  //   this.location = target;
+  //   game.trains.add(this);
+  //   this.state = "waiting_for_route";
+  //   return true;
+  // }
 
   /** Remove train from simulation */
-  public remove(game: Simulation): true | Error {
-    if (this.passengers.size > 0) return new Error("Passengers on train");
-    this.location?.trains.delete(this);
-    game.trains.delete(this);
-    return true;
-  }
+  // public remove(game: Simulation): true | Error {
+  //   if (this.passengers.size > 0) return new Error("Passengers on train");
+  //   this.location?.trains.delete(this);
+  //   game.trains.delete(this);
+  //   return true;
+  // }
 
   /** Move train from station to track, or track to station */
-  public move(target: Location): true | Error {
-    if (target == this.location) return true;
-    if (target.trains.isFull) return new Error("Full");
+  // public move(target: Location): true | Error {
+  //   if (target == this.location) return true;
+  //   if (target.trains.isFull) return new Error("Full");
 
-    // Prevent teleport
-    if (this.location instanceof Station) {
-      // Leaving
-      const station: Station = this.location;
-      const track = target as Track;
-      if (!station.tracks.has(track)) {
-        return new Error("Target track not at station, cannot leave.");
-      }
-      this.state = "departs";
-    } else {
-      // Entering
-      const track = this.location as Track;
-      const station = target as Station;
-      if (!track.stations.has(station)) {
-        return new Error("Track not at target station, cannot enter.");
-      }
-      this.state = "arrives";
-    }
+  //   // Prevent teleport
+  //   if (this.location instanceof Station) {
+  //     // Leaving
+  //     const station: Station = this.location;
+  //     const track = target as Track;
+  //     if (!station.tracks.has(track)) {
+  //       return new Error("Target track not at station, cannot leave.");
+  //     }
+  //     this.state = "departs";
+  //   } else {
+  //     // Entering
+  //     const track = this.location as Track;
+  //     const station = target as Station;
+  //     if (!track.stations.has(station)) {
+  //       return new Error("Track not at target station, cannot enter.");
+  //     }
+  //     this.state = "arrives";
+  //   }
 
-    const current: Location = this.location as Location;
-    current.trains.delete(this);
-    this.location = target;
-    target.trains.add(this);
+  //   const current: Location = this.location as Location;
+  //   current.trains.delete(this);
+  //   this.location = target;
+  //   target.trains.add(this);
 
-    // Increment track degradation when train moves on track
-    if (target instanceof Track) {
-      target.degraded += 0.1; // Wear rate of 0.1 per pass
-      this.state = "runs";
-    } else if (target instanceof Station) {
-      this.state = "waiting_for_passengers";
-    }
+  //   // Increment track degradation when train moves on track
+  //   if (target instanceof Track) {
+  //     target.degraded += 0.1; // Wear rate of 0.1 per pass
+  //     this.state = "runs";
+  //   } else if (target instanceof Station) {
+  //     this.state = "waiting_for_passengers";
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   /** Break the train */
-  public break(): void {
-    this.state = "broken";
-    this.degraded = 1;
-  }
+  // public break(): void {
+  //   this.state = "broken";
+  //   this.degraded = 1;
+  // }
 
   /** Repair the train */
-  public repair(): void {
-    this.degraded = 0;
-    this.state = "idle";
-  }
+  // public repair(): void {
+  //   this.degraded = 0;
+  //   this.state = "idle";
+  // }
 }

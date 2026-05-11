@@ -1,2 +1,1 @@
-export * from "./simulation.ts";
-export * from "./agent.ts";
+export * from "./create-simulation.ts";

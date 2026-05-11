@@ -1,5 +1,5 @@
 import type { Simulation } from "./simulation.ts";
-import type { TrainType } from "../train/train-type.ts";
+import type { TrainType } from "../types.ts";
 
 /** Confirm if any of the conditions for termination are met
  * 1. No trains can run, and no money in account for repair
@@ -9,7 +9,7 @@ import type { TrainType } from "../train/train-type.ts";
  * 4. No trains in network yet, and no money to buy train
  */
 export function isTerminated(game: Simulation): boolean {
-  if (game.trains.size == 0) {
+  if (game.fleet.size == 0) {
     if (
       game.balance <
         Math.min(...[...game.trainTypes].map((t: TrainType) => t.cost))

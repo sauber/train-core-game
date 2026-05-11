@@ -29,7 +29,7 @@ maximum number of platforms. Example:
 Station agent reports to simulation journal when number of platforms are
 increased.
 
-When maximum number of platforms are reached, not more platforms are added.
+When maximum number of platforms are reached, no more platforms are added.
 Platforms are never removed.
 
 ## Transit

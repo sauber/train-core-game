@@ -1,8 +1,11 @@
-import { type Train, Trains } from "../train/mod.ts";
-import type { Location } from "../area/mod.ts";
-import { type Track, Tracks } from "../track/mod.ts";
-import { Passengers } from "../passenger/mod.ts";
-import { LimitSet } from "../utils/mod.ts";
+import type {
+  iPassenger,
+  iStation,
+  iTrack,
+  iTrain,
+  Location,
+} from "../types.ts";
+import { LimitSet } from "../utils/limitset.ts";
 
 export class Stations extends LimitSet<Station> {
   constructor(limit: number = Infinity, values: Array<Station> = []) {
@@ -10,20 +13,13 @@ export class Stations extends LimitSet<Station> {
   }
 }
 
-export class Station {
-  /** Trains currently at station */
-  public readonly trains: Trains;
-
-  /** Tracks connected to station */
-  public readonly tracks: Tracks = new Tracks();
-
-  public readonly passengers: Passengers = new Passengers();
-
-  /** Revenue collected at this station */
-  public revenue: number = 0;
+export class Station implements iStation {
+  private readonly trains: LimitSet<iTrain>;
+  private readonly tracks = new Set<iTrack>();
+  private readonly passengers = new Set<iPassenger>();
 
   /** Total boardings and disembarkments for capacity growth */
-  public activity: number = 0;
+  private _transits: number = 0;
 
   constructor(
     /** Name of station */
@@ -31,67 +27,82 @@ export class Station {
     /** Location */
     public readonly location: Location,
     /** Count of platforms */
-    public platforms: number,
+    platforms: number,
   ) {
-    this.trains = new Trains(platforms);
+    this.trains = new LimitSet<iTrain>(platforms);
   }
 
-  /** Number of platforms not in use */
-  public get availablePlatforms(): number {
-    return this.platforms - this.trains.size;
+  public get size(): number {
+    return this.trains.limit;
   }
 
-  /** Add train to station */
-  public addTrain(train: Train): true | Error {
-    if (this.availablePlatforms <= 0) {
-      return new Error("No platforms available");
-    }
-    this.trains.add(train);
-    return true;
+  public set size(limit: number) {
+    // Cannot remove more platforms than trains at station
+    if (limit < this.trains.size) return;
+    this.trains.limit = limit;
   }
 
-  /** Train leaves station */
-  public removeTrain(train: Train): boolean {
-    if (!this.trains.has(train)) return false;
-    this.trains.delete(train);
-    return true;
+  public get transits(): number {
+    return this._transits;
   }
 
   /** Add track to station */
-  public addTrack(track: Track): boolean {
+  public addTrack(track: iTrack): boolean {
     if (this.tracks.has(track)) return false;
     this.tracks.add(track);
     return true;
   }
 
   /** Remove track from station */
-  public removeTrack(track: Track): boolean {
+  public delTrack(track: iTrack): boolean {
     if (!this.tracks.has(track)) return false;
     this.tracks.delete(track);
     return true;
   }
 
-  /** Update activity count and manage platform growth */
-  public updateActivity(): void {
-    this.activity++;
-    // Platform growth thresholds
-    const thresholds = [
-      { count: 0, platforms: 1 },
-      { count: 100, platforms: 2 },
-      { count: 250, platforms: 3 },
-      { count: 500, platforms: 4 },
-    ];
+  public numTrack(): number {
+    return this.tracks.size;
+  }
 
-    for (const threshold of thresholds) {
-      if (
-        this.activity >= threshold.count && this.platforms < threshold.platforms
-      ) {
-        this.platforms = threshold.platforms;
-        // Revenue from increased capacity
-        const additionalRevenue =
-          (threshold.platforms - (threshold.platforms - 1)) * 50;
-        this.revenue += additionalRevenue;
-      }
+  /** Add train to station */
+  public addTrain(train: iTrain): true {
+    if (this.trains.size >= this.trains.limit) {
+      throw new Error("No platforms available");
     }
+    this.trains.add(train);
+    return true;
+  }
+
+  /** Train leaves station */
+  public delTrain(train: iTrain): boolean {
+    if (!this.trains.has(train)) return false;
+    this.trains.delete(train);
+    return true;
+  }
+
+  public numTrain(): number {
+    return this.trains.size;
+  }
+
+  public get isFull(): boolean {
+    return this.trains.isFull;
+  }
+
+  public addPassenger(passenger: iPassenger): boolean {
+    if (this.passengers.has(passenger)) return false;
+    this.passengers.add(passenger);
+    this._transits++;
+    return true;
+  }
+
+  public delPassenger(passenger: iPassenger): boolean {
+    if (!this.passengers.has(passenger)) return false;
+    this.passengers.delete(passenger);
+    this._transits++;
+    return true;
+  }
+
+  public numPassenger(): number {
+    return this.passengers.size;
   }
 }

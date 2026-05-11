@@ -1,16 +1,16 @@
-import type { Agents } from "./agent.ts";
+import type { Agents } from "../types.ts";
 import { Simulation } from "./simulation.ts";
 import { fleetAgent } from "../fleet/mod.ts";
 import { areaAgent } from "../area/mod.ts";
-import { trackAgent } from "../track/mod.ts";
+import { networkAgent } from "../network/mod.ts";
+import { populationAgent } from "../population/mod.ts";
 import { mapAgent } from "../dashboard/mod.ts";
-import { stationAgent } from "../station/mod.ts";
 
 const agents: Agents = [
+  populationAgent,
   fleetAgent,
-  trackAgent,
+  networkAgent,
   areaAgent,
-  stationAgent,
   mapAgent,
 ];
 

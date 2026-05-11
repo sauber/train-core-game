@@ -1,12 +1,11 @@
-import { assertEquals } from "@std/assert/equals";
-import { createStation } from "../station/create-station.ts";
-import { Simulation } from "../simulation/mod.ts";
+import { assertEquals, assertInstanceOf } from "@std/assert";
+import type { Location } from "../types.ts";
+import { Station } from "./station.ts";
+import { createStation } from "./create-station.ts";
 
-Deno.test("Create station", () => {
-  const game = new Simulation();
-  const station_count = game.stations.size;
-
-  createStation(game);
-
-  assertEquals(game.stations.size, station_count + 1);
+Deno.test("Create Station", () => {
+  const location: Location = { x: 0, y: 0 };
+  const station = createStation(location);
+  assertEquals(station.location, location);
+  assertInstanceOf(station, Station);
 });

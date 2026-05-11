@@ -1,18 +1,18 @@
-import type { Simulation } from "../simulation/mod.ts";
+import type { iSimulation } from "../types.ts";
 
-export function renderInventory(game: Simulation): string {
+export function renderInventory(game: iSimulation): string {
   return [
     "Tick:",
     game.tick,
     "Balance:",
     game.balance,
     "Passengers:",
-    game.passengers.size,
+    game.population.size,
     "Trains:",
-    game.trains.size,
+    game.fleet.size,
     "Stations:",
-    game.stations.size,
+    game.area.size,
     "Tracks:",
-    game.tracks.size,
+    game.network.size,
   ].join(" ");
 }

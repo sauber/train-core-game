@@ -1,5 +1,5 @@
 import type { Layer } from "./layer.type.ts";
-import type { Station } from "../station/mod.ts";
+import type { iStation } from "../types.ts";
 import { brailleCellValue, bresenhamLine, toPixelPoint } from "./map-utils.ts";
 
 /**
@@ -20,8 +20,8 @@ export const trackLayer: Layer = (canvas, width, height, game) => {
     }, () => false));
 
   // Draw tracks using Bresenham algorithm
-  for (const track of game.tracks) {
-    const stations = Array.from(track.stations) as Station[];
+  for (const track of game.network.tracks) {
+    const stations = Array.from(track.stations) as iStation[];
     if (stations.length !== 2) continue;
 
     const [stationA, stationB] = stations;

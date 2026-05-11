@@ -1,75 +1,36 @@
-import type { Simulation } from "../simulation/mod.ts";
-import { Station } from "../station/mod.ts";
-import type { Train } from "../train/mod.ts";
-import { LimitSet } from "../utils/mod.ts";
-
-export type Location = Station | Train;
-
-function isStation(location: Location): boolean {
-  return location instanceof Station;
-}
+import type {
+  iPassenger,
+  iRoute,
+  iStation,
+  iTrain,
+  PassengerLocation,
+} from "../types.ts";
 
 /** A traveler from station trying to reach another destination */
-export class Passenger {
+export class Passenger implements iPassenger {
   /** Current location of passenger */
-  public location: Location;
+  public location: PassengerLocation;
 
   constructor(
     /** Travel origin */
-    public readonly origin: Station,
+    public readonly origin: iStation,
     /** Travel destination  */
-    public readonly destination: Station,
+    public readonly destination: iStation,
+    /** The path passenger wants to take */
+    public readonly route: iRoute,
   ) {
     this.location = origin;
   }
 
-  /** Add passenger to simulation */
-  public add(game: Simulation): true | Error {
-    const location: Location = this.location;
-    if (location.passengers.isFull) return new Error("Full");
-    location.passengers.add(this);
-    game.passengers.add(this);
+  /** Move passenger from station to train */
+  public board(train: iTrain): boolean {
+    this.location = train;
     return true;
   }
 
-  /** Remove passenger from game */
-  public remove(game: Simulation): void {
-    const location: Location = this.location;
-    location.passengers.delete(this);
-    game.passengers.delete(this);
-  }
-
-  /** Move passenger from one place to another */
-  public move(
-    target: Location,
-  ): true | Error {
-    if (target == this.location) return true;
-    if (target.passengers.isFull) return new Error("Full");
-
-    // TODO: Prevent teleport
-    if (isStation(this.location)) {
-      // Boarding
-      // const station: Station = this.location;
-      // const train: Train = target;
-      // if (!station.trains.has(target)) return new Error("Target train not at station, cannot board.");
-    } else {
-      // Disembark
-      // const train: Train = this.location;
-      // const station: Station = target;
-      // if (!train.location == station) return new Error("Train not at target station, cannot disembark.");
-    }
-
-    const current: Location = this.location;
-    current.passengers.delete(this);
-    this.location = target;
-    target.passengers.add(this);
+  /** Move passenger from train to station */
+  public disembark(station: iStation): boolean {
+    this.location = station;
     return true;
-  }
-}
-
-// export type Passengers = LimitSet<Passenger>;
-export class Passengers extends LimitSet<Passenger> {
-  constructor(limit: number = Infinity) {
-    super(limit);
   }
 }

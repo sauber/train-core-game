@@ -15,6 +15,8 @@ const names = [
   "Kappel",
   "Kol",
   "Knud",
+  "Mørk",
+  "Ny",
   "Ravns",
   "Ri",
   "Ros",

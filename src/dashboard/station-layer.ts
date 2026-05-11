@@ -13,10 +13,10 @@ export const stationLayer: Layer = (canvas, width, height, game) => {
   const pixelHeight = height * 4;
 
   // Draw each station with label
-  for (const station of game.stations) {
+  for (const station of game.area.stations) {
     // Calculate train and passenger counts using Array.from to convert LimitSet to array
-    const trainsAtStation = station.trains.size;
-    const passengersAtStation = station.passengers.size;
+    const trainsAtStation = station.numTrain();
+    const passengersAtStation = station.numPassenger();
     const labelLines: [string, string] = [
       station.name,
       `T${trainsAtStation} P${passengersAtStation}`,

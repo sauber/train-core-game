@@ -1,7 +1,3 @@
-import type { Speed } from "../utils/speed.ts";
-import type { Cost } from "../utils/cost.ts";
-import type { WearRatio } from "../utils/wear.ts";
-
 export type TrainTypes = Set<TrainType>;
 
 /** Properties of a train */
@@ -13,9 +9,9 @@ export type TrainType = {
   // Maximum number of passengers
   maximum: number;
   // Speed of the train
-  speed: Speed;
+  speed: number;
   // Wear factor
-  wear: WearRatio;
+  wear: number;
   // Cost of the train
-  cost: Cost;
+  cost: number;
 };

@@ -1,7 +1,7 @@
 import type { CharPlot } from "@sauber/widgets";
-import type { Simulation } from "../simulation/mod.ts";
+import type { iSimulation } from "../types.ts";
 
 /** Draw chars on a canvas */
 export interface Layer {
-  (canvas: CharPlot, width: number, height: number, game?: Simulation): void;
+  (canvas: CharPlot, width: number, height: number, sim?: iSimulation): void;
 }

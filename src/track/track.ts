@@ -1,55 +1,26 @@
-import { type Distance, distance } from "../area/area.ts";
-import type { Simulation } from "../simulation/mod.ts";
-import { type Station, Stations } from "../station/station.ts";
-import { Trains } from "../train/train.ts";
-import { LimitSet } from "../utils/limitset.ts";
-
-export class Tracks extends LimitSet<Track> {
-  constructor(limit: number = Infinity, values: Array<Track> = []) {
-    super(limit, values);
-  }
-}
+import { distance } from "../area/mod.ts";
+import type { Distance, iStation, iTrack, iTrain } from "../types.ts";
 
 /** Link between two stations */
-export class Track {
+export class Track implements iTrack {
   /** Optional train on track */
-  public readonly trains: Trains;
+  private train: iTrain | undefined;
 
   /** Set of stations */
-  public readonly stations: Stations;
+  public readonly stations = new Set<iStation>();
 
   /** Degraded state of track */
-  public degraded: number = 0;
+  private wear: number = 0;
 
   /** Price of track */
   // public readonly price: number;
 
-  constructor(a: Station, b: Station // public readonly pricePerUnit: number
+  constructor(a: iStation, b: iStation // public readonly pricePerUnit: number
   ) {
     // Confirm track connect to two different stations
     if (a === b) throw new Error("Track must connect two different stations");
-    this.stations = new Stations(2, [a, b]);
-    this.trains = new Trains(1);
-  }
-
-  /** Add track to simulation */
-  public add(game: Simulation): true | Error {
-    for (const s of this.stations) {
-      if (s.tracks.has(this)) return new Error("Track already exists");
-      s.addTrack(this);
-    }
-    game.tracks.add(this);
-    return true;
-  }
-
-  /** Remove only if no train on track */
-  public remove(game: Simulation): true | Error {
-    if (this.trains.size > 0) return new Error("Train on track");
-    for (const s of this.stations) {
-      s.removeTrack(this);
-    }
-    game.tracks.delete(this);
-    return true;
+    this.stations.add(a);
+    this.stations.add(b);
   }
 
   /** Distance between stations */
@@ -59,10 +30,42 @@ export class Track {
   }
 
   /** Given one station, which one is at the other end */
-  public otherStation(station: Station): Station {
+  public otherStation(station: iStation): iStation {
     for (const s of this.stations) {
       if (s !== station) return s;
     }
-    throw new Error("Station not in track");
+    throw new Error("Station not on track");
+  }
+
+  public addTrain(train: iTrain): boolean {
+    if (this.train) return false;
+    if (this.isBroken) return false;
+    this.train = train;
+    return true;
+  }
+
+  public delTrain(train: iTrain): boolean {
+    if (this.train !== train) return false;
+    this.train = undefined;
+    // Increase wear as train has passed the track
+    this.wear += 0.05;
+    return true;
+  }
+
+  public numTrain(): number {
+    return this.train ? 1 : 0;
+  }
+
+  public get isFull(): boolean {
+    return this.numTrain() >= 1;
+  }
+
+  public repair(): boolean {
+    this.wear = 0;
+    return true;
+  }
+
+  public get isBroken(): boolean {
+    return this.wear >= 1;
   }
 }

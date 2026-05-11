@@ -1,6 +1,6 @@
-import { assertEquals } from "@std/assert";
+import { assertEquals, assertThrows } from "@std/assert";
 import { Station } from "./station.ts";
-import type { Location } from "../area/mod.ts";
+import type { iPassenger, iTrack, iTrain, Location } from "../types.ts";
 
 /** Test cases for "./station.ts"
 Confirm requirements are met:
@@ -13,80 +13,72 @@ Confirm requirements are met:
 - Increments transits when passengers board or disembark
 */
 
-Deno.test("Station - platform growth state machine", () => {
+Deno.test("Station Name", () => {
   const location: Location = { x: 0, y: 0 };
   const station = new Station("Test Station", location, 1);
-
-  // Initial state
-  assertEquals(station.platforms, 1);
-  assertEquals(station.activity, 0);
-
-  // Activity 0-99: should remain at 1 platform
-  for (let i = 0; i < 99; i++) {
-    station.updateActivity();
-  }
-  assertEquals(station.activity, 99);
-  assertEquals(station.platforms, 1);
-
-  // Activity 100: should grow to 2 platforms
-  station.updateActivity();
-  assertEquals(station.activity, 100);
-  assertEquals(station.platforms, 2);
-
-  // Activity 101-249: should remain at 2 platforms
-  for (let i = 0; i < 149; i++) {
-    station.updateActivity();
-  }
-  assertEquals(station.activity, 249);
-  assertEquals(station.platforms, 2);
-
-  // Activity 250: should grow to 3 platforms
-  station.updateActivity();
-  assertEquals(station.activity, 250);
-  assertEquals(station.platforms, 3);
-
-  // Activity 251-499: should remain at 3 platforms
-  for (let i = 0; i < 249; i++) {
-    station.updateActivity();
-  }
-  assertEquals(station.activity, 499);
-  assertEquals(station.platforms, 3);
-
-  // Activity 500: should grow to 4 platforms
-  station.updateActivity();
-  assertEquals(station.activity, 500);
-  assertEquals(station.platforms, 4);
-
-  // Activity 501+: should remain at 4 platforms
-  for (let i = 0; i < 100; i++) {
-    station.updateActivity();
-  }
-  assertEquals(station.activity, 600);
-  assertEquals(station.platforms, 4);
+  assertEquals(station.name, "Test Station");
 });
 
-Deno.test("Station - platform growth generates revenue", () => {
+Deno.test("Station Location", () => {
   const location: Location = { x: 0, y: 0 };
   const station = new Station("Test Station", location, 1);
+  assertEquals(station.location, location);
+});
 
-  // Initial revenue
-  assertEquals(station.revenue, 0);
+Deno.test("Station Tracks", () => {
+  const location: Location = { x: 0, y: 0 };
+  const station = new Station("Test Station", location, 1);
+  assertEquals(station.numTrack(), 0);
 
-  // Grow to 2 platforms (should generate 50 revenue)
-  for (let i = 0; i < 100; i++) {
-    station.updateActivity();
-  }
-  assertEquals(station.revenue, 50);
+  // Add Track, confirm NumTrack increase
+  const track = {} as iTrack;
+  station.addTrack(track);
+  assertEquals(station.numTrack(), 1);
 
-  // Grow to 3 platforms (should generate another 50 revenue)
-  for (let i = 0; i < 150; i++) {
-    station.updateActivity();
-  }
-  assertEquals(station.revenue, 100);
+  // Remove Track, confirm NumTrack decrease
+  station.delTrack(track);
+  assertEquals(station.numTrack(), 0);
+});
 
-  // Grow to 4 platforms (should generate another 50 revenue)
-  for (let i = 0; i < 250; i++) {
-    station.updateActivity();
-  }
-  assertEquals(station.revenue, 150);
+Deno.test("Station Trains", () => {
+  const location: Location = { x: 0, y: 0 };
+  const station = new Station("Test Station", location, 1);
+  const train = {} as iTrain;
+
+  assertEquals(station.numTrain(), 0);
+  assertEquals(station.isFull, false);
+
+  station.addTrain(train);
+  assertEquals(station.numTrain(), 1);
+  assertEquals(station.isFull, true);
+
+  // Should throw when adding beyond capacity
+  assertThrows(
+    () => station.addTrain({} as iTrain),
+    Error,
+    "No platforms available",
+  );
+
+  station.delTrain(train);
+  assertEquals(station.numTrain(), 0);
+  assertEquals(station.isFull, false);
+});
+
+Deno.test("Station Passengers and Transits", () => {
+  const location: Location = { x: 0, y: 0 };
+  const station = new Station("Test Station", location, 1);
+  const passenger = {} as iPassenger;
+
+  assertEquals(station.numPassenger(), 0);
+  assertEquals(station.transits, 0);
+
+  // Adding passenger increments transits
+  station.addPassenger(passenger);
+  assertEquals(station.numPassenger(), 1);
+  assertEquals(station.transits, 1);
+
+  // Removing passenger increments transits again
+  station.delPassenger(passenger);
+  assertEquals(station.numPassenger(), 0);
+  assertEquals(station.transits, 2);
 });
