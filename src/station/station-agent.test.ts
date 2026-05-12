@@ -1,14 +1,13 @@
 import { assertEquals } from "@std/assert";
 import { stationAgent } from "./station-agent.ts";
 import { createSimulation } from "../simulation/mod.ts";
-import type { iStation, Location } from "../types.ts";
+import type { iStation } from "../types.ts";
 
 /** Test cases for "./station-agent.ts" */
 
 Deno.test("Increase platforms", () => {
   const sim = createSimulation();
-  const loc: Location = sim.area.findLocation();
-  const st: iStation = sim.createStation(loc);
+  const st: iStation = sim.createStation();
   assertEquals(st.size, 1);
 
   // Cannot increase when no transits happened

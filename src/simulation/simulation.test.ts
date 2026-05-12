@@ -1,25 +1,25 @@
-// import { assertEquals, assertInstanceOf } from "@std/assert";
-// import type { Agents } from "./agent.ts";
-// import { Simulation } from "./simulation.ts";
+import { assertEquals, assertInstanceOf } from "@std/assert";
+import { Simulation } from "./simulation.ts";
+import type { Agents } from "../types.ts";
 
-// Deno.test("Simulation instance", () => {
-//   const simulation = new Simulation();
-//   assertInstanceOf(simulation, Simulation);
-// });
+Deno.test("Simulation instance", () => {
+  const simulation = new Simulation();
+  assertInstanceOf(simulation, Simulation);
+});
 
-// Deno.test("Step simulation", () => {
-//   const simulation = new Simulation();
-//   const agents: Agents = [];
-//   simulation.step(agents);
-//   assertEquals(simulation.tick, 1);
-//   simulation.step(agents);
-//   assertEquals(simulation.tick, 2);
-// });
+Deno.test("Step simulation", () => {
+  const simulation = new Simulation();
+  const agents: Agents = [];
+  simulation.step(agents);
+  assertEquals(simulation.tick, 1);
+  simulation.step(agents);
+  assertEquals(simulation.tick, 2);
+});
 
-// Deno.test("Run simulation", async () => {
-//   const simulation = new Simulation();
-//   const agents: Agents = [];
-//   const ticks = 5;
-//   await simulation.run(agents, ticks, 0);
-//   assertEquals(simulation.tick, ticks);
-// });
+Deno.test("Run simulation", async () => {
+  const simulation = new Simulation();
+  const agents: Agents = [];
+  const ticks = 5;
+  await simulation.run(agents, ticks, 0);
+  assertEquals(simulation.tick, ticks);
+});

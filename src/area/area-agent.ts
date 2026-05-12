@@ -1,4 +1,4 @@
-import type { Agent, iSimulation, Location } from "../types.ts";
+import type { Agent, iSimulation } from "../types.ts";
 
 /** Spawn stations at defined capital levels */
 export const areaAgent: Agent = (sim: iSimulation): void => {
@@ -13,8 +13,7 @@ export const areaAgent: Agent = (sim: iSimulation): void => {
 
   // Spawn missing stations
   for (let i = current_station_count; i < stations_required; i++) {
-    const loc: Location = sim.area.findLocation();
-    sim.createStation(loc);
+    sim.createStation();
     // Max one action per invocation
     return;
   }

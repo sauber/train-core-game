@@ -15,8 +15,7 @@ export class Track implements iTrack {
   /** Price of track */
   // public readonly price: number;
 
-  constructor(a: iStation, b: iStation // public readonly pricePerUnit: number
-  ) {
+  constructor(a: iStation, b: iStation) {
     // Confirm track connect to two different stations
     if (a === b) throw new Error("Track must connect two different stations");
     this.stations.add(a);

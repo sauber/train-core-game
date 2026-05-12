@@ -2,6 +2,9 @@
 
 /** Simulation */
 export interface iSimulation {
+  /** Balance ats start of Simulation */
+  readonly initialBalance: Balance;
+
   /** Current balance */
   readonly balance: Balance;
 
@@ -39,7 +42,7 @@ export interface iSimulation {
   readonly journal: Journal;
 
   /** Create Station */
-  createStation(location: Location): iStation;
+  createStation(): iStation;
 
   /** Connect two stations with a track */
   createTrack(a: iStation, b: iStation): iTrack;

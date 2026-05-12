@@ -5,7 +5,7 @@ Platforms, tools, process and code structure for development.
 ## Platform
 
 - Programming language: Typescript
-- Shell: Windows 11 Powershell
+- Shell: Windows 11 PowerShell (not Unix/Bash)
 - Type checking command: `deno check`
 - Test command: `deno test`
 - Lint command: `deno lint`
@@ -53,3 +53,20 @@ other features.
 
 When importing multiple symbols from other folder, keep all symbols on same one
 import line.
+
+## Terminal Commands
+
+When running terminal commands:
+
+- Always use PowerShell-native cmdlets, NOT Unix/Bash commands
+- Use `Expand-Archive` instead of `unzip` or `tar`
+- Use `Compress-Archive` instead of `zip` or `tar`
+- Use `Get-ChildItem` or `dir` instead of `ls`
+- Use `Remove-Item` instead of `rm`
+- Use `Copy-Item` instead of `cp`
+- Use `Move-Item` instead of `mv`
+- Use `Get-Content` instead of `cat`
+- Use `Set-Location` instead of `cd` (though `cd` works in PowerShell)
+- Use `New-Item` instead of `touch` or `mkdir`
+- Use semicolons (`;`) to chain commands, not `&&`
+- Use backtick (`) for line continuation, not backslash (\)

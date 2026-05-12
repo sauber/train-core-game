@@ -1,72 +1,66 @@
-// import type { Simulation } from "../simulation/mod.ts";
-// import { Track, trackBuildCost } from "../track/mod.ts";
-// import { distance } from "../area/mod.ts";
-// import type { Station } from "../station/mod.ts";
+import type { iSimulation, iStation } from "../types.ts";
+import { distance } from "../area/mod.ts";
 
-// /** Find an isolated station and its nearest neighbor to connect */
-// function findIsolatedStation(
-//   game: Simulation,
-// ): { isolated: Station; nearest: Station } | null {
-//   const isolatedStations = Array.from(game.area.stations).filter(
-//     (station) => station.tracks.size === 0,
-//   );
+/** Find an isolated station and its nearest neighbor to connect to */
+function findIsolatedStation(
+  sim: iSimulation,
+): { isolated: iStation; nearest: iStation } | null {
+  const isolatedStations = Array.from(sim.area.stations).filter(
+    (station) => station.numTrack() === 0,
+  );
 
-//   if (isolatedStations.length === 0) return null;
+  if (isolatedStations.length === 0) return null;
 
-//   let bestIsolated: Station | null = null;
-//   let bestNearest: Station | null = null;
-//   let bestDist = Infinity;
+  let bestIsolated: iStation | null = null;
+  let bestNearest: iStation | null = null;
+  let bestDist = Infinity;
 
-//   for (const isolated of isolatedStations) {
-//     let minDist = Infinity;
-//     let nearest: Station | null = null;
-//     for (const other of game.area.stations) {
-//       if (other === isolated) continue;
-//       const dist = distance(isolated.location, other.location);
-//       if (dist < minDist) {
-//         minDist = dist;
-//         nearest = other;
-//       }
-//     }
-//     if (minDist < bestDist && nearest) {
-//       bestDist = minDist;
-//       bestIsolated = isolated;
-//       bestNearest = nearest;
-//     }
-//   }
+  for (const isolated of isolatedStations) {
+    let minDist = Infinity;
+    let nearest: iStation | null = null;
+    for (const other of sim.area.stations) {
+      if (other === isolated) continue;
+      const dist = distance(isolated.location, other.location);
+      if (dist < minDist) {
+        minDist = dist;
+        nearest = other;
+      }
+    }
+    if (minDist < bestDist && nearest) {
+      bestDist = minDist;
+      bestIsolated = isolated;
+      bestNearest = nearest;
+    }
+  }
 
-//   return bestIsolated && bestNearest
-//     ? { isolated: bestIsolated, nearest: bestNearest }
-//     : null;
-// }
+  return bestIsolated && bestNearest
+    ? { isolated: bestIsolated, nearest: bestNearest }
+    : null;
+}
 
-// /** Add a track to a station which has no tracks already.
-//  * Connect to nearest other station.
-//  * Only build one track.
-//  * Only build track if affordable.
-//  * Affordable means: after subtracting track cost, balance must be >= cheapest train price.
-//  */
-// export function addTracks(game: Simulation): boolean {
-//   const stations = findIsolatedStation(game);
-//   if (!stations) return false;
+/** Add a track to a station which has no tracks already.
+ * Connect to nearest other station.
+ * Only build one track.
+ * Only build track if affordable.
+ * Affordable means: after subtracting track cost, balance must be >= cheapest train price.
+ */
+export function addTracks(sim: iSimulation): boolean {
+  const stations = findIsolatedStation(sim);
+  if (!stations) return false;
+  const { isolated, nearest } = stations;
 
-//   const { isolated, nearest } = stations;
-//   const track = new Track(isolated, nearest);
-//   const cost = trackBuildCost(game, track);
+  // Cost
+  const cost = distance(isolated.location, nearest.location) * sim.trackCost;
 
-//   const minTrainCost = Math.min(
-//     ...Array.from(game.trainTypes).map((t) => t.cost),
-//   );
-//   if (game.balance - cost < minTrainCost) return false;
+  // Cost of most cheap train
+  const minTrainCost = Math.min(
+    ...Array.from(sim.trainTypes).map((t) => t.cost),
+  );
 
-//   const result = track.add(game);
-//   if (result === true) {
-//     game.event(
-//       `Track built between ${isolated.name} and ${nearest.name}`,
-//       -cost,
-//     );
-//     return true;
-//   }
+  // Ensure funds are available for a train after building track
+  if (cost + minTrainCost > sim.balance) return false;
 
-//   return false;
-// }
+  // Build track
+  sim.createTrack(isolated, nearest);
+  return true;
+}
