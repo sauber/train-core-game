@@ -11,7 +11,7 @@ import {
 } from "../types.ts";
 
 // Mock implementations
-function mockStation(name: string): iStation {
+function mockStation(name: string): iStation & { isFull: boolean } {
   return {
     name,
     location: { x: 0, y: 0 },
@@ -30,7 +30,7 @@ function mockStation(name: string): iStation {
   };
 }
 
-function mockTrack(distance: number, broken = false): iTrack {
+function mockTrack(distance: number, broken = false): iTrack & { isFull: boolean } {
   return {
     stations: new Set<iStation>(),
     distance,
@@ -134,7 +134,7 @@ Deno.test("Broken to Waiting transition", () => {
 Deno.test("Cannot depart if track is occupied", () => {
   const station = mockStation("Central");
   const track = mockTrack(100);
-  (track as any).isFull = true; // Mock track as occupied
+  track.isFull = true; // Mock track as occupied
   const train = new Train(type, station);
   train.nextTrack = track;
   assertEquals(train.depart(), false);
@@ -157,7 +157,7 @@ Deno.test("Cannot depart if passenger is missing", () => {
 
 Deno.test("Cannot arrive if station is full", () => {
   const station = mockStation("Central");
-  (station as any).isFull = true; // Mock station as full
+  station.isFull = true; // Mock station as full
   const track = mockTrack(100, false);
   track.stations.add(station);
   const train = new Train(type, track);
