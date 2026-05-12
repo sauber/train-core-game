@@ -27,6 +27,7 @@ import { createPopulation } from "../population/mod.ts";
 import { createStation } from "../station/mod.ts";
 import { createTrack } from "../track/mod.ts";
 import { createPassenger } from "../passenger/mod.ts";
+import { createTrain } from "../train/mod.ts";
 
 /** Default train types */
 const DEFAULT_TRAIN_TYPES = new Set<TrainType>([
@@ -310,12 +311,8 @@ export class Simulation implements iSimulation {
     return true;
   }
 
-  public createTrain(_type: TrainType, _location: iStation): iTrain {
-    // Confirm station has capacity
-    // Confirm funds
-    // Create train
-    // Place station at train
-    throw new Error("Method not implemented.");
+  public createTrain(type: TrainType, location: iStation): iTrain {
+    return createTrain(type, location);
   }
 
   public moveTrain(_train: iTrain, _target: TrainLocation): boolean {
