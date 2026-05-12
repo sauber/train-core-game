@@ -327,15 +327,15 @@ export type TrainType = {
   readonly cost: number;
 };
 
+/** State of train */
+export enum TrainState {
+  Waiting = "waiting",
+  Running = "running",
+  Broken = "broken",
+}
+
 /** Location of train */
 export type TrainLocation = iStation | iTrack;
-
-/** Door status */
-export enum Doors {
-  Closed = "Closed",
-  Exit = "Exit",
-  Open = "Open",
-}
 
 /** Train instance */
 export interface iTrain {
@@ -345,8 +345,8 @@ export interface iTrain {
   /** Location of train */
   readonly location: TrainLocation;
 
-  /** Can train drive */
-  readonly isBroken: boolean;
+  /** State of train */
+  readonly state: TrainState;
 
   /** Add a passenger */
   addPassenger(passenger: iPassenger): boolean;
@@ -368,7 +368,4 @@ export interface iTrain {
 
   /** Move train from track to station */
   arrive(station: iStation): boolean;
-
-  /** Station of doors */
-  readonly doors: Doors;
 }

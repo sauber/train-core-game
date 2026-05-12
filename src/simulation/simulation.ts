@@ -1,7 +1,6 @@
 import {
   type Agents,
   type Balance,
-  Doors,
   type iArea,
   type iFleet,
   type iIsland,
@@ -18,6 +17,7 @@ import {
   type Location,
   type Tick,
   type TrainLocation,
+  TrainState,
   type TrainType,
 } from "../types.ts";
 import { createArea, distance } from "../area/mod.ts";
@@ -255,7 +255,7 @@ export class Simulation implements iSimulation {
     return true;
   }
 
-  /** Move passenger to train */
+  /** Move passenger onto train */
   public boardPassenger(
     passenger: iPassenger,
     target: iTrain,
@@ -266,7 +266,7 @@ export class Simulation implements iSimulation {
     }
 
     // Confirm train has open doors
-    if (target.doors != Doors.Open) {
+    if (target.state != TrainState.Waiting) {
       throw new Error("Train doors not open for boarding");
     }
 
@@ -295,7 +295,9 @@ export class Simulation implements iSimulation {
 
     // Confirm train has Open or Exit door status
     const train: iTrain = passenger.location;
-    if (train.doors == Doors.Closed) throw new Error("Train doors closed");
+    if (train.state != TrainState.Running) {
+      throw new Error("Train doors closed");
+    }
 
     // Move passenger from train to station
     train.delPassenger(passenger);

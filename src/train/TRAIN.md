@@ -27,18 +27,11 @@ Train types vary by name, speed, cost, and passenger capacity.
 
 ## States
 
-- **Broken**: Train is not operational. repaired.
+- **Broken**: Train is not operational. Passengers must disembark.
 - **Waiting**: (Default state) Train is at station and missing passengers, route
-  or free track.
-- **Running**: Train is on track and is moving down the track.
-
-## Doors
-
-Door status is one of the following:
-
-- **Closed**: Passengers cannot board or disembark.
-- **Open**: Passengers can board or disembark.
-- **Exit**: Passengers must disembark.
+  or free track. Passenger may board or disembark.
+- **Running**: Train is on track and is moving down the track. Passenger may not
+  board or disembark.
 
 ## State Transition Rules
 
