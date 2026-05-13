@@ -1,22 +1,17 @@
-// import type { Simulation } from "../simulation/mod.ts";
-// import { trackRepairCost } from "../track/mod.ts";
+import type { iSimulation } from "../types.ts";
 
-// /** Repair a degraded track */
-// export function repairTracks(game: Simulation): boolean {
-//   for (const track of game.tracks) {
-//     if (track.wear <= 0) continue;
+/** Repair degraded tracks */
+export function repairTracks(sim: iSimulation): boolean {
+  for (const track of sim.network.tracks) {
+    if (track.isBroken) {
+      const cost = Math.ceil(track.distance * sim.trackCost * 0.5); // 50% of build cost
+      if (cost > sim.balance) continue;
 
-//     const cost = trackRepairCost(game, track);
-//     if (cost > game.balance) continue;
+      track.repair();
+      // No event logging since sim.event doesn't exist
+      return true;
+    }
+  }
 
-//     track.wear = 0;
-//     const [first, second] = Array.from(track.stations);
-//     game.event(
-//       `Track repaired between ${first.name} and ${second.name}`,
-//       -cost,
-//     );
-//     return true;
-//   }
-
-//   return false;
-// }
+  return false;
+}

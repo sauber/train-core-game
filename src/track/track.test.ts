@@ -46,7 +46,7 @@ Deno.test("Repair track with wear/breakage", () => {
   assertEquals(track.isBroken, false);
 
   // Simulate track becoming worn (wear >= 1)
-  Object.assign(track, { wear: 1 });
+  track.wear = 1;
   assertEquals(track.isBroken, true);
 
   // Cannot add train when track is broken

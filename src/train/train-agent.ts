@@ -1,9 +1,10 @@
-import { type Agent, type iSimulation, TrainState } from "../types.ts";
+import { TrainState } from "../types.ts";
+import type { Agent, iSimulation } from "../types.ts";
 
 /**
- * Insert and repair trains using lifecycle methods
+ * Train agent manages train creation, movement, and repairs
  */
-export const fleetAgent: Agent = (sim: iSimulation): void => {
+export const trainAgent: Agent = (sim: iSimulation): void => {
   // Repair broken trains
   for (const train of sim.fleet.trains) {
     if (train.state === TrainState.Broken) {
@@ -11,7 +12,7 @@ export const fleetAgent: Agent = (sim: iSimulation): void => {
     }
   }
 
-  // Insert train on island with no trains
+  // Create new trains on islands with no trains
   for (const island of sim.network.islands) {
     if (island.trains.size === 0) {
       const station = Array.from(island.stations)[0];
@@ -24,7 +25,7 @@ export const fleetAgent: Agent = (sim: iSimulation): void => {
 
       const newTrain = sim.createTrain(affordableType, station);
       sim.fleet.addTrain(newTrain);
-      break; // Insert one train per island
+      break; // One train per island
     }
   }
 };

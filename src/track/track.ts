@@ -10,7 +10,16 @@ export class Track implements iTrack {
   public readonly stations = new Set<iStation>();
 
   /** Degraded state of track */
-  private wear: number = 0;
+  private _wear: number = 0;
+
+  /** Wear level of track */
+  public get wear(): number {
+    return this._wear;
+  }
+
+  public set wear(value: number) {
+    this._wear = value;
+  }
 
   /** Price of track */
   // public readonly price: number;
@@ -47,7 +56,7 @@ export class Track implements iTrack {
     if (this.train !== train) return false;
     this.train = undefined;
     // Increase wear as train has passed the track
-    this.wear += 0.05;
+    this._wear += 0.05;
     return true;
   }
 
@@ -60,11 +69,11 @@ export class Track implements iTrack {
   }
 
   public repair(): boolean {
-    this.wear = 0;
+    this._wear = 0;
     return true;
   }
 
   public get isBroken(): boolean {
-    return this.wear >= 1;
+    return this._wear >= 1;
   }
 }

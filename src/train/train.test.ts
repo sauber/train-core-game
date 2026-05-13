@@ -30,7 +30,10 @@ function mockStation(name: string): iStation & { isFull: boolean } {
   };
 }
 
-function mockTrack(distance: number, broken = false): iTrack & { isFull: boolean } {
+function mockTrack(
+  distance: number,
+  broken = false,
+): iTrack & { isFull: boolean } {
   return {
     stations: new Set<iStation>(),
     distance,
@@ -39,6 +42,7 @@ function mockTrack(distance: number, broken = false): iTrack & { isFull: boolean
     addTrain: () => true,
     delTrain: () => true,
     repair: () => true,
+    wear: 0,
   };
 }
 

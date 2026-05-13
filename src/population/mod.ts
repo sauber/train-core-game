@@ -1,2 +1,2 @@
-export * from "./create-population.ts";
-export * from "./population-agent.ts";
+export { createPopulation } from "./create-population.ts";
+export { populationAgent } from "./population-agent.ts";

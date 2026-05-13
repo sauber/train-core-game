@@ -4,12 +4,20 @@ import { fleetAgent } from "../fleet/mod.ts";
 import { areaAgent } from "../area/mod.ts";
 import { networkAgent } from "../network/mod.ts";
 import { populationAgent } from "../population/mod.ts";
+import { passengerAgent } from "../passenger/mod.ts";
+import { trackAgent } from "../track/mod.ts";
+import { trainAgent } from "../train/mod.ts";
+import { stationAgent } from "../station/mod.ts";
 import { mapAgent } from "../dashboard/mod.ts";
 
 const agents: Agents = [
+  passengerAgent,
   populationAgent,
-  fleetAgent,
+  trackAgent,
   networkAgent,
+  trainAgent,
+  fleetAgent,
+  stationAgent,
   areaAgent,
   mapAgent,
 ];

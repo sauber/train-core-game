@@ -1,42 +1,57 @@
-// import { findNearestStation } from "../station/mod.ts";
-// import { unConnectedStations } from "../station/mod.ts";
-// import { createTrack } from "./mod.ts";
-// import { trackBuildCost } from "./mod.ts";
-// import type { Agent, Simulation } from "../simulation/mod.ts";
-// import { Track } from "../track/mod.ts";
+import type { Agent, iSimulation, iStation } from "../types.ts";
 
-import type { Agent, iSimulation } from "../types.ts";
+/**
+ * Track agent connects unconnected stations to nearest neighbor
+ */
+export const trackAgent: Agent = (sim: iSimulation): void => {
+  // Find isolated stations (no tracks)
+  const isolatedStations = Array.from(sim.area.stations).filter(
+    (station) => station.numTrack() === 0,
+  );
 
-/** If a station is unconnected, connect it to nearest other station */
-export const trackAgent: Agent = (_sim: iSimulation): void => {
-  // const unconnected = unConnectedStations(game);
-  // for (const station of unconnected) {
-  //   const other = findNearestStation(game, station);
-  //   if (other == station) continue;
+  if (isolatedStations.length === 0) return;
 
-  //   const tempTrack = new Track(station, other);
-  //   const price = trackBuildCost(game, tempTrack);
+  // Find nearest neighbor for each isolated station
+  let bestIsolated: iStation | null = null;
+  let bestNearest: iStation | null = null;
+  let bestDist = Infinity;
 
-  //   let cheapest = Infinity;
-  //   for (const type of game.trainTypes) {
-  //     cheapest = Math.min(cheapest, type.cost);
-  //   }
+  for (const isolated of isolatedStations) {
+    let minDist = Infinity;
+    let nearest: iStation | null = null;
 
-  //   if (price > (game.balance - cheapest)) continue;
+    for (const other of sim.area.stations) {
+      if (other === isolated) continue;
+      const dist = Math.sqrt(
+        Math.pow(isolated.location.x - other.location.x, 2) +
+          Math.pow(isolated.location.y - other.location.y, 2),
+      );
+      if (dist < minDist) {
+        minDist = dist;
+        nearest = other;
+      }
+    }
 
-  //   const track: Track | Error = createTrack(game, station, other);
-  //   if (track instanceof Error) {
-  //     game.event(
-  //       `Error: Track from ${station.name} to ${other.name} not built: ` +
-  //         track.message,
-  //     );
-  //   } else {
-  //     game.event(
-  //       `Track built from ${station.name} to ${other.name}`,
-  //       -price,
-  //     );
-  //   }
-  //   // Only put down one track per step
-  //   return;
-  // }
+    if (minDist < bestDist && nearest) {
+      bestDist = minDist;
+      bestIsolated = isolated;
+      bestNearest = nearest;
+    }
+  }
+
+  if (!bestIsolated || !bestNearest) return;
+
+  // Cost of track
+  const cost = bestDist * sim.trackCost;
+
+  // Cost of cheapest train
+  const minTrainCost = Math.min(
+    ...Array.from(sim.trainTypes).map((t) => t.cost),
+  );
+
+  // Ensure funds are available for a train after building track
+  if (cost + minTrainCost > sim.balance) return;
+
+  // Build track
+  sim.createTrack(bestIsolated, bestNearest);
 };
